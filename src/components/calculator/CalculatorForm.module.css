@@ -1,0 +1,74 @@
+.blockContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4x);
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-3x);
+  align-items: start;
+}
+
+@media (max-width: 600px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.separator {
+  height: 1px;
+  background: var(--container-transparent-1);
+}
+
+/* Specialists table */
+.specialistsTable {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2x);
+  margin-bottom: var(--spacing-3x);
+}
+
+.specHeader {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr 40px;
+  gap: var(--spacing-2x);
+  padding: 0 var(--spacing-1x);
+}
+
+.specRow {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr 40px;
+  gap: var(--spacing-2x);
+  align-items: center;
+}
+
+@media (max-width: 700px) {
+  .specHeader {
+    display: none;
+  }
+  .specRow {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+  .specRow > *:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* Delete cell — icon dims on cell hover */
+.deleteCell:hover :global(.hoverOpacity) {
+  opacity: 0.5;
+}
+
+/* Rate column — right-align input and header, remove default 10px gap */
+.rateCell {
+  gap: 0;
+}
+
+.rateCell :global(.table-cell__title-input),
+.rateCell :global(.table-cell__title) {
+  text-align: right;
+}

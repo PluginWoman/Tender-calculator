@@ -1,0 +1,54 @@
+.panel {
+  background: var(--container-default);
+  border-radius: var(--card-rounding);
+  box-shadow: var(--Card);
+  overflow: hidden;
+}
+
+.header {
+  background: var(--primitive-brand);
+  padding: var(--spacing-4x) var(--spacing-5x);
+  text-align: center;
+  color: white;
+}
+
+.price {
+  margin: var(--spacing-2x) 0 var(--spacing-1x);
+  color: white;
+}
+
+.body {
+  padding: var(--spacing-2x) var(--page-horizontal-padding) var(--spacing-4x);
+}
+
+.divider {
+  height: 1px;
+  background: var(--container-transparent-1);
+  margin: var(--spacing-2x) 0;
+}
+
+.verdict {
+  margin: var(--spacing-4x) var(--spacing-4x) 0;
+}
+
+.stackedBar {
+  display: flex;
+  height: 6px;
+  border-radius: var(--rounding-2x);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.2);
+  gap: 2px;
+  margin-top: var(--spacing-3x);
+}
+
+.stackedSegment {
+  min-width: 2px;
+}
+
+.dot {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
