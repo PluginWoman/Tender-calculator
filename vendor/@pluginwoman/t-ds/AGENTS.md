@@ -16,8 +16,8 @@
    import { Circle, ChevronRight } from '@pluginwoman/t-ds/icons'
    ```
    > Иконки экспортируются без суффикса `Icon` (`Circle`, `ChevronRight`, …). Полный список — в `src/assets/Icon/24/Stroked.tsx`.
-3. **Никогда не хардкодь цвета, размеры шрифта, отступы, скругления, тени.** Используй CSS-переменные и типографические классы (см. ниже). Это главное правило консистентности.
-4. **Не пиши свои аналоги существующих компонентов.** Сначала ищи готовый компонент в каталоге (раздел 3). Почти все паттерны (кнопки, поля, ячейки, модалки, шиты, навигация) уже есть.
+3. **Никогда не хардкодь и не создавай новые цвета, текстовые стили, переменные размеров, отступы, скругления, тени.** Только CSS-переменные из дизайн-системы и готовые типографические классы `ts-*` (см. ниже). Нельзя: новые CSS-классы с `font-size`/`font-weight`, новые CSS-переменные `--my-*-color` / `--my-*-size`, хардкод hex-значений или числовых размеров. Это главное правило консистентности.
+4. **Прежде чем верстать элемент вручную, проверь — нет ли подходящего компонента в t-ds.** Сравнивай по названию: как называется слой/компонент в Фигме — ищи компонент с тем же именем в каталоге (раздел 3). Почти все паттерны (кнопки, поля, ячейки, модалки, шиты, навигация) уже есть. **Не пиши свои аналоги существующих компонентов.**
 5. **Булевы пропсы именуются `is*` / `has*`** (`isDisabled`, `isLoading`, `hasDescription`). Колбэки — `on*` (`onClick`, `onChange`, `onClose`).
 6. **Многие контейнерные компоненты составные** (`Modal` + `ModalHeader` + `ModalFooter`, `Drawer`, `ActionSheet`, `Footer`, `Widget`, `Table`). Собирай их из частей, а не одним пропсом.
 7. **Строковые enum-пропсы регистрозависимы.** `size`, `variant`, `layout` и т.п. — строго в нижнем регистре (`size="m"`, не `"M"`). Неверный регистр молча ломает раскладку: класс `page-layout--M` просто не существует, и компонент остаётся без размерных стилей. Допустимые значения смотри в типе пропа.
@@ -130,8 +130,12 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 - **`Dropdown`** — выбор из списка. controlled `value`/`onChange`, `children` — обычно `Cell`; `placeholder`, `isError`/`errorMessage`, `hasSearch`, `isLoading`, `isEmpty`, `hasHelpIcon`/`helpText`, `right` слот.
   > **Правила сборки списка опций через `Cell`:**
   > 1. Отключай `hasLeftAccessory={false}` и `hasRightAccessory={false}` у каждого `Cell` если аксессуары не нужны — иначе по умолчанию рендерится `Avatar` слева и `ChevronRight` справа, что ломает внешний вид.
-  > 2. Выделяй текущий выбор цветом через `titleColor="var(--primitive-brand)"` и добавляй галку в правый аксессуар.
-  > 3. В проп `value` у `Dropdown` передавай **человекочитаемую строку** (label), а не внутренний ключ.
+  > 2. Выделяй текущий выбор иконкой `Checkmark` в правом аксессуаре, цвет иконки `--primitive-success`. Цвет текста не меняй.
+  > 3. Типографика заголовка зависит от состава строки:
+  >    - Без аватара слева (независимо от наличия subtitle/description) → `titleClassName="ts-400-m"`
+  >    - С аватаром слева и при наличии subtitle и/или description → `titleClassName="ts-500-m"` (дефолт Cell)
+  >    - На адаптиве (`≤1023px`) всегда повышай размер до `l`: `ts-400-l` / `ts-500-l` соответственно
+  > 4. В проп `value` у `Dropdown` передавай **человекочитаемую строку** (label), а не внутренний ключ.
   > ```tsx
   > <Dropdown label="Вариант" value={currentLabel} hasHelpIcon={false}>
   >   {options.map(opt => (
@@ -140,10 +144,10 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
   >       title={opt.label}
   >       hasLeftAccessory={false}
   >       hasRightAccessory={opt.value === currentValue}
+  >       titleClassName="ts-400-m"
   >       rightAccessory={opt.value === currentValue
-  >         ? <CellRightAccessory variant="icon" icon={<Check />} />
+  >         ? <CellRightAccessory variant="icon" icon={<Checkmark style={{ color: 'var(--primitive-success)' }} />} />
   >         : undefined}
-  >       titleColor={opt.value === currentValue ? 'var(--primitive-brand)' : undefined}
   >       onClick={() => setValue(opt.value)}
   >     />
   >   ))}
@@ -243,10 +247,10 @@ const currentLabel = options.find(o => o.value === current)?.label ?? ''
       title={opt.label}
       hasLeftAccessory={false}
       hasRightAccessory={opt.value === current}
+      titleClassName="ts-400-m"
       rightAccessory={opt.value === current
-        ? <CellRightAccessory variant="icon" icon={<Check />} />
+        ? <CellRightAccessory variant="icon" icon={<Checkmark style={{ color: 'var(--primitive-success)' }} />} />
         : undefined}
-      titleColor={opt.value === current ? 'var(--primitive-brand)' : undefined}
       onClick={() => setCurrent(opt.value)}
     />
   ))}

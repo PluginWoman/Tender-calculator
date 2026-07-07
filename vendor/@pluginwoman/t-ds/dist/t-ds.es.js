@@ -1,6 +1,6 @@
-import { jsxs as r, jsx as e, Fragment as E } from "react/jsx-runtime";
-import q, { useState as j, useEffect as M, useRef as I, useLayoutEffect as ye } from "react";
-import { Magnifier as he, Checkmark as te, Plus as ue, ChevronRight as A, Circle as S, ChevronDown as ae, Cross as J, ArrowLeft as Q, Watch as xe, Bell as ie, Gift as we, Gear as re, ArrowRightOutgoingRectangleVertical as ke, Broom as pe, MinusCircle as Ce } from "./icons/24/Stroked.es.js";
+import { jsxs as r, jsx as e, Fragment as D } from "react/jsx-runtime";
+import G, { useState as L, useEffect as j, useRef as M, useLayoutEffect as ye } from "react";
+import { Magnifier as he, Checkmark as te, Plus as ue, ChevronRight as A, Circle as z, ChevronDown as ae, Cross as J, ArrowLeft as Q, Watch as xe, Bell as ie, Gift as we, Gear as re, ArrowRightOutgoingRectangleVertical as ke, Broom as pe, MinusCircle as Ce } from "./icons/24/Stroked.es.js";
 import { Minus as se } from "./icons/16/Stroked.es.js";
 import { ChevronDown as ve } from "./icons/12/Filled.es.js";
 import le from "react-dom";
@@ -14,8 +14,8 @@ const $e = 300, ka = ({
   className: l = "",
   isOverlayCloseEnabled: o = !0
 }) => {
-  const [c, d] = j(a ? "in" : "hidden");
-  if (M(() => {
+  const [c, d] = L(a ? "in" : "hidden");
+  if (j(() => {
     if (a)
       d("in");
     else if (c === "in") {
@@ -23,7 +23,7 @@ const $e = 300, ka = ({
       const u = setTimeout(() => d("hidden"), $e);
       return () => clearTimeout(u);
     }
-  }, [a]), M(() => {
+  }, [a]), j(() => {
     if (c !== "in") return;
     const u = (p) => {
       p.key === "Escape" && (t == null || t());
@@ -51,11 +51,11 @@ const $e = 300, ka = ({
     ),
     /* @__PURE__ */ r("aside", { className: _, role: "dialog", "aria-modal": "true", children: [
       s && /* @__PURE__ */ e("div", { className: "action-sheet__header", children: s }),
-      /* @__PURE__ */ e("div", { className: "action-sheet__content", children: /* @__PURE__ */ e("div", { className: "action-sheet__content-inner", children: i }) }),
+      /* @__PURE__ */ e("div", { className: "action-sheet__content ds-scroll-area", children: /* @__PURE__ */ e("div", { className: "action-sheet__content-inner", children: i }) }),
       n && /* @__PURE__ */ e("div", { className: "action-sheet__footer", children: n })
     ] })
   ] });
-}, D = ({ className: a = "", style: t }) => /* @__PURE__ */ e("span", { className: `ds-spinner ${a}`, style: t, "aria-hidden": "true", children: /* @__PURE__ */ e("span", { className: "ds-spinner__ring" }) }), Ca = ({
+}, V = ({ className: a = "", style: t }) => /* @__PURE__ */ e("span", { className: `ds-spinner ${a}`, style: t, "aria-hidden": "true", children: /* @__PURE__ */ e("span", { className: "ds-spinner__ring" }) }), Ca = ({
   title: a,
   description: t,
   hasDescription: s = !1,
@@ -91,7 +91,7 @@ const $e = 300, ka = ({
             _ && /* @__PURE__ */ e("span", { className: "action-sheet-button__description ts-400-s", children: t })
           ] })
         ] }),
-        c && /* @__PURE__ */ e(D, { className: "action-sheet-button__spinner" })
+        c && /* @__PURE__ */ e(V, { className: "action-sheet-button__spinner" })
       ]
     }
   );
@@ -116,7 +116,7 @@ const $e = 300, ka = ({
       disabled: t || s,
       onClick: a,
       children: [
-        s && /* @__PURE__ */ e(D, { className: "action-sheet-footer__spinner" }),
+        s && /* @__PURE__ */ e(V, { className: "action-sheet-footer__spinner" }),
         /* @__PURE__ */ e("span", { className: "action-sheet-footer__label ts-500-l", children: "Отмена" })
       ]
     }
@@ -142,42 +142,42 @@ const $e = 300, ka = ({
   className: l = "",
   isOverlayCloseEnabled: o = !0
 }) => {
-  const c = I(null), d = I(null), m = I(0), [_, h] = j(a ? "in" : "hidden");
-  M(() => {
+  const c = M(null), d = M(null), m = M(0), [_, h] = L(a ? "in" : "hidden");
+  j(() => {
     if (a)
       h("in");
     else if (_ === "in") {
       h("out");
-      const N = setTimeout(() => h("hidden"), Le);
-      return () => clearTimeout(N);
+      const f = setTimeout(() => h("hidden"), Le);
+      return () => clearTimeout(f);
     }
-  }, [a]), M(() => {
+  }, [a]), j(() => {
     if (_ !== "in") return;
-    const N = (b) => {
-      b.key === "Escape" && (t == null || t());
+    const f = (N) => {
+      N.key === "Escape" && (t == null || t());
     };
-    return document.addEventListener("keydown", N), () => document.removeEventListener("keydown", N);
+    return document.addEventListener("keydown", f), () => document.removeEventListener("keydown", f);
   }, [_, t]);
-  const u = (N) => {
-    d.current = N.touches[0].clientY, m.current = 0;
-  }, p = (N) => {
+  const u = (f) => {
+    d.current = f.touches[0].clientY, m.current = 0;
+  }, p = (f) => {
     if (d.current === null) return;
-    const b = N.touches[0].clientY - d.current;
-    b <= 0 || (m.current = b, c.current && (c.current.style.transform = `translateY(${b}px)`));
+    const N = f.touches[0].clientY - d.current;
+    N <= 0 || (m.current = N, c.current && (c.current.style.transform = `translateY(${N}px)`));
   }, v = () => {
     m.current > je ? t == null || t() : c.current && (c.current.style.transition = "transform 0.2s ease", c.current.style.transform = "", setTimeout(() => {
       c.current && (c.current.style.transition = "");
     }, 200)), d.current = null, m.current = 0;
   };
   if (_ === "hidden") return null;
-  const f = ["bottom-sheet", l].filter(Boolean).join(" "), y = [
+  const b = ["bottom-sheet", l].filter(Boolean).join(" "), y = [
     "bottom-sheet__panel",
     _ === "in" ? "animate-slide-up-in" : "animate-slide-up-out"
   ].join(" "), x = [
     "bottom-sheet__overlay",
     _ === "in" ? "animate-overlay-in" : "animate-overlay-out"
   ].join(" ");
-  return /* @__PURE__ */ r("div", { className: f, children: [
+  return /* @__PURE__ */ r("div", { className: b, children: [
     /* @__PURE__ */ e(
       "button",
       {
@@ -215,7 +215,7 @@ const $e = 300, ka = ({
 }) => a ? /* @__PURE__ */ r("div", { className: ["bottom-sheet-header", s].filter(Boolean).join(" "), children: [
   /* @__PURE__ */ e("div", { className: "bottom-sheet-header__title ts-600-xl", children: a }),
   t && /* @__PURE__ */ e("div", { className: "bottom-sheet-header__right-accessory", children: t })
-] }) : null, Me = (a) => /* @__PURE__ */ e("svg", { viewBox: "0 0 20 20", fill: "currentColor", "aria-hidden": "true", focusable: "false", ...a, children: /* @__PURE__ */ e("path", { d: "M10 1C14.9706 1 19 5.02944 19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1ZM13.707 6.29297C13.3165 5.90244 12.6835 5.90244 12.293 6.29297L10 8.58594L7.70703 6.29297C7.31651 5.90244 6.68349 5.90244 6.29297 6.29297C5.90244 6.68349 5.90244 7.31651 6.29297 7.70703L8.58594 10L6.29297 12.293C5.90244 12.6835 5.90244 13.3165 6.29297 13.707C6.68349 14.0976 7.31651 14.0976 7.70703 13.707L10 11.4141L12.293 13.707C12.6835 14.0976 13.3165 14.0976 13.707 13.707C14.0976 13.3165 14.0976 12.6835 13.707 12.293L11.4141 10L13.707 7.70703C14.0976 7.31651 14.0976 6.68349 13.707 6.29297Z" }) }), Te = (a) => /* @__PURE__ */ e("svg", { viewBox: "0 0 20 20", fill: "currentColor", "aria-hidden": "true", focusable: "false", ...a, children: /* @__PURE__ */ e("path", { d: "M10 1C14.9706 1 19 5.02944 19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1ZM10 8.5C9.44771 8.5 9 8.94772 9 9.5V13.5C9 14.0523 9.44771 14.5 10 14.5C10.5523 14.5 11 14.0523 11 13.5V9.5C11 8.94772 10.5523 8.5 10 8.5ZM10 5.5C9.44771 5.5 9 5.94772 9 6.5C9 7.05228 9.44771 7.5 10 7.5C10.5523 7.5 11 7.05228 11 6.5C11 5.94772 10.5523 5.5 10 5.5Z" }) }), Ie = ({
+] }) : null, Te = (a) => /* @__PURE__ */ e("svg", { viewBox: "0 0 20 20", fill: "currentColor", "aria-hidden": "true", focusable: "false", ...a, children: /* @__PURE__ */ e("path", { d: "M10 1C14.9706 1 19 5.02944 19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1ZM13.707 6.29297C13.3165 5.90244 12.6835 5.90244 12.293 6.29297L10 8.58594L7.70703 6.29297C7.31651 5.90244 6.68349 5.90244 6.29297 6.29297C5.90244 6.68349 5.90244 7.31651 6.29297 7.70703L8.58594 10L6.29297 12.293C5.90244 12.6835 5.90244 13.3165 6.29297 13.707C6.68349 14.0976 7.31651 14.0976 7.70703 13.707L10 11.4141L12.293 13.707C12.6835 14.0976 13.3165 14.0976 13.707 13.707C14.0976 13.3165 14.0976 12.6835 13.707 12.293L11.4141 10L13.707 7.70703C14.0976 7.31651 14.0976 6.68349 13.707 6.29297Z" }) }), Me = (a) => /* @__PURE__ */ e("svg", { viewBox: "0 0 20 20", fill: "currentColor", "aria-hidden": "true", focusable: "false", ...a, children: /* @__PURE__ */ e("path", { d: "M10 1C14.9706 1 19 5.02944 19 10C19 14.9706 14.9706 19 10 19C5.02944 19 1 14.9706 1 10C1 5.02944 5.02944 1 10 1ZM10 8.5C9.44771 8.5 9 8.94772 9 9.5V13.5C9 14.0523 9.44771 14.5 10 14.5C10.5523 14.5 11 14.0523 11 13.5V9.5C11 8.94772 10.5523 8.5 10 8.5ZM10 5.5C9.44771 5.5 9 5.94772 9 6.5C9 7.05228 9.44771 7.5 10 7.5C10.5523 7.5 11 7.05228 11 6.5C11 5.94772 10.5523 5.5 10 5.5Z" }) }), Ie = ({
   value: a,
   onChange: t,
   placeholder: s = "Поиск",
@@ -239,7 +239,7 @@ const $e = 300, ka = ({
       className: "ds-search__clear",
       "aria-label": "Очистить",
       onClick: () => t == null ? void 0 : t(""),
-      children: /* @__PURE__ */ e("span", { className: "ds-icon ds-icon--20", "aria-hidden": "true", children: /* @__PURE__ */ e(Me, {}) })
+      children: /* @__PURE__ */ e("span", { className: "ds-icon ds-icon--20", "aria-hidden": "true", children: /* @__PURE__ */ e(Te, {}) })
     }
   )
 ] }), Re = ({
@@ -272,8 +272,8 @@ const La = ({
   className: n = "",
   onHide: i
 }) => {
-  const l = I(null), o = I(null), c = I(() => {
-  }), d = I(i);
+  const l = M(null), o = M(null), c = M(() => {
+  }), d = M(i);
   d.current = i, ye(() => {
     const _ = l.current, h = o.current.offsetHeight;
     _.style.height = "0px", c.current = ce(0, h, 200, 16, (p) => {
@@ -328,7 +328,7 @@ const La = ({
     ] }),
     n && /* @__PURE__ */ e("div", { className: "action-form-cell__right", children: n })
   ] }) });
-}, z = ({
+}, P = ({
   label: a,
   imageUrl: t,
   icon: s,
@@ -428,7 +428,7 @@ const La = ({
       style: i
     }
   );
-}, P = ({
+}, Z = ({
   value: a,
   color: t = "var(--primitive-neutral-4)",
   textColor: s = "var(--primitive-default)",
@@ -447,7 +447,7 @@ const La = ({
       children: l
     }
   );
-}, G = (a) => a ?? /* @__PURE__ */ e(S, {}), Se = ({
+}, Y = (a) => a ?? /* @__PURE__ */ e(z, {}), Se = ({
   variant: a = "disclosure",
   className: t = "",
   content: s,
@@ -502,19 +502,19 @@ const La = ({
     case "icon-24":
     case "icon-18": {
       const v = `ds-cell-right-accessory__icon--${a.split("-")[1]}`;
-      return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ e("span", { className: `ds-cell-right-accessory__icon ${v}`, "aria-hidden": "true", children: G(n) }) });
+      return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ e("span", { className: `ds-cell-right-accessory__icon ${v}`, "aria-hidden": "true", children: Y(n) }) });
     }
     case "spinner-24":
-      return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ e(D, {}) });
+      return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ e(V, {}) });
     case "spinner-34-avatar-s":
       return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ r("div", { className: "ds-cell-right-accessory__row", children: [
-        /* @__PURE__ */ e("span", { className: "ds-cell-right-accessory__spinner-large", children: /* @__PURE__ */ e(D, { className: "ds-cell-right-accessory__spinner-large-inner" }) }),
-        /* @__PURE__ */ e(z, { size: "s", shape: "circle", label: _ })
+        /* @__PURE__ */ e("span", { className: "ds-cell-right-accessory__spinner-large", children: /* @__PURE__ */ e(V, { className: "ds-cell-right-accessory__spinner-large-inner" }) }),
+        /* @__PURE__ */ e(P, { size: "s", shape: "circle", label: _ })
       ] }) });
     case "avatar-m":
-      return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ e(z, { size: "m", shape: "circle", label: _ }) });
+      return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ e(P, { size: "m", shape: "circle", label: _ }) });
     case "avatar-s":
-      return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ e(z, { size: "s", shape: "circle", label: _ }) });
+      return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ e(P, { size: "s", shape: "circle", label: _ }) });
     case "text-l":
     case "text-m":
     case "text-s": {
@@ -553,18 +553,18 @@ const La = ({
         /* @__PURE__ */ e("span", { className: "ds-cell-right-accessory__disclosure", "aria-hidden": "true", children: /* @__PURE__ */ e(A, {}) })
       ] }) });
     case "badge":
-      return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ e(P, { value: c }) });
+      return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ e(Z, { value: c }) });
     case "badge-disclosure":
       return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ r("div", { className: "ds-cell-right-accessory__row", children: [
-        /* @__PURE__ */ e(P, { value: c }),
+        /* @__PURE__ */ e(Z, { value: c }),
         /* @__PURE__ */ e("span", { className: "ds-cell-right-accessory__disclosure", "aria-hidden": "true", children: /* @__PURE__ */ e(A, {}) })
       ] }) });
     case "notification-indicator":
       return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ e("span", { className: "ds-cell-right-accessory__notification-indicator", "aria-hidden": "true" }) });
     case "icon-24-icon-24":
       return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ r("div", { className: "ds-cell-right-accessory__row", children: [
-        /* @__PURE__ */ e("span", { className: "ds-cell-right-accessory__icon ds-cell-right-accessory__icon--24", "aria-hidden": "true", children: G(n) }),
-        /* @__PURE__ */ e("span", { className: "ds-cell-right-accessory__icon ds-cell-right-accessory__icon--24", "aria-hidden": "true", children: G(i) })
+        /* @__PURE__ */ e("span", { className: "ds-cell-right-accessory__icon ds-cell-right-accessory__icon--24", "aria-hidden": "true", children: Y(n) }),
+        /* @__PURE__ */ e("span", { className: "ds-cell-right-accessory__icon ds-cell-right-accessory__icon--24", "aria-hidden": "true", children: Y(i) })
       ] }) });
     case "text-m-icon-30":
     case "text-m-icon-24":
@@ -572,7 +572,7 @@ const La = ({
       const v = `ds-cell-right-accessory__icon--${a.split("-").pop()}`;
       return /* @__PURE__ */ e("div", { className: p, children: /* @__PURE__ */ r("div", { className: "ds-cell-right-accessory__row", children: [
         /* @__PURE__ */ e("span", { className: "ds-cell-right-accessory__text-m ts-500-m", children: l }),
-        /* @__PURE__ */ e("span", { className: `ds-cell-right-accessory__icon ${v}`, "aria-hidden": "true", children: G(n) })
+        /* @__PURE__ */ e("span", { className: `ds-cell-right-accessory__icon ${v}`, "aria-hidden": "true", children: Y(n) })
       ] }) });
     }
     case "stepper":
@@ -588,7 +588,7 @@ const La = ({
             children: /* @__PURE__ */ e(se, {})
           }
         ),
-        /* @__PURE__ */ e(P, { value: c }),
+        /* @__PURE__ */ e(Z, { value: c }),
         /* @__PURE__ */ e(
           "button",
           {
@@ -605,10 +605,10 @@ const La = ({
     default:
       return /* @__PURE__ */ e("div", { className: p });
   }
-}, Oe = {
+}, ze = {
   xl: "ts-500-xl",
   "2xl": "ts-500-2xl"
-}, ze = {
+}, Oe = {
   0: "accordeon-cell--content-spacing-0",
   "0-5x": "accordeon-cell--content-spacing-0-5x",
   "1x": "accordeon-cell--content-spacing-1x",
@@ -622,7 +622,7 @@ const La = ({
   "2x": "accordeon-cell--list-spacing-2x",
   "4x": "accordeon-cell--list-spacing-4x",
   "6x": "accordeon-cell--list-spacing-6x"
-}, Ma = ({
+}, Ta = ({
   title: a,
   description: t,
   children: s,
@@ -638,42 +638,42 @@ const La = ({
   onOpenChange: u,
   contentSpacing: p = "4x",
   listSpacing: v = "2x",
-  className: f = ""
+  className: b = ""
 }) => {
-  const [y, x] = j(_), N = h ?? y, b = l && !!t, $ = !!s, k = () => {
-    const T = !N;
+  const [y, x] = L(_), f = h ?? y, N = l && !!t, w = !!s, B = () => {
+    const T = !f;
     h === void 0 && x(T), u == null || u(T);
-  }, B = [
+  }, C = [
     "accordeon-cell",
     `accordeon-cell--${n}`,
     `accordeon-cell--chevron-${i}`,
-    ze[p],
+    Oe[p],
     Pe[v],
-    N ? "is-open" : "",
-    b ? "accordeon-cell--with-description" : "",
-    f
-  ].filter(Boolean).join(" "), C = /* @__PURE__ */ e(Se, { variant: d, text: m });
-  return /* @__PURE__ */ r("div", { className: B, children: [
+    f ? "is-open" : "",
+    N ? "accordeon-cell--with-description" : "",
+    b
+  ].filter(Boolean).join(" "), $ = /* @__PURE__ */ e(Se, { variant: d, text: m });
+  return /* @__PURE__ */ r("div", { className: C, children: [
     /* @__PURE__ */ r(
       "button",
       {
         className: "accordeon-cell__header",
         type: "button",
-        "aria-expanded": N,
-        onClick: k,
+        "aria-expanded": f,
+        onClick: B,
         children: [
           /* @__PURE__ */ r("span", { className: "accordeon-cell__center", children: [
             /* @__PURE__ */ r("span", { className: "accordeon-cell__content-row", children: [
-              /* @__PURE__ */ e("span", { className: `accordeon-cell__title ${Oe[n]}`, children: a }),
+              /* @__PURE__ */ e("span", { className: `accordeon-cell__title ${ze[n]}`, children: a }),
               /* @__PURE__ */ e("span", { className: "accordeon-cell__chevron", "aria-hidden": "true", children: /* @__PURE__ */ e(ae, {}) })
             ] }),
-            b && /* @__PURE__ */ e("span", { className: "accordeon-cell__description ts-400-s", children: t })
+            N && /* @__PURE__ */ e("span", { className: "accordeon-cell__description ts-400-s", children: t })
           ] }),
-          o && i === "title" && /* @__PURE__ */ e("span", { className: "accordeon-cell__right-accessory", children: c ?? C })
+          o && i === "title" && /* @__PURE__ */ e("span", { className: "accordeon-cell__right-accessory", children: c ?? $ })
         ]
       }
     ),
-    $ && N && /* @__PURE__ */ e("div", { className: "accordeon-cell__body", children: /* @__PURE__ */ e("div", { className: "accordeon-cell__list", children: s }) })
+    w && f && /* @__PURE__ */ e("div", { className: "accordeon-cell__body", children: /* @__PURE__ */ e("div", { className: "accordeon-cell__list", children: s }) })
   ] });
 }, Ze = {
   xl: "ts-500-xl",
@@ -681,7 +681,7 @@ const La = ({
   m: "ts-500-m",
   s: "ts-500-s",
   xs: "ts-500-s"
-}, Z = ({
+}, F = ({
   children: a,
   variant: t = "primary",
   size: s = "m",
@@ -716,11 +716,11 @@ const La = ({
           /* @__PURE__ */ e("span", { className: `button__label ${Ze[s]}`, children: a }),
           l && /* @__PURE__ */ e("span", { className: "button__accessory", children: l })
         ] }),
-        o && /* @__PURE__ */ e(D, {})
+        o && /* @__PURE__ */ e(V, {})
       ]
     }
   );
-}, Ta = ({
+}, Ma = ({
   title: a,
   subtitle: t,
   description: s,
@@ -736,10 +736,10 @@ const La = ({
   subtitleColor: u = "var(--primitive-secondary)",
   descriptionColor: p = "var(--primitive-secondary)",
   className: v = "",
-  onClick: f
+  onClick: b
 }) => {
   const y = /* @__PURE__ */ e(
-    z,
+    P,
     {
       size: "m",
       shape: "circle",
@@ -754,9 +754,9 @@ const La = ({
     "div",
     {
       className: ["ds-cell", c !== "none" ? `ds-cell--padding-${c}` : "", v].filter(Boolean).join(" "),
-      onClick: f,
-      role: f ? "button" : void 0,
-      tabIndex: f ? 0 : void 0,
+      onClick: b,
+      role: b ? "button" : void 0,
+      tabIndex: b ? 0 : void 0,
       children: [
         l && /* @__PURE__ */ e("div", { className: "ds-cell__left-accessory", children: n || y }),
         /* @__PURE__ */ r("div", { className: "ds-cell__content", children: [
@@ -782,12 +782,12 @@ const La = ({
     return /* @__PURE__ */ e("div", { className: c, children: s });
   switch (a) {
     case "avatar":
-      return /* @__PURE__ */ e("div", { className: c, children: /* @__PURE__ */ e(z, { size: "m", shape: "circle", label: i }) });
+      return /* @__PURE__ */ e("div", { className: c, children: /* @__PURE__ */ e(P, { size: "m", shape: "circle", label: i }) });
     case "icon-30":
     case "icon-24":
     case "icon-18": {
       const d = `ds-cell-left-accessory__icon--${a.split("-")[1]}`;
-      return /* @__PURE__ */ e("div", { className: c, children: /* @__PURE__ */ e("span", { className: `ds-cell-left-accessory__icon ${d}`, "aria-hidden": "true", children: n ?? /* @__PURE__ */ e(S, {}) }) });
+      return /* @__PURE__ */ e("div", { className: c, children: /* @__PURE__ */ e("span", { className: `ds-cell-left-accessory__icon ${d}`, "aria-hidden": "true", children: n ?? /* @__PURE__ */ e(z, {}) }) });
     }
     case "card-preview":
       return /* @__PURE__ */ e("div", { className: c, children: /* @__PURE__ */ e("span", { className: "ds-cell-left-accessory__card-preview", "aria-hidden": "true" }) });
@@ -806,7 +806,7 @@ const La = ({
           className: "ds-cell-left-accessory__add-button",
           onClick: o,
           "aria-label": "Add",
-          children: /* @__PURE__ */ e("span", { className: "ds-cell-left-accessory__add-icon", "aria-hidden": "true", children: n ?? /* @__PURE__ */ e(S, {}) })
+          children: /* @__PURE__ */ e("span", { className: "ds-cell-left-accessory__add-icon", "aria-hidden": "true", children: n ?? /* @__PURE__ */ e(z, {}) })
         }
       ) });
     case "custom":
@@ -827,77 +827,84 @@ const La = ({
   emptyText: _ = "Ничего не найдено",
   children: h
 }) => {
-  const [u, p] = j(!1), [v, f] = j(!1), [y, x] = j(() => window.innerWidth < oe), [N, b] = j({ left: 0, width: de }), [$, k] = j("");
-  M(() => {
+  const [u, p] = L(!1), [v, b] = L(!1), [y, x] = L(() => window.innerWidth < oe), [f, N] = L({ left: 0, width: de }), [w, B] = L("");
+  j(() => {
     const g = () => x(window.innerWidth < oe);
     return window.addEventListener("resize", g), () => window.removeEventListener("resize", g);
-  }, []), M(() => {
+  }, []);
+  const C = () => {
+    if (!s.current) return;
+    const g = s.current.getBoundingClientRect(), I = Math.max(g.width, de);
+    window.innerHeight - g.bottom >= Fe ? N({ top: g.bottom + 4, left: g.left, width: I }) : N({ bottom: window.innerHeight - g.top + 4, left: g.left, width: I });
+  };
+  j(() => {
     if (!y) {
-      if (a) {
-        if (s.current) {
-          const g = s.current.getBoundingClientRect(), L = Math.max(g.width, de);
-          window.innerHeight - g.bottom >= Fe ? b({ top: g.bottom + 4, left: g.left, width: L }) : b({ bottom: window.innerHeight - g.top + 4, left: g.left, width: L });
-        }
-        f(!1), p(!0);
-      } else if (u) {
-        f(!0);
+      if (a)
+        b(!1), p(!0);
+      else if (u) {
+        b(!0);
         const g = setTimeout(() => {
-          p(!1), f(!1);
+          p(!1), b(!1);
         }, 300);
         return () => clearTimeout(g);
       }
     }
-  }, [a, y]), M(() => {
+  }, [a, y]), j(() => {
+    if (!(!a || y))
+      return C(), window.addEventListener("scroll", C, { capture: !0 }), window.addEventListener("resize", C), () => {
+        window.removeEventListener("scroll", C, { capture: !0 }), window.removeEventListener("resize", C);
+      };
+  }, [a, y]), j(() => {
     if (!a || y) return;
-    const g = (L) => {
-      L.key === "Escape" && t();
+    const g = (I) => {
+      I.key === "Escape" && t();
     };
     return document.addEventListener("keydown", g), () => document.removeEventListener("keydown", g);
-  }, [a, y, t]), M(() => {
-    a || k("");
+  }, [a, y, t]), j(() => {
+    a || B("");
   }, [a]);
-  const B = /* @__PURE__ */ e("span", { className: "dropdown-popup__checkmark", "aria-hidden": "true", children: /* @__PURE__ */ e(te, {}) }), C = /* @__PURE__ */ e("span", { className: "dropdown-popup__checkmark", "aria-hidden": "true" }), T = q.Children.map(h, (g) => {
-    if (!q.isValidElement(g))
+  const $ = /* @__PURE__ */ e("span", { className: "dropdown-popup__checkmark", "aria-hidden": "true", children: /* @__PURE__ */ e(te, {}) }), T = /* @__PURE__ */ e("span", { className: "dropdown-popup__checkmark", "aria-hidden": "true" }), k = G.Children.map(h, (g) => {
+    if (!G.isValidElement(g))
       return g;
-    const L = i !== void 0 && typeof g.props.title == "string" && g.props.title === i, V = g.props.onClick;
-    return q.cloneElement(g, {
+    const I = i !== void 0 && typeof g.props.title == "string" && g.props.title === i, E = g.props.onClick;
+    return G.cloneElement(g, {
       verticalPadding: "none",
       titleClassName: "ts-400-m",
       hasRightAccessory: !0,
-      rightAccessory: L ? B : C,
-      onClick: V ? () => {
-        V(), t();
+      rightAccessory: I ? $ : T,
+      onClick: E ? () => {
+        E(), t();
       } : t
     });
-  }), w = /* @__PURE__ */ r(E, { children: [
-    d && /* @__PURE__ */ e("div", { className: "dropdown-popup__state", children: /* @__PURE__ */ e(D, {}) }),
+  }), R = /* @__PURE__ */ r(D, { children: [
+    d && /* @__PURE__ */ e("div", { className: "dropdown-popup__state", children: /* @__PURE__ */ e(V, {}) }),
     !d && m && /* @__PURE__ */ e("div", { className: "dropdown-popup__state", children: /* @__PURE__ */ e("p", { className: "dropdown-popup__empty-text ts-400-m", children: _ }) }),
-    !d && !m && T
+    !d && !m && k
   ] });
   if (y) {
-    const g = n || l ? /* @__PURE__ */ r(E, { children: [
+    const g = n || l ? /* @__PURE__ */ r(D, { children: [
       n && /* @__PURE__ */ e(be, { title: n }),
       l && /* @__PURE__ */ e(
         Re,
         {
-          value: $,
-          onChange: (L) => {
-            k(L), c == null || c(L);
+          value: w,
+          onChange: (I) => {
+            B(I), c == null || c(I);
           },
           placeholder: o
         }
       )
     ] }) : void 0;
     return le.createPortal(
-      /* @__PURE__ */ e(Ne, { isOpen: a, onClose: t, header: g, children: w }),
+      /* @__PURE__ */ e(Ne, { isOpen: a, onClose: t, header: g, children: R }),
       document.body
     );
   }
   if (!u) return null;
-  const R = [
+  const H = [
     "dropdown-popup",
     v ? "dropdown-popup--exiting" : ""
-  ].filter(Boolean).join(" "), H = l && /* @__PURE__ */ e("div", { className: "dropdown-popup__search-wrap", children: /* @__PURE__ */ r("div", { className: "dropdown-popup__search", children: [
+  ].filter(Boolean).join(" "), S = l && /* @__PURE__ */ e("div", { className: "dropdown-popup__search-wrap", children: /* @__PURE__ */ r("div", { className: "dropdown-popup__search", children: [
     /* @__PURE__ */ e("span", { className: "dropdown-popup__search-icon", "aria-hidden": "true", children: /* @__PURE__ */ e(he, {}) }),
     /* @__PURE__ */ e(
       "input",
@@ -910,7 +917,7 @@ const La = ({
     )
   ] }) });
   return le.createPortal(
-    /* @__PURE__ */ r("div", { className: R, children: [
+    /* @__PURE__ */ r("div", { className: H, children: [
       /* @__PURE__ */ e("div", { className: "dropdown-popup__overlay", onClick: t }),
       /* @__PURE__ */ r(
         "div",
@@ -918,14 +925,14 @@ const La = ({
           className: "dropdown-popup__panel",
           style: {
             position: "fixed",
-            width: N.width,
-            top: N.top,
-            bottom: N.bottom,
-            left: N.left
+            width: f.width,
+            top: f.top,
+            bottom: f.bottom,
+            left: f.left
           },
           children: [
-            H,
-            /* @__PURE__ */ e("div", { className: "dropdown-popup__content", children: w })
+            S,
+            /* @__PURE__ */ e("div", { className: "dropdown-popup__content ds-scroll-area", children: R })
           ]
         }
       )
@@ -948,57 +955,57 @@ const La = ({
   value: u,
   hasSearch: p = !1,
   searchPlaceholder: v = "Поиск",
-  onSearchChange: f,
+  onSearchChange: b,
   isLoading: y = !1,
   isEmpty: x = !1,
-  emptyText: N = "Ничего не найдено"
+  emptyText: f = "Ничего не найдено"
 }) => {
-  const [b, $] = j(!1), k = I(null), B = t === "dropdown" && h !== void 0, C = B ? b : m, T = [
+  const [N, w] = L(!1), B = M(null), C = t === "dropdown" && h !== void 0, $ = C ? N : m, T = [
     "chip",
     `chip--${t}`,
     s ? "is-selected" : "",
     n ? "is-disabled" : "",
-    C ? "is-pressed" : "",
+    $ ? "is-pressed" : "",
     _
-  ].filter(Boolean).join(" "), w = () => o ? o === "icon" ? /* @__PURE__ */ e("span", { className: "chip__accessory chip__accessory--left ds-icon ds-icon--xs", "aria-hidden": "true", children: c ?? /* @__PURE__ */ e(S, {}) }) : o === "logo" ? /* @__PURE__ */ e("span", { className: "chip__accessory chip__accessory--left", "aria-hidden": "true", children: /* @__PURE__ */ e("span", { className: "chip__logo" }) }) : o === "logo-stack" ? /* @__PURE__ */ r("span", { className: "chip__accessory chip__accessory--left chip__logo-stack", "aria-hidden": "true", children: [
+  ].filter(Boolean).join(" "), k = () => o ? o === "icon" ? /* @__PURE__ */ e("span", { className: "chip__accessory chip__accessory--left ds-icon ds-icon--xs", "aria-hidden": "true", children: c ?? /* @__PURE__ */ e(z, {}) }) : o === "logo" ? /* @__PURE__ */ e("span", { className: "chip__accessory chip__accessory--left", "aria-hidden": "true", children: /* @__PURE__ */ e("span", { className: "chip__logo" }) }) : o === "logo-stack" ? /* @__PURE__ */ r("span", { className: "chip__accessory chip__accessory--left chip__logo-stack", "aria-hidden": "true", children: [
     /* @__PURE__ */ e("span", { className: "chip__logo" }),
     /* @__PURE__ */ e("span", { className: "chip__logo" })
   ] }) : null : null, R = () => {
-    B ? $((L) => !L) : i == null || i();
-  }, H = (L) => {
-    L.stopPropagation(), l && l(L);
-  }, g = /* @__PURE__ */ r(E, { children: [
-    w(),
+    C ? w((g) => !g) : i == null || i();
+  }, H = (g) => {
+    g.stopPropagation(), l && l(g);
+  }, S = /* @__PURE__ */ r(D, { children: [
+    k(),
     /* @__PURE__ */ e("span", { className: "chip__label ts-500-s", children: a }),
-    t === "tab" && d !== void 0 && /* @__PURE__ */ e("span", { className: "chip__accessory chip__accessory--right chip__badge", "aria-hidden": "true", children: /* @__PURE__ */ e(P, { value: Number(d), size: "s" }) }),
-    t === "dropdown" && /* @__PURE__ */ e("span", { className: `chip__accessory chip__caret ${C ? "is-open" : ""}`, "aria-hidden": "true", children: /* @__PURE__ */ e(ve, {}) }),
+    t === "tab" && d !== void 0 && /* @__PURE__ */ e("span", { className: "chip__accessory chip__accessory--right chip__badge", "aria-hidden": "true", children: /* @__PURE__ */ e(Z, { value: Number(d), size: "s" }) }),
+    t === "dropdown" && /* @__PURE__ */ e("span", { className: `chip__accessory chip__caret ${$ ? "is-open" : ""}`, "aria-hidden": "true", children: /* @__PURE__ */ e(ve, {}) }),
     t === "action" && s && /* @__PURE__ */ e("span", { className: "chip__accessory chip__cross", "aria-hidden": "true", onClick: H })
   ] });
-  return t === "dropdown" ? /* @__PURE__ */ r(E, { children: [
+  return t === "dropdown" ? /* @__PURE__ */ r(D, { children: [
     /* @__PURE__ */ e(
       "button",
       {
-        ref: k,
+        ref: B,
         className: T,
         type: "button",
         disabled: n,
         onClick: R,
-        children: /* @__PURE__ */ e("span", { className: "chip__dropdown", children: g })
+        children: /* @__PURE__ */ e("span", { className: "chip__dropdown", children: S })
       }
     ),
-    B && /* @__PURE__ */ e(
+    C && /* @__PURE__ */ e(
       ge,
       {
-        isOpen: b,
-        onClose: () => $(!1),
-        triggerRef: k,
+        isOpen: N,
+        onClose: () => w(!1),
+        triggerRef: B,
         value: u,
         hasSearch: p,
         searchPlaceholder: v,
-        onSearchChange: f,
+        onSearchChange: b,
         isLoading: y,
         isEmpty: x,
-        emptyText: N,
+        emptyText: f,
         children: h
       }
     )
@@ -1009,7 +1016,7 @@ const La = ({
       type: "button",
       disabled: n,
       onClick: i,
-      children: g
+      children: S
     }
   );
 }, Ha = ({
@@ -1020,8 +1027,8 @@ const La = ({
   items: i,
   className: l = ""
 }) => {
-  const o = I(null);
-  M(() => {
+  const o = M(null);
+  j(() => {
     if (!t)
       return;
     const m = (_) => {
@@ -1078,13 +1085,13 @@ const La = ({
   size: u = "s",
   className: p = ""
 }) => {
-  const v = s && !!t || l, f = [
+  const v = s && !!t || l, b = [
     "contextual-notification",
     `contextual-notification--${u}`,
     v ? "contextual-notification--extended" : "",
     p
-  ].filter(Boolean).join(" "), y = u === "m" ? "ts-500-m" : "ts-500-s", x = u === "m" ? "ts-400-m" : "ts-400-s", N = u === "m" ? "ts-500-m" : "ts-500-s", b = u === "m" ? 20 : 16;
-  return /* @__PURE__ */ r("div", { className: f, children: [
+  ].filter(Boolean).join(" "), y = u === "m" ? "ts-500-m" : "ts-500-s", x = u === "m" ? "ts-400-m" : "ts-400-s", f = u === "m" ? "ts-500-m" : "ts-500-s", N = u === "m" ? 20 : 16;
+  return /* @__PURE__ */ r("div", { className: b, children: [
     /* @__PURE__ */ e("div", { className: "contextual-notification__accessory", children: m === "avatar" ? h : /* @__PURE__ */ e("span", { className: "ds-icon ds-icon--18", "aria-hidden": "true", children: _ }) }),
     /* @__PURE__ */ r("div", { className: "contextual-notification__body", children: [
       /* @__PURE__ */ r("div", { className: "contextual-notification__header", children: [
@@ -1107,17 +1114,17 @@ const La = ({
         /* @__PURE__ */ e(
           "button",
           {
-            className: `contextual-notification__action-label ${N} hoverOpacity`,
+            className: `contextual-notification__action-label ${f} hoverOpacity`,
             type: "button",
             onClick: d,
             children: o
           }
         ),
         c && /* @__PURE__ */ e(
-          D,
+          V,
           {
             className: "contextual-notification__spinner",
-            style: { width: `${b}px`, height: `${b}px` }
+            style: { width: `${N}px`, height: `${N}px` }
           }
         )
       ] })
@@ -1131,8 +1138,8 @@ const La = ({
   children: i,
   className: l = ""
 }) => {
-  const [o, c] = j(a ? "in" : "hidden");
-  if (M(() => {
+  const [o, c] = L(a ? "in" : "hidden");
+  if (j(() => {
     if (a)
       c("in");
     else if (o === "in") {
@@ -1140,7 +1147,7 @@ const La = ({
       const _ = setTimeout(() => c("hidden"), Ae);
       return () => clearTimeout(_);
     }
-  }, [a]), M(() => {
+  }, [a]), j(() => {
     if (o !== "in") return;
     const _ = (h) => {
       h.key === "Escape" && (t == null || t());
@@ -1155,7 +1162,7 @@ const La = ({
     /* @__PURE__ */ e("div", { className: "drawer__overlay", "aria-hidden": "true" }),
     /* @__PURE__ */ r("aside", { className: m, role: "dialog", "aria-modal": "true", children: [
       s && /* @__PURE__ */ e("div", { className: "drawer__header", children: s }),
-      /* @__PURE__ */ e("div", { className: "drawer__content", children: i }),
+      /* @__PURE__ */ e("div", { className: "drawer__content ds-scroll-area", children: i }),
       n && /* @__PURE__ */ e("div", { className: "drawer__footer", children: n })
     ] })
   ] });
@@ -1180,7 +1187,7 @@ const La = ({
     t && /* @__PURE__ */ e("div", { className: "drawer-footer__description ts-400-s", children: t }),
     /* @__PURE__ */ r("div", { className: o, children: [
       n && a !== "1-button" && /* @__PURE__ */ e(
-        Z,
+        F,
         {
           variant: n.isSelected ? "primary" : "secondary",
           isDisabled: n.isDisabled,
@@ -1191,7 +1198,7 @@ const La = ({
         }
       ),
       s && /* @__PURE__ */ e(
-        Z,
+        F,
         {
           variant: s.isSelected ? "primary" : "secondary",
           isDisabled: s.isDisabled,
@@ -1255,8 +1262,8 @@ const La = ({
   onOpenChange: l,
   className: o = ""
 }) => {
-  const [c, d] = j(i), m = n !== void 0, _ = m ? n : c;
-  M(() => {
+  const [c, d] = L(i), m = n !== void 0, _ = m ? n : c;
+  j(() => {
     m || d(i);
   }, [i, m]);
   const h = (v) => {
@@ -1281,7 +1288,7 @@ const La = ({
       ]
     }
   );
-}, Oa = ({
+}, za = ({
   label: a,
   description: t,
   errorMessage: s,
@@ -1297,31 +1304,31 @@ const La = ({
   children: u,
   hasSearch: p = !1,
   searchPlaceholder: v = "Поиск",
-  onSearchChange: f,
+  onSearchChange: b,
   isLoading: y = !1,
   isEmpty: x = !1,
-  emptyText: N = "Ничего не найдено"
+  emptyText: f = "Ничего не найдено"
 }) => {
-  const [b, $] = j(!1), k = I(null), B = o ? s ?? t : t, C = [
+  const [N, w] = L(!1), B = M(null), C = o ? s ?? t : t, $ = [
     "dropdown",
     l ? "dropdown--disabled" : "",
     o ? "dropdown--error" : "",
-    b ? "dropdown--open" : ""
+    N ? "dropdown--open" : ""
   ].filter(Boolean).join(" ");
-  return /* @__PURE__ */ r(E, { children: [
+  return /* @__PURE__ */ r(D, { children: [
     /* @__PURE__ */ r(
       "div",
       {
-        ref: k,
-        className: C,
+        ref: B,
+        className: $,
         onClick: () => {
-          l || $((R) => !R);
+          l || w((R) => !R);
         },
         onKeyDown: (R) => {
-          (R.key === "Enter" || R.key === " ") && (R.preventDefault(), l || $((H) => !H));
+          (R.key === "Enter" || R.key === " ") && (R.preventDefault(), l || w((H) => !H));
         },
         role: "combobox",
-        "aria-expanded": b,
+        "aria-expanded": N,
         "aria-haspopup": "listbox",
         tabIndex: l ? -1 : 0,
         children: [
@@ -1338,9 +1345,9 @@ const La = ({
               m && /* @__PURE__ */ e("span", { className: "dropdown__chevron", "aria-hidden": "true", children: /* @__PURE__ */ e(ve, {}) })
             ] }) })
           ] }),
-          B && /* @__PURE__ */ r("div", { className: "dropdown__meta", children: [
+          C && /* @__PURE__ */ r("div", { className: "dropdown__meta", children: [
             /* @__PURE__ */ e("div", { className: "dropdown__divider" }),
-            /* @__PURE__ */ e("p", { className: "dropdown__description ts-400-s", children: B })
+            /* @__PURE__ */ e("p", { className: "dropdown__description ts-400-s", children: C })
           ] })
         ]
       }
@@ -1348,17 +1355,17 @@ const La = ({
     /* @__PURE__ */ e(
       ge,
       {
-        isOpen: b,
-        onClose: () => $(!1),
-        triggerRef: k,
+        isOpen: N,
+        onClose: () => w(!1),
+        triggerRef: B,
         label: a,
         value: n,
         hasSearch: p,
         searchPlaceholder: v,
-        onSearchChange: f,
+        onSearchChange: b,
         isLoading: y,
         isEmpty: x,
-        emptyText: N,
+        emptyText: f,
         children: u
       }
     )
@@ -1373,7 +1380,7 @@ const La = ({
     children: /* @__PURE__ */ e("span", { className: "feedback-banner__action-label ts-500-m", children: a.label })
   },
   t
-), za = ({
+), Oa = ({
   children: a,
   primaryAction: t,
   secondaryAction: s,
@@ -1416,12 +1423,12 @@ const La = ({
       "aria-busy": i || void 0,
       children: [
         /* @__PURE__ */ e("span", { className: "icon-button__icon", children: /* @__PURE__ */ e("span", { className: "ds-icon ds-icon--m", "aria-hidden": "true", children: a }) }),
-        i && /* @__PURE__ */ e(D, {})
+        i && /* @__PURE__ */ e(V, {})
       ]
     }
   );
 }, Ge = { label: "Действие" }, Ye = { label: "Действие" }, O = (a, t, s = "") => /* @__PURE__ */ e(
-  Z,
+  F,
   {
     variant: t,
     isDisabled: a.isDisabled,
@@ -1431,7 +1438,7 @@ const La = ({
     children: a.label
   }
 ), qe = ({
-  icon: a = /* @__PURE__ */ e(S, {}),
+  icon: a = /* @__PURE__ */ e(z, {}),
   ariaLabel: t,
   onClick: s,
   isDisabled: n = !1,
@@ -1489,19 +1496,19 @@ const La = ({
       O(n, "secondary"),
       O(s, "primary")
     ] }),
-    a === "page-control-button" && /* @__PURE__ */ r(E, { children: [
+    a === "page-control-button" && /* @__PURE__ */ r(D, { children: [
       /* @__PURE__ */ e("div", { className: "footer__page-control", role: "tablist", "aria-label": "Страницы", children: Array.from({ length: _ }, (y, x) => {
-        const N = x === h;
+        const f = x === h;
         return /* @__PURE__ */ e(
           "button",
           {
             className: [
               "footer__page-dot",
-              N ? "footer__page-dot--selected" : ""
+              f ? "footer__page-dot--selected" : ""
             ].filter(Boolean).join(" "),
             type: "button",
             role: "tab",
-            "aria-selected": N,
+            "aria-selected": f,
             "aria-label": `Страница ${x + 1}`,
             onClick: () => u == null ? void 0 : u(x)
           },
@@ -1541,10 +1548,10 @@ const La = ({
   ] });
 };
 function Qe(a = fe) {
-  const [t, s] = j(
+  const [t, s] = L(
     () => typeof window < "u" && window.matchMedia(`(max-width: ${a}px)`).matches
   );
-  return M(() => {
+  return j(() => {
     const n = window.matchMedia(`(max-width: ${a}px)`), i = (l) => s(l.matches);
     return n.addEventListener("change", i), () => n.removeEventListener("change", i);
   }, [a]), t;
@@ -1559,38 +1566,38 @@ const Je = 300, Ue = 400, ea = ({
   isOverlayCloseEnabled: o = !0,
   isSheet: c = !1
 }) => {
-  const d = Qe(), m = I(null), [_, h] = j(!1), [u, p] = j(a ? "in" : "hidden");
-  if (M(() => {
+  const d = Qe(), m = M(null), [_, h] = L(!1), [u, p] = L(a ? "in" : "hidden");
+  if (j(() => {
     if (a)
       p("in");
     else if (u === "in") {
       p("out");
-      const b = setTimeout(() => p("hidden"), d ? Ue : Je);
-      return () => clearTimeout(b);
+      const w = setTimeout(() => p("hidden"), d ? Ue : Je);
+      return () => clearTimeout(w);
     }
-  }, [a]), M(() => {
+  }, [a]), j(() => {
     if (u !== "in") return;
-    const N = (b) => {
-      b.key === "Escape" && (t == null || t());
+    const N = (w) => {
+      w.key === "Escape" && (t == null || t());
     };
     return document.addEventListener("keydown", N), () => document.removeEventListener("keydown", N);
-  }, [u, t]), M(() => {
+  }, [u, t]), j(() => {
     if (u !== "in") {
       h(!1);
       return;
     }
     const N = m.current;
     if (!N) return;
-    const b = () => h(N.scrollTop > 0);
-    return b(), N.addEventListener("scroll", b), () => N.removeEventListener("scroll", b);
+    const w = () => h(N.scrollTop >= 24);
+    return w(), N.addEventListener("scroll", w), () => N.removeEventListener("scroll", w);
   }, [u, i]), c && d) {
-    const N = q.isValidElement(s) ? s.props.title : void 0, b = N != null ? /* @__PURE__ */ e(be, { title: N }) : void 0;
+    const N = G.isValidElement(s) ? s.props.title : void 0, w = N != null ? /* @__PURE__ */ e(be, { title: N }) : void 0;
     return /* @__PURE__ */ e(
       Ne,
       {
         isOpen: a,
         onClose: t,
-        header: b,
+        header: w,
         footer: n,
         isOverlayCloseEnabled: o,
         className: l,
@@ -1599,31 +1606,34 @@ const Je = 300, Ue = 400, ea = ({
     );
   }
   if (u === "hidden") return null;
-  const v = ["modal", l].filter(Boolean).join(" "), f = [
+  const v = G.isValidElement(s) ? s.props.title : void 0, b = ["modal", l].filter(Boolean).join(" "), y = [
     "modal__header",
     _ ? "modal__header--compact" : ""
-  ].filter(Boolean).join(" "), y = [
+  ].filter(Boolean).join(" "), x = [
     "modal__panel",
     d ? u === "in" ? "animate-slide-right-in" : "animate-slide-right-out" : u === "in" ? "animate-popup-in" : "animate-popup-out"
-  ].join(" "), x = [
+  ].join(" "), f = [
     "modal__overlay",
     u === "in" ? "animate-overlay-in" : "animate-overlay-out"
   ].join(" ");
-  return /* @__PURE__ */ r("div", { className: v, children: [
+  return /* @__PURE__ */ r("div", { className: b, children: [
     /* @__PURE__ */ e(
       "button",
       {
         type: "button",
-        className: x,
+        className: f,
         "aria-label": "Закрыть модальное окно",
         onClick: () => {
           o && (t == null || t());
         }
       }
     ),
-    /* @__PURE__ */ r("aside", { className: y, role: "dialog", "aria-modal": "true", children: [
-      s && /* @__PURE__ */ e("div", { className: f, children: s }),
-      /* @__PURE__ */ e("div", { ref: m, className: "modal__content", children: /* @__PURE__ */ e("div", { className: "modal__content-inner", children: i }) }),
+    /* @__PURE__ */ r("aside", { className: x, role: "dialog", "aria-modal": "true", children: [
+      s && /* @__PURE__ */ e("div", { className: y, children: s }),
+      /* @__PURE__ */ e("div", { ref: m, className: "modal__content ds-scroll-area", children: /* @__PURE__ */ r("div", { className: "modal__content-inner", children: [
+        v && /* @__PURE__ */ e("div", { className: "modal__content-title ts-600-2xl", children: v }),
+        i
+      ] }) }),
       n && /* @__PURE__ */ e("div", { className: "modal__footer", children: n })
     ] })
   ] });
@@ -1648,18 +1658,15 @@ const Je = 300, Ue = 400, ea = ({
       children: _
     }
   ) : /* @__PURE__ */ e("div", { className: "modal-header__side", children: _ }) : /* @__PURE__ */ e("div", { className: "modal-header__side modal-header__side--empty" });
-  return /* @__PURE__ */ r("div", { className: c, children: [
-    /* @__PURE__ */ r("div", { className: "modal-header__navigation", children: [
-      m(d, n, "Открыть предыдущее действие"),
-      /* @__PURE__ */ e("div", { className: "modal-header__center", children: typeof a > "u" ? null : /* @__PURE__ */ e("div", { className: "modal-header__title modal-header__title--compact ts-500-m", children: a }) }),
-      m(
-        /* @__PURE__ */ e("span", { className: "modal-header__icon ds-icon ds-icon--24", "aria-hidden": "true", children: /* @__PURE__ */ e(J, {}) }),
-        i,
-        "Закрыть модальное окно"
-      )
-    ] }),
-    typeof a > "u" ? null : /* @__PURE__ */ e("div", { className: "modal-header__title-block", children: /* @__PURE__ */ e("div", { className: "modal-header__title modal-header__title--default ts-600-2xl", children: a }) })
-  ] });
+  return /* @__PURE__ */ e("div", { className: c, children: /* @__PURE__ */ r("div", { className: "modal-header__navigation", children: [
+    m(d, n, "Открыть предыдущее действие"),
+    /* @__PURE__ */ e("div", { className: "modal-header__center", children: typeof a > "u" ? null : /* @__PURE__ */ e("div", { className: "modal-header__title modal-header__title--compact ts-500-m", children: a }) }),
+    m(
+      /* @__PURE__ */ e("span", { className: "modal-header__icon ds-icon ds-icon--24", "aria-hidden": "true", children: /* @__PURE__ */ e(J, {}) }),
+      i,
+      "Закрыть модальное окно"
+    )
+  ] }) });
 }, ta = ({
   layout: a = "1-button",
   description: t,
@@ -1681,7 +1688,7 @@ const Je = 300, Ue = 400, ea = ({
     t && /* @__PURE__ */ e("div", { className: "modal-footer__description ts-400-s", children: t }),
     /* @__PURE__ */ r("div", { className: o, children: [
       n && a !== "1-button" && /* @__PURE__ */ e(
-        Z,
+        F,
         {
           variant: n.isSelected ? "primary" : "secondary",
           isDisabled: n.isDisabled,
@@ -1692,7 +1699,7 @@ const Je = 300, Ue = 400, ea = ({
         }
       ),
       s && /* @__PURE__ */ e(
-        Z,
+        F,
         {
           variant: s.isSelected ? "primary" : "secondary",
           isDisabled: s.isDisabled,
@@ -1728,12 +1735,12 @@ const Je = 300, Ue = 400, ea = ({
       role: l ? "button" : void 0,
       tabIndex: l ? 0 : void 0,
       children: [
-        /* @__PURE__ */ e("span", { className: `link-cell__icon ds-icon ${d}`, "aria-hidden": "true", children: s ?? /* @__PURE__ */ e(S, {}) }),
+        /* @__PURE__ */ e("span", { className: `link-cell__icon ds-icon ${d}`, "aria-hidden": "true", children: s ?? /* @__PURE__ */ e(z, {}) }),
         /* @__PURE__ */ r("div", { className: "link-cell__text", children: [
           /* @__PURE__ */ e("span", { className: `link-cell__title ${m}`, children: a }),
           t && /* @__PURE__ */ e("span", { className: "link-cell__description ts-400-s", children: t })
         ] }),
-        i && /* @__PURE__ */ e(D, { className: "link-cell__spinner" })
+        i && /* @__PURE__ */ e(V, { className: "link-cell__spinner" })
       ]
     }
   );
@@ -1783,7 +1790,7 @@ const Je = 300, Ue = 400, ea = ({
       ),
       children: /* @__PURE__ */ r("div", { className: "flow-result-view", children: [
         /* @__PURE__ */ e(
-          z,
+          P,
           {
             size: "l",
             shape: "superellipse",
@@ -1863,7 +1870,7 @@ const Je = 300, Ue = 400, ea = ({
       disabled: n || i,
       onClick: l,
       children: [
-        i && /* @__PURE__ */ e(D, { className: "header-button__spinner" }),
+        i && /* @__PURE__ */ e(V, { className: "header-button__spinner" }),
         t && /* @__PURE__ */ e("span", { className: "ds-icon ds-icon--m header-button__icon", children: t }),
         /* @__PURE__ */ e("span", { className: "header-button__label ts-500-s", children: a })
       ]
@@ -1944,7 +1951,7 @@ const Je = 300, Ue = 400, ea = ({
           }
         },
         u
-      )) }) : /* @__PURE__ */ r(E, { children: [
+      )) }) : /* @__PURE__ */ r(D, { children: [
         /* @__PURE__ */ e(
           "div",
           {
@@ -2010,19 +2017,19 @@ const Je = 300, Ue = 400, ea = ({
   avatarUrl: u,
   avatarInitials: p = "НО",
   onCustomerClick: v,
-  onNotificationsClick: f,
+  onNotificationsClick: b,
   onGiftClick: y,
   onSettingsClick: x,
-  onLogoutClick: N,
-  onNavMainClick: b,
-  onNavPaymentsClick: $,
-  onNavServicesClick: k
+  onLogoutClick: f,
+  onNavMainClick: N,
+  onNavPaymentsClick: w,
+  onNavServicesClick: B
 }) => {
-  const [B, C] = j(!1), T = [
+  const [C, $] = L(!1), T = [
     "main-page-navigation-bar",
     t
-  ].filter(Boolean).join(" "), w = () => {
-    C(!B), v == null || v();
+  ].filter(Boolean).join(" "), k = () => {
+    $(!C), v == null || v();
   };
   return /* @__PURE__ */ r("header", { className: T, children: [
     /* @__PURE__ */ r("div", { className: "main-page-navigation-bar__desktop", children: [
@@ -2062,7 +2069,7 @@ const Je = 300, Ue = 400, ea = ({
             {
               isActive: a === "main",
               label: "Главная",
-              onClick: b
+              onClick: N
             }
           ),
           /* @__PURE__ */ e(
@@ -2070,7 +2077,7 @@ const Je = 300, Ue = 400, ea = ({
             {
               isActive: a === "payments",
               label: "Платежи",
-              onClick: $
+              onClick: w
             }
           ),
           /* @__PURE__ */ e(
@@ -2078,7 +2085,7 @@ const Je = 300, Ue = 400, ea = ({
             {
               isActive: a === "services",
               label: "Сервисы",
-              onClick: k
+              onClick: B
             }
           )
         ] }),
@@ -2098,11 +2105,11 @@ const Je = 300, Ue = 400, ea = ({
                 l && /* @__PURE__ */ e(
                   "button",
                   {
-                    className: `main-page-navigation-bar__customer-select hoverOpacity ${B ? "main-page-navigation-bar__customer-select--open" : ""}`,
+                    className: `main-page-navigation-bar__customer-select hoverOpacity ${C ? "main-page-navigation-bar__customer-select--open" : ""}`,
                     type: "button",
-                    onClick: w,
+                    onClick: k,
                     "aria-label": "Customer menu",
-                    "aria-expanded": B,
+                    "aria-expanded": C,
                     children: /* @__PURE__ */ e("span", { className: "ds-icon ds-icon--18", "aria-hidden": "true", children: /* @__PURE__ */ e(ae, {}) })
                   }
                 )
@@ -2127,7 +2134,7 @@ const Je = 300, Ue = 400, ea = ({
                 className: "main-page-navigation-bar__action-button hoverOpacity",
                 type: "button",
                 "aria-label": "Notifications",
-                onClick: f,
+                onClick: b,
                 children: [
                   /* @__PURE__ */ e("span", { className: "ds-icon ds-icon--m", "aria-hidden": "true", children: /* @__PURE__ */ e(ie, {}) }),
                   i && /* @__PURE__ */ e(ee, { className: "main-page-navigation-bar__notification-badge" })
@@ -2160,7 +2167,7 @@ const Je = 300, Ue = 400, ea = ({
                 className: "main-page-navigation-bar__action-button hoverOpacity",
                 type: "button",
                 "aria-label": "Logout",
-                onClick: N,
+                onClick: f,
                 children: /* @__PURE__ */ e("span", { className: "ds-icon ds-icon--m", "aria-hidden": "true", children: /* @__PURE__ */ e(ke, {}) })
               }
             )
@@ -2185,11 +2192,11 @@ const Je = 300, Ue = 400, ea = ({
             l && /* @__PURE__ */ e(
               "button",
               {
-                className: `main-page-navigation-bar__customer-select hoverOpacity ${B ? "main-page-navigation-bar__customer-select--open" : ""}`,
+                className: `main-page-navigation-bar__customer-select hoverOpacity ${C ? "main-page-navigation-bar__customer-select--open" : ""}`,
                 type: "button",
-                onClick: w,
+                onClick: k,
                 "aria-label": "Customer menu",
-                "aria-expanded": B,
+                "aria-expanded": C,
                 children: /* @__PURE__ */ e("span", { className: "ds-icon ds-icon--18", "aria-hidden": "true", children: /* @__PURE__ */ e(ae, {}) })
               }
             )
@@ -2224,7 +2231,7 @@ const Je = 300, Ue = 400, ea = ({
             className: "main-page-navigation-bar__action-button hoverOpacity",
             type: "button",
             "aria-label": "Notifications",
-            onClick: f,
+            onClick: b,
             children: [
               /* @__PURE__ */ e("span", { className: "ds-icon ds-icon--m", "aria-hidden": "true", children: /* @__PURE__ */ e(ie, {}) }),
               i && /* @__PURE__ */ e(ee, { className: "main-page-navigation-bar__notification-badge" })
@@ -2298,7 +2305,7 @@ const Je = 300, Ue = 400, ea = ({
     X(s, i, o),
     X(n ?? s, l, c)
   ] }) : t === "icon-badge" ? /* @__PURE__ */ r("div", { className: "navigation-bar-adaptive__right navigation-bar-adaptive__right--badge", children: [
-    /* @__PURE__ */ e(P, { value: m, size: "s" }),
+    /* @__PURE__ */ e(Z, { value: m, size: "s" }),
     X(s, i, o)
   ] }) : /* @__PURE__ */ e("div", { className: "navigation-bar-adaptive__right", children: X(s, i, o) });
 }, da = (a) => {
@@ -2317,28 +2324,28 @@ const Je = 300, Ue = 400, ea = ({
     backButtonIcon: u = /* @__PURE__ */ e(Q, {}),
     actionButtonIcon: p = /* @__PURE__ */ e(pe, {}),
     onBackClick: v,
-    onActionClick: f,
+    onActionClick: b,
     onRootLinkClick: y,
     isInverted: x,
-    isSticky: N
-  } = a, b = i.length > 0, $ = !!s && m, k = !!n && d, B = b && i.every(la), C = [
+    isSticky: f
+  } = a, N = i.length > 0, w = !!s && m, B = !!n && d, C = N && i.every(la), $ = [
     "navigation-bar",
-    N ? "navigation-bar--sticky" : "",
+    f ? "navigation-bar--sticky" : "",
     l
   ].filter(Boolean).join(" "), T = [
     "navigation-bar-adaptive",
     x ? "navigation-bar-adaptive--inverted" : "",
-    N ? "navigation-bar-adaptive--sticky" : "",
+    f ? "navigation-bar-adaptive--sticky" : "",
     l
   ].filter(Boolean).join(" ");
-  return /* @__PURE__ */ r(E, { children: [
-    /* @__PURE__ */ r("section", { className: C, children: [
+  return /* @__PURE__ */ r(D, { children: [
+    /* @__PURE__ */ r("section", { className: $, children: [
       (o || c) && /* @__PURE__ */ r("div", { className: "navigation-bar__buttons", children: [
         o && _e(u, _, v),
-        c && _e(p, h, f)
+        c && _e(p, h, b)
       ] }),
       /* @__PURE__ */ r("div", { className: "navigation-bar__header", children: [
-        k && /* @__PURE__ */ r(
+        B && /* @__PURE__ */ r(
           "button",
           {
             className: "navigation-bar__root-link hoverOpacity",
@@ -2352,49 +2359,49 @@ const Je = 300, Ue = 400, ea = ({
         ),
         /* @__PURE__ */ r("div", { className: "navigation-bar__title-block", children: [
           /* @__PURE__ */ e("h2", { className: "navigation-bar__title ts-600-2xl", children: t }),
-          $ && /* @__PURE__ */ e("p", { className: "navigation-bar__description ts-500-xs", children: s })
+          w && /* @__PURE__ */ e("p", { className: "navigation-bar__description ts-500-xs", children: s })
         ] })
       ] }),
-      b && /* @__PURE__ */ e("div", { className: "navigation-bar__items", role: B ? "list" : void 0, children: i.map((w, R) => {
-        const H = w.key ?? R;
-        if (w.kind === "step") {
-          const g = w.state === "current", L = w.state === "completed", V = L && !!w.onClick, F = [
+      N && /* @__PURE__ */ e("div", { className: "navigation-bar__items", role: C ? "list" : void 0, children: i.map((k, R) => {
+        const H = k.key ?? R;
+        if (k.kind === "step") {
+          const S = k.state === "current", g = k.state === "completed", I = g && !!k.onClick, E = [
             "navigation-bar__step",
-            g ? "navigation-bar__step--current" : "",
-            L ? "navigation-bar__step--completed" : "",
-            V ? "hoverOpacity" : ""
-          ].filter(Boolean).join(" "), W = /* @__PURE__ */ r(E, { children: [
+            S ? "navigation-bar__step--current" : "",
+            g ? "navigation-bar__step--completed" : "",
+            I ? "hoverOpacity" : ""
+          ].filter(Boolean).join(" "), W = /* @__PURE__ */ r(D, { children: [
             /* @__PURE__ */ e("span", { className: "navigation-bar__step-indicator", "aria-hidden": "true" }),
-            /* @__PURE__ */ e("span", { className: "navigation-bar__step-label ts-500-m", children: w.label })
+            /* @__PURE__ */ e("span", { className: "navigation-bar__step-label ts-500-m", children: k.label })
           ] });
-          return V ? /* @__PURE__ */ e(
+          return I ? /* @__PURE__ */ e(
             "button",
             {
-              className: F,
+              className: E,
               type: "button",
               role: "listitem",
-              onClick: w.onClick,
+              onClick: k.onClick,
               children: W
             },
             H
           ) : /* @__PURE__ */ e(
             "div",
             {
-              className: F,
+              className: E,
               role: "listitem",
               children: W
             },
             H
           );
         }
-        return w.href ? /* @__PURE__ */ e(
+        return k.href ? /* @__PURE__ */ e(
           "a",
           {
             className: "navigation-bar__link hoverOpacity",
-            href: w.isDisabled ? void 0 : w.href,
-            onClick: w.onClick,
-            "aria-disabled": w.isDisabled || void 0,
-            children: /* @__PURE__ */ e("span", { className: "navigation-bar__link-label ts-500-s", children: w.label })
+            href: k.isDisabled ? void 0 : k.href,
+            onClick: k.onClick,
+            "aria-disabled": k.isDisabled || void 0,
+            children: /* @__PURE__ */ e("span", { className: "navigation-bar__link-label ts-500-s", children: k.label })
           },
           H
         ) : /* @__PURE__ */ e(
@@ -2402,9 +2409,9 @@ const Je = 300, Ue = 400, ea = ({
           {
             className: "navigation-bar__link hoverOpacity",
             type: "button",
-            onClick: w.onClick,
-            disabled: w.isDisabled,
-            children: /* @__PURE__ */ e("span", { className: "navigation-bar__link-label ts-500-s", children: w.label })
+            onClick: k.onClick,
+            disabled: k.isDisabled,
+            children: /* @__PURE__ */ e("span", { className: "navigation-bar__link-label ts-500-s", children: k.label })
           },
           H
         );
@@ -2519,7 +2526,7 @@ const Je = 300, Ue = 400, ea = ({
           m && n && /* @__PURE__ */ e("p", { className: "promo-page-banner__description promo-page-banner__description--adaptive ts-500-m", children: n })
         ] }),
         _ && /* @__PURE__ */ e("div", { className: "promo-page-banner__button-block", children: /* @__PURE__ */ e(
-          Z,
+          F,
           {
             className: "promo-page-banner__button",
             variant: "white",
@@ -2531,11 +2538,11 @@ const Je = 300, Ue = 400, ea = ({
     ] })
   ] });
 }, _a = () => /* @__PURE__ */ e(
-  z,
+  P,
   {
     size: "m",
     shape: "circle",
-    icon: /* @__PURE__ */ e(S, {}),
+    icon: /* @__PURE__ */ e(z, {}),
     style: {
       "--avatar-size": "44px",
       "--avatar-content-size": "20px",
@@ -2597,7 +2604,7 @@ const Je = 300, Ue = 400, ea = ({
         c && t && /* @__PURE__ */ e("p", { className: "promo-page-horizontal-card__description ts-500-l", children: t })
       ] }),
       h && d && /* @__PURE__ */ e(
-        Z,
+        F,
         {
           className: "promo-page-horizontal-card__button",
           variant: "primary",
@@ -2641,49 +2648,49 @@ const Je = 300, Ue = 400, ea = ({
   placeholder: u,
   onTitleChange: p,
   isDisabled: v = !1,
-  isError: f = !1,
+  isError: b = !1,
   backgroundColor: y,
   style: x,
-  className: N = "",
-  onClick: b
+  className: f = "",
+  onClick: N
 }) => {
-  const $ = I(null), k = h && a, C = [
+  const w = M(null), B = h && a, $ = [
     "table-cell",
     v ? "table-cell--disabled" : "",
-    f ? "table-cell--error" : "",
-    !!b || k ? "table-cell--interactive" : "",
-    k ? "table-cell--edit" : "",
-    N
-  ].filter(Boolean).join(" "), H = a && (h || t !== void 0) || s && n !== void 0 || i && l !== void 0, g = f, L = !f && d && m, V = (F) => {
+    b ? "table-cell--error" : "",
+    !!N || B ? "table-cell--interactive" : "",
+    B ? "table-cell--edit" : "",
+    f
+  ].filter(Boolean).join(" "), H = a && (h || t !== void 0) || s && n !== void 0 || i && l !== void 0, S = b, g = !b && d && m, I = (E) => {
     var W;
-    v || (k && F.target !== $.current && ((W = $.current) == null || W.focus()), b == null || b());
+    v || (B && E.target !== w.current && ((W = w.current) == null || W.focus()), N == null || N());
   };
   return /* @__PURE__ */ r(
     "div",
     {
-      className: C,
+      className: $,
       style: y ? { "--table-cell-bg": y, ...x } : x,
-      onClick: V,
-      role: b && !k ? "button" : void 0,
-      tabIndex: b && !k && !v ? 0 : void 0,
+      onClick: I,
+      role: N && !B ? "button" : void 0,
+      tabIndex: N && !B && !v ? 0 : void 0,
       children: [
         o && c && /* @__PURE__ */ e("div", { className: "table-cell__left", children: c }),
         H && /* @__PURE__ */ r("div", { className: "table-cell__content", children: [
-          a && (k ? /* @__PURE__ */ e(
+          a && (B ? /* @__PURE__ */ e(
             "input",
             {
-              ref: $,
+              ref: w,
               className: `table-cell__title-input ts-${_}-m`,
               value: t ?? "",
               placeholder: u,
               disabled: v,
-              onChange: (F) => p == null ? void 0 : p(F.target.value)
+              onChange: (E) => p == null ? void 0 : p(E.target.value)
             }
           ) : t !== void 0 && /* @__PURE__ */ e("p", { className: `table-cell__title ts-${_}-m`, children: t })),
           s && n !== void 0 && /* @__PURE__ */ e("p", { className: "table-cell__description ts-400-s", children: n }),
           i && l !== void 0 && /* @__PURE__ */ e("div", { className: "table-cell__tag", children: l })
         ] }),
-        (L || g) && /* @__PURE__ */ e("div", { className: "table-cell__right", children: g ? /* @__PURE__ */ e("span", { className: "ds-icon ds-icon--s", children: /* @__PURE__ */ e(Te, {}) }) : m })
+        (g || S) && /* @__PURE__ */ e("div", { className: "table-cell__right", children: S ? /* @__PURE__ */ e("span", { className: "ds-icon ds-icon--s", children: /* @__PURE__ */ e(Me, {}) }) : m })
       ]
     }
   );
@@ -2699,28 +2706,28 @@ const Je = 300, Ue = 400, ea = ({
   onTabChange: d,
   className: m = ""
 }) => {
-  var B;
-  const _ = c !== void 0, [h, u] = j(o), [p, v] = j(
+  var C;
+  const _ = c !== void 0, [h, u] = L(o), [p, v] = L(
     _ ? c : o
-  ), [f, y] = j("idle"), x = I(null), N = I(null), b = _ ? c : h;
-  M(() => () => {
-    N.current && clearTimeout(N.current);
+  ), [b, y] = L("idle"), x = M(null), f = M(null), N = _ ? c : h;
+  j(() => () => {
+    f.current && clearTimeout(f.current);
   }, []);
-  const $ = (C) => {
-    C === b || f !== "idle" || (x.current = C, _ || u(C), d == null || d(C), y("out"), N.current = setTimeout(() => {
-      v(x.current), y("in"), N.current = setTimeout(() => {
+  const w = ($) => {
+    $ === N || b !== "idle" || (x.current = $, _ || u($), d == null || d($), y("out"), f.current = setTimeout(() => {
+      v(x.current), y("in"), f.current = setTimeout(() => {
         y("idle");
       }, 500);
     }, 200));
-  }, k = [
+  }, B = [
     "tabs-carousel__content",
-    f === "out" ? "animate-tab-content-out" : "",
-    f === "in" ? "animate-tab-content-in" : ""
+    b === "out" ? "animate-tab-content-out" : "",
+    b === "in" ? "animate-tab-content-in" : ""
   ].filter(Boolean).join(" ");
   return /* @__PURE__ */ r("div", { className: `tabs-carousel ${m}`.trim(), children: [
     /* @__PURE__ */ r("div", { className: "tabs-carousel__bar", children: [
-      /* @__PURE__ */ e("div", { className: "tabs-carousel__tabs", children: a.map((C, T) => {
-        const w = T === b;
+      /* @__PURE__ */ e("div", { className: "tabs-carousel__tabs", children: a.map(($, T) => {
+        const k = T === N;
         return /* @__PURE__ */ r(
           "button",
           {
@@ -2728,16 +2735,16 @@ const Je = 300, Ue = 400, ea = ({
             className: [
               "tabs-carousel__tab",
               `tabs-carousel__tab--${t}`,
-              w ? "is-active" : ""
+              k ? "is-active" : ""
             ].filter(Boolean).join(" "),
-            onClick: () => $(T),
-            "aria-selected": w,
+            onClick: () => w(T),
+            "aria-selected": k,
             children: [
-              /* @__PURE__ */ e("span", { className: `tabs-carousel__tab-label ts-600-${t}`, children: C.label }),
-              C.badge !== void 0 && /* @__PURE__ */ e("span", { className: `tabs-carousel__tab-badge tabs-carousel__tab-badge--${t}`, children: /* @__PURE__ */ e(
-                P,
+              /* @__PURE__ */ e("span", { className: `tabs-carousel__tab-label ts-600-${t}`, children: $.label }),
+              $.badge !== void 0 && /* @__PURE__ */ e("span", { className: `tabs-carousel__tab-badge tabs-carousel__tab-badge--${t}`, children: /* @__PURE__ */ e(
+                Z,
                 {
-                  value: C.badge,
+                  value: $.badge,
                   size: "s",
                   color: "var(--primitive-brand)",
                   textColor: "var(--primitive-default)"
@@ -2761,7 +2768,7 @@ const Je = 300, Ue = 400, ea = ({
         }
       )
     ] }),
-    ((B = a[p]) == null ? void 0 : B.content) !== void 0 && /* @__PURE__ */ e("div", { className: k, children: a[p].content })
+    ((C = a[p]) == null ? void 0 : C.content) !== void 0 && /* @__PURE__ */ e("div", { className: B, children: a[p].content })
   ] });
 }, tt = ({
   children: a,
@@ -2796,11 +2803,11 @@ const Je = 300, Ue = 400, ea = ({
   hasHelpIcon: m = !1,
   helpText: _
 }) => {
-  const h = I(null), u = c ? s ?? t : t, p = () => {
-    const f = h.current;
-    f && (f.style.height = "auto", f.style.height = `${f.scrollHeight}px`);
+  const h = M(null), u = c ? s ?? t : t, p = () => {
+    const b = h.current;
+    b && (b.style.height = "auto", b.style.height = `${b.scrollHeight}px`);
   };
-  M(() => {
+  j(() => {
     p();
   }, [i]);
   const v = [
@@ -2828,7 +2835,7 @@ const Je = 300, Ue = 400, ea = ({
           className: "text-area__field ts-400-m",
           placeholder: n,
           value: i,
-          onChange: (f) => l == null ? void 0 : l(f.target.value),
+          onChange: (b) => l == null ? void 0 : l(b.target.value),
           disabled: o,
           maxLength: d
         }
@@ -2839,12 +2846,12 @@ const Je = 300, Ue = 400, ea = ({
       /* @__PURE__ */ e("p", { className: "text-area__description ts-400-s", children: u })
     ] })
   ] });
-}, Y = (a, t = "ds-icon--m") => /* @__PURE__ */ e("span", { className: `ds-icon ${t} widget-title-accessory__icon`, "aria-hidden": "true", children: a }), pa = ({
+}, q = (a, t = "ds-icon--m") => /* @__PURE__ */ e("span", { className: `ds-icon ${t} widget-title-accessory__icon`, "aria-hidden": "true", children: a }), pa = ({
   variant: a = "icon",
   className: t = "",
   content: s,
   text: n = a === "description" ? "Text S" : "Text M",
-  icon: i = /* @__PURE__ */ e(S, {}),
+  icon: i = /* @__PURE__ */ e(z, {}),
   secondaryIcon: l = /* @__PURE__ */ e(Ce, {}),
   onClick: o
 }) => {
@@ -2868,13 +2875,13 @@ const Je = 300, Ue = 400, ea = ({
             children: n
           }
         ),
-        (a === "icon" || a === "link-icon" || a === "icon-icon") && Y(i),
-        a === "icon-icon" && Y(l),
-        a === "editing-mode" && /* @__PURE__ */ r(E, { children: [
-          Y(/* @__PURE__ */ e(Be, {}), "ds-icon--18"),
-          Y(l)
+        (a === "icon" || a === "link-icon" || a === "icon-icon") && q(i),
+        a === "icon-icon" && q(l),
+        a === "editing-mode" && /* @__PURE__ */ r(D, { children: [
+          q(/* @__PURE__ */ e(Be, {}), "ds-icon--18"),
+          q(l)
         ] }),
-        a === "none" && /* @__PURE__ */ e(P, { value: 0, color: "transparent", textColor: "transparent", className: "widget-title-accessory__none" })
+        a === "none" && /* @__PURE__ */ e(Z, { value: 0, color: "transparent", textColor: "transparent", className: "widget-title-accessory__none" })
       ]
     }
   );
@@ -2927,20 +2934,20 @@ const Je = 300, Ue = 400, ea = ({
   ] });
 };
 export {
-  Ma as AccordeonCell,
+  Ta as AccordeonCell,
   ja as ActionFormCell,
   ka as ActionSheet,
   Ca as ActionSheetButton,
   Ba as ActionSheetFooter,
   $a as ActionSheetHeader,
   La as Alert,
-  z as Avatar,
-  P as Badge,
+  P as Avatar,
+  Z as Badge,
   Ne as BottomSheet,
   be as BottomSheetHeader,
   Re as BottomSheetSearch,
-  Z as Button,
-  Ta as Cell,
+  F as Button,
+  Ma as Cell,
   Ia as CellLeftAccessory,
   Se as CellRightAccessory,
   Ee as Checkbox,
@@ -2951,8 +2958,8 @@ export {
   Va as DrawerFooter,
   Sa as DrawerHeader,
   We as DrawerHeaderTitle,
-  Oa as Dropdown,
-  za as FeedbackBanner,
+  za as Dropdown,
+  Oa as FeedbackBanner,
   Za as FlowResultView,
   Pa as Footer,
   qe as FooterIconButton,
@@ -2975,7 +2982,7 @@ export {
   De as Radio,
   U as SCINavigationButton,
   Ie as Search,
-  D as Spinner,
+  V as Spinner,
   Ve as Switch,
   Ua as Table,
   et as TableCell,

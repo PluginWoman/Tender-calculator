@@ -1,6 +1,6 @@
 {
   "name": "@pluginwoman/t-ds",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "T Design System - React components library",
   "type": "module",
   "main": "./dist/t-ds.cjs",
