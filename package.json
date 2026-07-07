@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@pluginwoman/t-ds": "^1.2.0",
+    "@pluginwoman/t-ds": "file:./vendor/@pluginwoman/t-ds",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1"
