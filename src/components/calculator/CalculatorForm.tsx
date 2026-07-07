@@ -120,7 +120,7 @@ function ArticlePickerCell({
           background: 'var(--popup-primary)',
           borderRadius: 'var(--rounding-3x)',
           boxShadow: 'var(--Popout)',
-          padding: '0 var(--spacing-5x)',
+          padding: 'var(--spacing-3x) var(--spacing-5x)',
           maxHeight: '280px',
           overflowY: 'auto',
           overscrollBehavior: 'contain',
