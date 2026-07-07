@@ -58,7 +58,6 @@ export interface CalculatorState {
 
 export interface CalculatorResults {
   directCosts: number
-  contractCosts: number
   overheadTotal: number
   specificCosts: number
   fullCost: number
@@ -116,29 +115,27 @@ function calculate(state: CalculatorState): CalculatorResults {
   let directCosts = 0
   let payrollBase = 0
 
+  const extraCosts =
+    state.serviceMaterials + state.serviceRent + state.serviceLicenses +
+    state.contractDelivery + state.contractInstall + state.contractTravel +
+    state.contractCert + state.contractInsurance + state.contractDocs
+
   if (state.purchaseType === 'goods') {
     directCosts =
       state.goodsQty * state.goodsPrice +
       state.goodsCustoms +
       state.goodsLogistics +
-      state.goodsPack
+      state.goodsPack +
+      extraCosts
     payrollBase = directCosts
   } else {
     let fop = 0
     state.specialists.forEach((s) => {
       fop += s.qty * s.hours * s.rate
     })
-    directCosts = fop * (1 + INSURANCE_RATE) + state.serviceMaterials + state.serviceRent + state.serviceLicenses
+    directCosts = fop * (1 + INSURANCE_RATE) + extraCosts
     payrollBase = fop
   }
-
-  const contractCosts =
-    state.contractDelivery +
-    state.contractInstall +
-    state.contractTravel +
-    state.contractCert +
-    state.contractInsurance +
-    state.contractDocs
 
   const usePayroll = OVERHEAD_NORMS[state.category].base === 'payroll'
   const overheadBase = usePayroll ? payrollBase : directCosts
@@ -149,7 +146,7 @@ function calculate(state: CalculatorState): CalculatorResults {
   const contSecCost =
     state.contractSecurityAmount * (BANK_GUARANTEE_RATE * (state.contractDurationDays / DAYS_IN_YEAR))
 
-  const costBeforeDelay = directCosts + contractCosts + overheadTotal + bidSecCost + contSecCost
+  const costBeforeDelay = directCosts + overheadTotal + bidSecCost + contSecCost
   const delayCost = costBeforeDelay * (ALT_YIELD_RATE * (state.paymentDelayDays / DAYS_IN_YEAR))
 
   const costForRisk = costBeforeDelay + delayCost
@@ -158,7 +155,7 @@ function calculate(state: CalculatorState): CalculatorResults {
   const specificCosts =
     bidSecCost + contSecCost + delayCost + riskAmount + state.tenderMgmt + state.warrantyReserve
 
-  const fullCost = directCosts + contractCosts + overheadTotal + specificCosts
+  const fullCost = directCosts + overheadTotal + specificCosts
   const profitAmount = fullCost * (state.profitPercent / 100)
   const priceBeforeTax = fullCost + profitAmount
 
@@ -188,7 +185,6 @@ function calculate(state: CalculatorState): CalculatorResults {
 
   return {
     directCosts,
-    contractCosts,
     overheadTotal,
     specificCosts,
     fullCost,

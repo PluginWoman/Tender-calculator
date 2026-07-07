@@ -1,6 +1,7 @@
 import { Fragment, useRef, useEffect, useCallback, useState } from 'react'
 import { Widget, Input, Dropdown, Cell, CellRightAccessory, Table, TableCell, ActionFormCell } from '@pluginwoman/t-ds'
-import { Plus, Trash } from '@pluginwoman/t-ds/icons'
+import { Plus, Trash, Checkmark } from '@pluginwoman/t-ds/icons'
+import { ChevronDown as ChevronDownFilled } from '@pluginwoman/t-ds/icons/12/Filled'
 import type { CalculatorState, Specialist } from '../../hooks/useCalculator'
 import styles from './CalculatorForm.module.css'
 
@@ -31,6 +32,108 @@ function parseRateInput(s: string): number {
 
 const RUB = <span className="ts-400-s" style={{ color: 'var(--primitive-secondary)' }}>₽</span>
 const PCT = <span className="ts-400-s" style={{ color: 'var(--primitive-secondary)' }}>%</span>
+
+// --- Extra costs articles ---
+type ArticleKey = 'materials' | 'rent' | 'licenses' | 'delivery' | 'install' | 'travel' | 'cert' | 'insurance' | 'docs'
+type ArticleStateKey = 'serviceMaterials' | 'serviceRent' | 'serviceLicenses' | 'contractDelivery' | 'contractInstall' | 'contractTravel' | 'contractCert' | 'contractInsurance' | 'contractDocs'
+const ARTICLE_CONFIG: { key: ArticleKey; label: string; stateKey: ArticleStateKey }[] = [
+  { key: 'materials', label: 'Материалы',                  stateKey: 'serviceMaterials'  },
+  { key: 'rent',      label: 'Аренда оборудования',        stateKey: 'serviceRent'       },
+  { key: 'licenses',  label: 'Лицензии на ПО',             stateKey: 'serviceLicenses'   },
+  { key: 'delivery',  label: 'Доставка до заказчика',      stateKey: 'contractDelivery'  },
+  { key: 'install',   label: 'Монтаж / Пусконаладка',      stateKey: 'contractInstall'   },
+  { key: 'travel',    label: 'Командировочные расходы',     stateKey: 'contractTravel'    },
+  { key: 'cert',      label: 'Сертификация / Испытания',   stateKey: 'contractCert'      },
+  { key: 'insurance', label: 'Страхование',                 stateKey: 'contractInsurance' },
+  { key: 'docs',      label: 'Оформление документации',    stateKey: 'contractDocs'      },
+]
+
+function ArticlePickerCell({
+  value,
+  options,
+  onChange,
+}: {
+  value: ArticleKey
+  options: { value: ArticleKey; label: string }[]
+  onChange: (v: ArticleKey) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const [menuPos, setMenuPos] = useState({ top: 0, left: 0, width: 0 })
+  const triggerRef = useRef<HTMLDivElement>(null)
+  const label = ARTICLE_CONFIG.find(a => a.key === value)!.label
+
+  useEffect(() => {
+    if (!open) return
+    const handle = (e: MouseEvent) => {
+      if (triggerRef.current && !triggerRef.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handle)
+    return () => document.removeEventListener('mousedown', handle)
+  }, [open])
+
+  const handleToggle = () => {
+    if (!open && triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect()
+      const estimatedMenuH = options.length * 52
+      const fitsBelow = rect.bottom + estimatedMenuH < window.innerHeight
+      setMenuPos({
+        top: fitsBelow ? rect.bottom : rect.top - estimatedMenuH,
+        left: rect.left,
+        width: rect.width,
+      })
+    }
+    setOpen(o => !o)
+  }
+
+  return (
+    <div ref={triggerRef} className={styles.articlePickerCell}>
+      <div style={{ cursor: 'pointer', height: '100%' }} onClick={handleToggle}>
+        <TableCell
+          title={label}
+          hasRightAccessory
+          rightAccessory={
+            <span style={{ display: 'flex', width: 12, height: 12, color: 'var(--primitive-secondary)', flexShrink: 0, transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
+              <ChevronDownFilled />
+            </span>
+          }
+        />
+      </div>
+      {open && (
+        <div style={{
+          position: 'fixed',
+          top: menuPos.top,
+          left: menuPos.left,
+          width: menuPos.width,
+          zIndex: 1000,
+          background: 'var(--popup-primary)',
+          borderRadius: 'var(--rounding-3x)',
+          boxShadow: 'var(--Popout)',
+          overflow: 'hidden',
+          padding: '0 var(--spacing-5x)',
+          maxHeight: '280px',
+          overflowY: 'auto',
+        }}>
+          {options.map(opt => (
+            <Cell
+              key={opt.value}
+              title={opt.label}
+              titleClassName="ts-400-m"
+              hasLeftAccessory={false}
+              hasRightAccessory={opt.value === value}
+              verticalPadding="3x"
+              rightAccessory={
+                opt.value === value
+                  ? <span className="dropdown-popup__checkmark"><Checkmark /></span>
+                  : undefined
+              }
+              onClick={() => { onChange(opt.value); setOpen(false) }}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 // --- Dropdown option sets ---
 const PURCHASE_TYPE_OPTIONS = [
@@ -78,11 +181,16 @@ function SelectDropdown<T extends string>({
         <Cell
           key={opt.value}
           title={opt.label}
+          titleClassName="ts-400-m"
           hasLeftAccessory={false}
           hasRightAccessory={opt.value === value}
           rightAccessory={
             opt.value === value ? (
-              <CellRightAccessory variant="disclosure" />
+              <CellRightAccessory
+                variant="icon-24"
+                icon={<Checkmark />}
+                className={styles.successIcon}
+              />
             ) : undefined
           }
           onClick={() => onChange(opt.value)}
@@ -121,6 +229,7 @@ export default function CalculatorForm({
   const norm = OVERHEAD_NORMS[state.category]
 
   const tableRef = useRef<HTMLDivElement>(null)
+  const extraTableRef = useRef<HTMLDivElement>(null)
   const prevSpecCountRef = useRef(state.specialists.length)
 
   useEffect(() => {
@@ -136,6 +245,53 @@ export default function CalculatorForm({
   const handleAddSpecialist = useCallback(() => {
     addSpecialist()
   }, [addSpecialist])
+
+  const [activeArticles, setActiveArticles] = useState<ArticleKey[]>(() =>
+    ARTICLE_CONFIG
+      .filter(a => (state[a.stateKey] as number) > 0)
+      .map(a => a.key)
+  )
+
+  const [articleAmounts, setArticleAmounts] = useState<Record<ArticleKey, string>>(
+    () => Object.fromEntries(
+      ARTICLE_CONFIG.map(a => [a.key, n2s(state[a.stateKey] as number)])
+    ) as Record<ArticleKey, string>
+  )
+
+  const handleAddArticle = useCallback(() => {
+    const next = ARTICLE_CONFIG.find(a => !activeArticles.includes(a.key))
+    if (!next) return
+    setActiveArticles(prev => [...prev, next.key])
+  }, [activeArticles])
+
+  const handleRemoveArticle = useCallback((key: ArticleKey) => {
+    const cfg = ARTICLE_CONFIG.find(a => a.key === key)!
+    update({ [cfg.stateKey]: 0 })
+    setArticleAmounts(prev => ({ ...prev, [key]: '' }))
+    setActiveArticles(prev => prev.filter(k => k !== key))
+  }, [update])
+
+  const handleChangeArticle = useCallback((oldKey: ArticleKey, newKey: ArticleKey) => {
+    const oldCfg = ARTICLE_CONFIG.find(a => a.key === oldKey)!
+    update({ [oldCfg.stateKey]: 0 })
+    setArticleAmounts(prev => ({ ...prev, [oldKey]: '', [newKey]: '' }))
+    setActiveArticles(prev => prev.map(k => k === oldKey ? newKey : k))
+  }, [update])
+
+  const handleExtraTableBlur = useCallback((e: React.FocusEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLInputElement
+    if (target.tagName !== 'INPUT' || !extraTableRef.current) return
+    const amountInputs = Array.from(
+      extraTableRef.current.querySelectorAll<HTMLInputElement>('input[placeholder="0"]')
+    )
+    const idx = amountInputs.indexOf(target)
+    if (idx < 0 || idx >= activeArticles.length) return
+    const key = activeArticles[idx]
+    const cfg = ARTICLE_CONFIG.find(a => a.key === key)!
+    const num = parseRateInput(target.value)
+    update({ [cfg.stateKey]: num })
+    setArticleAmounts(prev => ({ ...prev, [key]: formatRateDisplay(num) }))
+  }, [activeArticles, update])
 
   const [rateDisplay, setRateDisplay] = useState<Record<string, string>>(() =>
     Object.fromEntries(state.specialists.map((s) => [s.id, formatRateDisplay(s.rate)]))
@@ -225,182 +381,186 @@ export default function CalculatorForm({
       {/* Block 1A: Goods */}
       {state.purchaseType === 'goods' && (
         <FormBlock title="Прямые затраты: ТОВАРЫ">
-          <FormRow>
-            <Input
-              label="Количество единиц"
-              value={n2s(state.goodsQty)}
-              onChange={(v) => update({ goodsQty: s2n(v) })}
-            />
-            <Input
-              label="Закупочная цена (без НДС)"
-              value={n2s(state.goodsPrice)}
-              right={RUB}
-              onChange={(v) => update({ goodsPrice: s2n(v) })}
-            />
-            <Input
-              label="Таможня и сборы"
-              value={n2s(state.goodsCustoms)}
-              right={RUB}
-              onChange={(v) => update({ goodsCustoms: s2n(v) })}
-            />
-          </FormRow>
-          <FormRow>
-            <Input
-              label="Транспорт до склада"
-              value={n2s(state.goodsLogistics)}
-              right={RUB}
-              onChange={(v) => update({ goodsLogistics: s2n(v) })}
-            />
-            <Input
-              label="Упаковка и маркировка"
-              value={n2s(state.goodsPack)}
-              right={RUB}
-              onChange={(v) => update({ goodsPack: s2n(v) })}
-            />
-            <div />
-          </FormRow>
+          <div className={styles.costGroupsContainer}>
+            <div className={styles.blockContent}>
+              <FormRow>
+                <Input
+                  label="Количество единиц"
+                  value={n2s(state.goodsQty)}
+                  onChange={(v) => update({ goodsQty: s2n(v) })}
+                />
+                <Input
+                  label="Закупочная цена (без НДС)"
+                  value={n2s(state.goodsPrice)}
+                  right={RUB}
+                  onChange={(v) => update({ goodsPrice: s2n(v) })}
+                />
+                <Input
+                  label="Таможня и сборы"
+                  value={n2s(state.goodsCustoms)}
+                  right={RUB}
+                  onChange={(v) => update({ goodsCustoms: s2n(v) })}
+                />
+              </FormRow>
+              <FormRow>
+                <Input
+                  label="Транспорт до склада"
+                  value={n2s(state.goodsLogistics)}
+                  right={RUB}
+                  onChange={(v) => update({ goodsLogistics: s2n(v) })}
+                />
+                <Input
+                  label="Упаковка и маркировка"
+                  value={n2s(state.goodsPack)}
+                  right={RUB}
+                  onChange={(v) => update({ goodsPack: s2n(v) })}
+                />
+                <div />
+              </FormRow>
+            </div>
+
+            <div className={styles.blockContent}>
+              <p className="ts-500-s">Прочие затраты</p>
+              {activeArticles.length > 0 && (
+                <div ref={extraTableRef} onBlur={handleExtraTableBlur}>
+                  <Table gridTemplateColumns="1fr 160px 64px">
+                    <TableCell title="Статья" titleStyle="600" backgroundColor="var(--bg-neutral-1)" />
+                    <TableCell title="Сумма" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
+                    <TableCell title="" backgroundColor="var(--bg-neutral-1)" />
+                    {activeArticles.map((key) => {
+                      const opts = ARTICLE_CONFIG
+                        .filter(a => a.key === key || !activeArticles.includes(a.key))
+                        .map(a => ({ value: a.key, label: a.label }))
+                      return (
+                        <Fragment key={key}>
+                          <ArticlePickerCell value={key} options={opts} onChange={(v) => handleChangeArticle(key, v)} />
+                          <TableCell
+                            isEdit
+                            title={articleAmounts[key]}
+                            placeholder="0"
+                            className={styles.rateCell}
+                            hasRightAccessory
+                            rightAccessory={<span className="ts-400-m" style={{ color: articleAmounts[key] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
+                            onTitleChange={(v) => setArticleAmounts(prev => ({ ...prev, [key]: v }))}
+                          />
+                          <TableCell hasTitle={false} hasRightAccessory className={styles.deleteCell}
+                            rightAccessory={
+                              <span className="ds-icon ds-icon--m hoverOpacity" style={{ color: 'var(--primitive-neutral-4)', cursor: 'pointer' }} onClick={() => handleRemoveArticle(key)}>
+                                <Trash />
+                              </span>
+                            }
+                          />
+                        </Fragment>
+                      )
+                    })}
+                  </Table>
+                </div>
+              )}
+              {activeArticles.length < ARTICLE_CONFIG.length && (
+                <ActionFormCell
+                  title="Добавить статью"
+                  left={<span className="ds-icon ds-icon--m" style={{ color: 'var(--primitive-brand)' }}><Plus /></span>}
+                  onClick={handleAddArticle}
+                />
+              )}
+            </div>
+          </div>
         </FormBlock>
       )}
 
       {/* Block 1B: Services */}
       {state.purchaseType === 'service' && (
-        <FormBlock title="Прямые затраты: РАБОТЫ / УСЛУГИ">
-          <p className="ts-500-s" style={{ marginBottom: 'var(--spacing-2x)' }}>Трудозатраты (ФОТ)</p>
+        <FormBlock title="Прямые затраты">
+          <div className={styles.costGroupsContainer}>
 
-          <div ref={tableRef} onBlur={handleTableBlur}>
-            <Table gridTemplateColumns="1fr 96px 96px 160px 64px">
-              {/* Header */}
-              <TableCell title="Профессия / Роль" titleStyle="600" backgroundColor="var(--bg-neutral-1)" />
-              <TableCell title="Чел." titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
-              <TableCell title="Часов" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
-              <TableCell title="Ставка ₽/час" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
-              <TableCell title="" backgroundColor="var(--bg-neutral-1)" />
+            <div className={styles.blockContent}>
+              <p className="ts-500-s">Трудозатраты (ФОТ)</p>
+              {state.specialists.length > 0 && (
+                <div ref={tableRef} onBlur={handleTableBlur}>
+                  <Table gridTemplateColumns="1fr 96px 96px 160px 64px">
+                    <TableCell title="Профессия / Роль" titleStyle="600" backgroundColor="var(--bg-neutral-1)" />
+                    <TableCell title="Чел." titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
+                    <TableCell title="Часов" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
+                    <TableCell title="Ставка ₽/час" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
+                    <TableCell title="" backgroundColor="var(--bg-neutral-1)" />
+                    {state.specialists.map((s) => (
+                      <Fragment key={s.id}>
+                        <TableCell isEdit title={s.role} placeholder="Должность" onTitleChange={(v) => updateSpecialist(s.id, { role: v })} />
+                        <TableCell isEdit title={n2s(s.qty)} className={styles.rateCell} placeholder="1" onTitleChange={(v) => updateSpecialist(s.id, { qty: s2n(v) })} />
+                        <TableCell isEdit title={n2s(s.hours)} className={styles.rateCell} placeholder="1" onTitleChange={(v) => updateSpecialist(s.id, { hours: s2n(v) })} />
+                        <TableCell
+                          isEdit title={rateDisplay[s.id] ?? ''} placeholder="0" className={styles.rateCell} hasRightAccessory
+                          rightAccessory={<span className="ts-400-m" style={{ color: rateDisplay[s.id] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
+                          onTitleChange={(v) => setRateDisplay((prev) => ({ ...prev, [s.id]: v }))}
+                        />
+                        <TableCell hasTitle={false} hasRightAccessory className={styles.deleteCell}
+                          rightAccessory={
+                            <span className="ds-icon ds-icon--m hoverOpacity" style={{ color: 'var(--primitive-neutral-4)', cursor: 'pointer' }} onClick={() => removeSpecialist(s.id)}>
+                              <Trash />
+                            </span>
+                          }
+                        />
+                      </Fragment>
+                    ))}
+                  </Table>
+                </div>
+              )}
+              <ActionFormCell
+                title="Добавить специалиста"
+                left={<span className="ds-icon ds-icon--m" style={{ color: 'var(--primitive-brand)' }}><Plus /></span>}
+                onClick={handleAddSpecialist}
+              />
+            </div>
 
-              {/* Rows */}
-              {state.specialists.map((s) => (
-                <Fragment key={s.id}>
-                  <TableCell
-                    isEdit
-                    title={s.role}
-                    placeholder="Должность"
-                    onTitleChange={(v) => updateSpecialist(s.id, { role: v })}
-                  />
-                  <TableCell
-                    isEdit
-                    title={n2s(s.qty)}
-                    className={styles.rateCell}
-                    placeholder="1"
-                    onTitleChange={(v) => updateSpecialist(s.id, { qty: s2n(v) })}
-                  />
-                  <TableCell
-                    isEdit
-                    title={n2s(s.hours)}
-                    className={styles.rateCell}
-                    placeholder="1"
-                    onTitleChange={(v) => updateSpecialist(s.id, { hours: s2n(v) })}
-                  />
-                  <TableCell
-                    isEdit
-                    title={rateDisplay[s.id] ?? ''}
-                    placeholder="0"
-                    className={styles.rateCell}
-                    hasRightAccessory
-                    rightAccessory={
-                      <span className="ts-400-m" style={{ color: rateDisplay[s.id] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>
-                    }
-                    onTitleChange={(v) => setRateDisplay((prev) => ({ ...prev, [s.id]: v }))}
-                  />
-                  <TableCell
-                    hasTitle={false}
-                    hasRightAccessory
-                    rightAccessory={
-                      <span
-                        className="ds-icon ds-icon--m hoverOpacity"
-                        style={{ color: 'var(--primitive-neutral-4)', cursor: 'pointer' }}
-                        onClick={() => removeSpecialist(s.id)}
-                      >
-                        <Trash />
-                      </span>
-                    }
-                    className={styles.deleteCell}
-                  />
-                </Fragment>
-              ))}
-            </Table>
+            <div className={styles.blockContent}>
+              <p className="ts-500-s">Прочие затраты</p>
+              {activeArticles.length > 0 && (
+                <div ref={extraTableRef} onBlur={handleExtraTableBlur}>
+                  <Table gridTemplateColumns="1fr 160px 64px">
+                    <TableCell title="Статья" titleStyle="600" backgroundColor="var(--bg-neutral-1)" />
+                    <TableCell title="Сумма" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
+                    <TableCell title="" backgroundColor="var(--bg-neutral-1)" />
+                    {activeArticles.map((key) => {
+                      const opts = ARTICLE_CONFIG
+                        .filter(a => a.key === key || !activeArticles.includes(a.key))
+                        .map(a => ({ value: a.key, label: a.label }))
+                      return (
+                        <Fragment key={key}>
+                          <ArticlePickerCell value={key} options={opts} onChange={(v) => handleChangeArticle(key, v)} />
+                          <TableCell
+                            isEdit
+                            title={articleAmounts[key]}
+                            placeholder="0"
+                            className={styles.rateCell}
+                            hasRightAccessory
+                            rightAccessory={<span className="ts-400-m" style={{ color: articleAmounts[key] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
+                            onTitleChange={(v) => setArticleAmounts(prev => ({ ...prev, [key]: v }))}
+                          />
+                          <TableCell hasTitle={false} hasRightAccessory className={styles.deleteCell}
+                            rightAccessory={
+                              <span className="ds-icon ds-icon--m hoverOpacity" style={{ color: 'var(--primitive-neutral-4)', cursor: 'pointer' }} onClick={() => handleRemoveArticle(key)}>
+                                <Trash />
+                              </span>
+                            }
+                          />
+                        </Fragment>
+                      )
+                    })}
+                  </Table>
+                </div>
+              )}
+              {activeArticles.length < ARTICLE_CONFIG.length && (
+                <ActionFormCell
+                  title="Добавить статью"
+                  left={<span className="ds-icon ds-icon--m" style={{ color: 'var(--primitive-brand)' }}><Plus /></span>}
+                  onClick={handleAddArticle}
+                />
+              )}
+            </div>
+
           </div>
-
-          <ActionFormCell
-            title="Добавить специалиста"
-            left={<span className="ds-icon ds-icon--m" style={{ color: 'var(--primitive-brand)' }}><Plus /></span>}
-            onClick={handleAddSpecialist}
-          />
-
-          <FormRow>
-            <Input
-              label="Материалы"
-              value={n2s(state.serviceMaterials)}
-              right={RUB}
-              onChange={(v) => update({ serviceMaterials: s2n(v) })}
-            />
-            <Input
-              label="Аренда оборудования"
-              value={n2s(state.serviceRent)}
-              right={RUB}
-              onChange={(v) => update({ serviceRent: s2n(v) })}
-            />
-            <Input
-              label="Лицензии на ПО"
-              value={n2s(state.serviceLicenses)}
-              right={RUB}
-              onChange={(v) => update({ serviceLicenses: s2n(v) })}
-            />
-          </FormRow>
         </FormBlock>
       )}
-
-      {/* Block 2: Contract */}
-      <FormBlock title="Прямые затраты по контракту">
-        <FormRow>
-          <Input
-            label='Доставка до заказчика ("последняя миля")'
-            value={n2s(state.contractDelivery)}
-            right={RUB}
-            onChange={(v) => update({ contractDelivery: s2n(v) })}
-          />
-          <Input
-            label="Монтаж / Пусконаладка"
-            value={n2s(state.contractInstall)}
-            right={RUB}
-            onChange={(v) => update({ contractInstall: s2n(v) })}
-          />
-          <Input
-            label="Командировочные расходы"
-            value={n2s(state.contractTravel)}
-            right={RUB}
-            onChange={(v) => update({ contractTravel: s2n(v) })}
-          />
-        </FormRow>
-        <FormRow>
-          <Input
-            label="Сертификация / Испытания"
-            value={n2s(state.contractCert)}
-            right={RUB}
-            onChange={(v) => update({ contractCert: s2n(v) })}
-          />
-          <Input
-            label="Страхование"
-            value={n2s(state.contractInsurance)}
-            right={RUB}
-            onChange={(v) => update({ contractInsurance: s2n(v) })}
-          />
-          <Input
-            label="Оформление документации"
-            value={n2s(state.contractDocs)}
-            right={RUB}
-            onChange={(v) => update({ contractDocs: s2n(v) })}
-          />
-        </FormRow>
-      </FormBlock>
 
       {/* Block 3: Overhead */}
       <FormBlock title="Накладные расходы">

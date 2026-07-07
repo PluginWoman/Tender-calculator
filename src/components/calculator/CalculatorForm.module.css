@@ -4,6 +4,12 @@
   gap: var(--spacing-4x);
 }
 
+.costGroupsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--content-group-list-spacing);
+}
+
 .formRow {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -57,6 +63,20 @@
   }
 }
 
+
+/* Override DS icon color for success checkmark in CellRightAccessory */
+.successIcon :global(.ds-cell-right-accessory__icon) {
+  color: var(--primitive-success);
+}
+
+/* Article picker cell — stretch TableCell to full row height */
+.articlePickerCell {
+  height: 100%;
+}
+.articlePickerCell :global(.table-cell) {
+  height: 100%;
+  min-height: 44px;
+}
 
 /* Delete cell — icon dims on cell hover */
 .deleteCell:hover :global(.hoverOpacity) {

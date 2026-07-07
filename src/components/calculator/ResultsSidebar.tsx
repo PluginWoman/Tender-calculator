@@ -101,7 +101,7 @@ function BodyRow({ color, label, value }: { color: string; label: string; value:
 }
 
 export default function ResultsSidebar({ results }: Props) {
-  const { finalPrice, directCosts, contractCosts, overheadTotal, specificCosts,
+  const { finalPrice, directCosts, overheadTotal, specificCosts,
     fullCost, profitAmount, taxAmount, verdict, nmccDiff, nmccDiffPercent } = results
 
   const key: VerdictKey = verdict ?? 'none'
@@ -117,12 +117,11 @@ export default function ResultsSidebar({ results }: Props) {
     : `+ ${fmtPercent(nmccDiffPercent)}`
 
   const rawItems = [
-    { label: 'Прямые затраты', value: directCosts,    color: SEGMENT_COLORS[0] },
-    { label: 'По контракту',   value: contractCosts,  color: SEGMENT_COLORS[1] },
-    { label: 'Накладные',      value: overheadTotal,  color: SEGMENT_COLORS[2] },
-    { label: 'Специфические',  value: specificCosts,  color: SEGMENT_COLORS[3] },
-    { label: 'Прибыль',        value: profitAmount,   color: SEGMENT_COLORS[4] },
-    { label: 'Налоги',         value: taxAmount,      color: SEGMENT_COLORS[5] },
+    { label: 'Прямые затраты', value: directCosts,   color: SEGMENT_COLORS[0] },
+    { label: 'Накладные',      value: overheadTotal, color: SEGMENT_COLORS[2] },
+    { label: 'Специфические',  value: specificCosts, color: SEGMENT_COLORS[3] },
+    { label: 'Прибыль',        value: profitAmount,  color: SEGMENT_COLORS[4] },
+    { label: 'Налоги',         value: taxAmount,     color: SEGMENT_COLORS[5] },
   ]
   const items = [...rawItems].sort((a, b) => b.value - a.value)
 
@@ -189,7 +188,7 @@ export default function ResultsSidebar({ results }: Props) {
                   </span>
                 }
               >
-                <span className="ts-400-xs">Стоимость без учёта налогов и прибыли</span>
+                <span className="ts-400-s">Стоимость без учёта налогов и прибыли</span>
               </Tooltip>
             </div>
             <span className="ts-500-m">{fmtMoney.format(fullCost)}</span>
