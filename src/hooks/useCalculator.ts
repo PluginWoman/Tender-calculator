@@ -21,6 +21,16 @@ export interface Specialist {
   rate: number
 }
 
+export interface GoodsItem {
+  id: string
+  name: string
+  qty: number
+  price: number
+  customs: number
+  logistics: number
+  pack: number
+}
+
 export interface CalculatorState {
   purchaseName: string
   purchaseNumber: string
@@ -28,11 +38,7 @@ export interface CalculatorState {
   purchaseType: 'goods' | 'service'
   taxSystem: 'osno' | 'usn_income' | 'usn_expense'
   category: 'it' | 'construction' | 'medical' | 'other' | 'goods'
-  goodsQty: number
-  goodsPrice: number
-  goodsCustoms: number
-  goodsLogistics: number
-  goodsPack: number
+  goods: GoodsItem[]
   specialists: Specialist[]
   serviceMaterials: number
   serviceRent: number
@@ -80,11 +86,9 @@ const DEFAULT_STATE: CalculatorState = {
   purchaseType: 'service',
   taxSystem: 'osno',
   category: 'it',
-  goodsQty: 1,
-  goodsPrice: 0,
-  goodsCustoms: 0,
-  goodsLogistics: 0,
-  goodsPack: 0,
+  goods: [
+    { id: '1', name: '', qty: 1, price: 0, customs: 0, logistics: 0, pack: 0 },
+  ],
   specialists: [
     { id: '1', role: 'Руководитель проекта', qty: 1, hours: 1, rate: 2500 },
     { id: '2', role: 'Специалист (Исполнитель)', qty: 1, hours: 1, rate: 1500 },
@@ -121,12 +125,11 @@ function calculate(state: CalculatorState): CalculatorResults {
     state.contractCert + state.contractInsurance + state.contractDocs
 
   if (state.purchaseType === 'goods') {
-    directCosts =
-      state.goodsQty * state.goodsPrice +
-      state.goodsCustoms +
-      state.goodsLogistics +
-      state.goodsPack +
-      extraCosts
+    const goodsTotal = state.goods.reduce(
+      (sum, item) => sum + item.qty * item.price + item.customs + item.logistics + item.pack,
+      0
+    )
+    directCosts = goodsTotal + extraCosts
     payrollBase = directCosts
   } else {
     let fop = 0
@@ -253,6 +256,35 @@ export function useCalculator() {
     []
   )
 
+  const addGoodsItem = useCallback(() => {
+    setState((prev) => ({
+      ...prev,
+      goods: [
+        ...prev.goods,
+        { id: String(Date.now()), name: '', qty: 1, price: 0, customs: 0, logistics: 0, pack: 0 },
+      ],
+    }))
+  }, [])
+
+  const removeGoodsItem = useCallback((id: string) => {
+    setState((prev) => ({
+      ...prev,
+      goods: prev.goods.filter((g) => g.id !== id),
+    }))
+  }, [])
+
+  const updateGoodsItem = useCallback(
+    (id: string, partial: Partial<Omit<GoodsItem, 'id'>>) => {
+      setState((prev) => ({
+        ...prev,
+        goods: prev.goods.map((g) =>
+          g.id === id ? { ...g, ...partial } : g
+        ),
+      }))
+    },
+    []
+  )
+
   return {
     state,
     results: calculate(state),
@@ -260,5 +292,8 @@ export function useCalculator() {
     addSpecialist,
     removeSpecialist,
     updateSpecialist,
+    addGoodsItem,
+    removeGoodsItem,
+    updateGoodsItem,
   }
 }

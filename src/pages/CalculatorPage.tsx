@@ -5,7 +5,8 @@ import DebugPanel from '../components/debug/DebugPanel'
 import styles from './CalculatorPage.module.css'
 
 export default function CalculatorPage() {
-  const { state, results, update, addSpecialist, removeSpecialist, updateSpecialist } =
+  const { state, results, update, addSpecialist, removeSpecialist, updateSpecialist,
+    addGoodsItem, removeGoodsItem, updateGoodsItem } =
     useCalculator()
 
   return (
@@ -26,6 +27,9 @@ export default function CalculatorPage() {
               addSpecialist={addSpecialist}
               removeSpecialist={removeSpecialist}
               updateSpecialist={updateSpecialist}
+              addGoodsItem={addGoodsItem}
+              removeGoodsItem={removeGoodsItem}
+              updateGoodsItem={updateGoodsItem}
             />
           </div>
           <aside className={styles.sidebarColumn}>

@@ -2,7 +2,7 @@ import { Fragment, useRef, useEffect, useCallback, useState } from 'react'
 import { Widget, Input, Dropdown, Cell, CellRightAccessory, Table, TableCell, ActionFormCell } from '@pluginwoman/t-ds'
 import { Plus, Trash, Checkmark } from '@pluginwoman/t-ds/icons'
 import { ChevronDown as ChevronDownFilled } from '@pluginwoman/t-ds/icons/12/Filled'
-import type { CalculatorState, Specialist } from '../../hooks/useCalculator'
+import type { CalculatorState, Specialist, GoodsItem } from '../../hooks/useCalculator'
 import styles from './CalculatorForm.module.css'
 
 interface Props {
@@ -11,6 +11,9 @@ interface Props {
   addSpecialist: () => void
   removeSpecialist: (id: string) => void
   updateSpecialist: (id: string, partial: Partial<Omit<Specialist, 'id'>>) => void
+  addGoodsItem: () => void
+  removeGoodsItem: (id: string) => void
+  updateGoodsItem: (id: string, partial: Partial<Omit<GoodsItem, 'id'>>) => void
 }
 
 const n2s = (n: number) => (n === 0 ? '' : String(n))
@@ -236,22 +239,36 @@ export default function CalculatorForm({
   addSpecialist,
   removeSpecialist,
   updateSpecialist,
+  addGoodsItem,
+  removeGoodsItem,
+  updateGoodsItem,
 }: Props) {
   const norm = OVERHEAD_NORMS[state.category]
 
   const tableRef = useRef<HTMLDivElement>(null)
   const extraTableRef = useRef<HTMLDivElement>(null)
+  const goodsTableRef = useRef<HTMLDivElement>(null)
   const prevSpecCountRef = useRef(state.specialists.length)
+  const prevGoodsCountRef = useRef(state.goods.length)
 
   useEffect(() => {
     if (state.specialists.length > prevSpecCountRef.current && tableRef.current) {
       const inputs = tableRef.current.querySelectorAll<HTMLInputElement>('input')
-      // 4 isEdit inputs per row; first input of the new last row
       const idx = (state.specialists.length - 1) * 4
       inputs[idx]?.focus()
     }
     prevSpecCountRef.current = state.specialists.length
   }, [state.specialists.length])
+
+  useEffect(() => {
+    if (state.goods.length > prevGoodsCountRef.current && goodsTableRef.current) {
+      const inputs = goodsTableRef.current.querySelectorAll<HTMLInputElement>('input')
+      // 6 isEdit inputs per row: name, qty, price, customs, logistics, pack
+      const idx = (state.goods.length - 1) * 6
+      inputs[idx]?.focus()
+    }
+    prevGoodsCountRef.current = state.goods.length
+  }, [state.goods.length])
 
   const handleAddSpecialist = useCallback(() => {
     addSpecialist()
@@ -303,6 +320,52 @@ export default function CalculatorForm({
     update({ [cfg.stateKey]: num })
     setArticleAmounts(prev => ({ ...prev, [key]: formatRateDisplay(num) }))
   }, [activeArticles, update])
+
+  const GOODS_MONEY_FIELDS = ['price', 'customs', 'logistics', 'pack'] as const
+
+  const [goodsDisplay, setGoodsDisplay] = useState<Record<string, string>>(() => {
+    const init: Record<string, string> = {}
+    for (const g of state.goods) {
+      for (const f of GOODS_MONEY_FIELDS) {
+        init[`${g.id}_${f}`] = formatRateDisplay(g[f])
+      }
+    }
+    return init
+  })
+
+  useEffect(() => {
+    setGoodsDisplay((prev) => {
+      const next: Record<string, string> = {}
+      for (const g of state.goods) {
+        for (const f of GOODS_MONEY_FIELDS) {
+          const k = `${g.id}_${f}`
+          next[k] = k in prev ? prev[k] : formatRateDisplay(g[f])
+        }
+      }
+      return next
+    })
+  }, [state.goods])
+
+  const handleGoodsTableBlur = useCallback(
+    (e: React.FocusEvent<HTMLDivElement>) => {
+      const target = e.target as HTMLInputElement
+      if (target.tagName !== 'INPUT' || !goodsTableRef.current) return
+      const moneyInputs = Array.from(
+        goodsTableRef.current.querySelectorAll<HTMLInputElement>('input[placeholder="0"]')
+      )
+      const idx = moneyInputs.indexOf(target)
+      if (idx < 0) return
+      const rowIdx = Math.floor(idx / 4)
+      const fieldIdx = idx % 4
+      const field = GOODS_MONEY_FIELDS[fieldIdx]
+      const item = state.goods[rowIdx]
+      if (!item) return
+      const num = parseRateInput(target.value)
+      updateGoodsItem(item.id, { [field]: num })
+      setGoodsDisplay((prev) => ({ ...prev, [`${item.id}_${field}`]: formatRateDisplay(num) }))
+    },
+    [state.goods, updateGoodsItem]
+  )
 
   const [rateDisplay, setRateDisplay] = useState<Record<string, string>>(() =>
     Object.fromEntries(state.specialists.map((s) => [s.id, formatRateDisplay(s.rate)]))
@@ -394,40 +457,58 @@ export default function CalculatorForm({
         <FormBlock title="Прямые затраты: ТОВАРЫ">
           <div className={styles.costGroupsContainer}>
             <div className={styles.blockContent}>
-              <FormRow>
-                <Input
-                  label="Количество единиц"
-                  value={n2s(state.goodsQty)}
-                  onChange={(v) => update({ goodsQty: s2n(v) })}
-                />
-                <Input
-                  label="Закупочная цена (без НДС)"
-                  value={n2s(state.goodsPrice)}
-                  right={RUB}
-                  onChange={(v) => update({ goodsPrice: s2n(v) })}
-                />
-                <Input
-                  label="Таможня и сборы"
-                  value={n2s(state.goodsCustoms)}
-                  right={RUB}
-                  onChange={(v) => update({ goodsCustoms: s2n(v) })}
-                />
-              </FormRow>
-              <FormRow>
-                <Input
-                  label="Транспорт до склада"
-                  value={n2s(state.goodsLogistics)}
-                  right={RUB}
-                  onChange={(v) => update({ goodsLogistics: s2n(v) })}
-                />
-                <Input
-                  label="Упаковка и маркировка"
-                  value={n2s(state.goodsPack)}
-                  right={RUB}
-                  onChange={(v) => update({ goodsPack: s2n(v) })}
-                />
-                <div />
-              </FormRow>
+              <p className="ts-500-s">Товары</p>
+              {state.goods.length > 0 && (
+                <div ref={goodsTableRef} onBlur={handleGoodsTableBlur}>
+                  <Table gridTemplateColumns="2fr 80px 140px 120px 120px 120px 48px">
+                    <TableCell title="Название" titleStyle="600" backgroundColor="var(--bg-neutral-1)" />
+                    <TableCell title="Кол-во" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
+                    <TableCell title="Цена (б/НДС)" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
+                    <TableCell title="Таможня" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
+                    <TableCell title="Транспорт" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
+                    <TableCell title="Упаковка" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
+                    <TableCell title="" backgroundColor="var(--bg-neutral-1)" />
+                    {state.goods.map((g) => (
+                      <Fragment key={g.id}>
+                        <TableCell isEdit title={g.name} placeholder="Название товара" onTitleChange={(v) => updateGoodsItem(g.id, { name: v })} />
+                        <TableCell isEdit title={n2s(g.qty)} className={styles.rateCell} placeholder="1" onTitleChange={(v) => updateGoodsItem(g.id, { qty: s2n(v) })} />
+                        <TableCell
+                          isEdit title={goodsDisplay[`${g.id}_price`] ?? ''} placeholder="0" className={styles.rateCell} hasRightAccessory
+                          rightAccessory={<span className="ts-400-m" style={{ color: goodsDisplay[`${g.id}_price`] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
+                          onTitleChange={(v) => setGoodsDisplay((prev) => ({ ...prev, [`${g.id}_price`]: v }))}
+                        />
+                        <TableCell
+                          isEdit title={goodsDisplay[`${g.id}_customs`] ?? ''} placeholder="0" className={styles.rateCell} hasRightAccessory
+                          rightAccessory={<span className="ts-400-m" style={{ color: goodsDisplay[`${g.id}_customs`] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
+                          onTitleChange={(v) => setGoodsDisplay((prev) => ({ ...prev, [`${g.id}_customs`]: v }))}
+                        />
+                        <TableCell
+                          isEdit title={goodsDisplay[`${g.id}_logistics`] ?? ''} placeholder="0" className={styles.rateCell} hasRightAccessory
+                          rightAccessory={<span className="ts-400-m" style={{ color: goodsDisplay[`${g.id}_logistics`] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
+                          onTitleChange={(v) => setGoodsDisplay((prev) => ({ ...prev, [`${g.id}_logistics`]: v }))}
+                        />
+                        <TableCell
+                          isEdit title={goodsDisplay[`${g.id}_pack`] ?? ''} placeholder="0" className={styles.rateCell} hasRightAccessory
+                          rightAccessory={<span className="ts-400-m" style={{ color: goodsDisplay[`${g.id}_pack`] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
+                          onTitleChange={(v) => setGoodsDisplay((prev) => ({ ...prev, [`${g.id}_pack`]: v }))}
+                        />
+                        <TableCell hasTitle={false} hasRightAccessory className={styles.deleteCell}
+                          rightAccessory={
+                            <span className="ds-icon ds-icon--m hoverOpacity" style={{ color: 'var(--primitive-neutral-4)', cursor: 'pointer' }} onClick={() => removeGoodsItem(g.id)}>
+                              <Trash />
+                            </span>
+                          }
+                        />
+                      </Fragment>
+                    ))}
+                  </Table>
+                </div>
+              )}
+              <ActionFormCell
+                title="Добавить товар"
+                left={<span className="ds-icon ds-icon--m" style={{ color: 'var(--primitive-brand)' }}><Plus /></span>}
+                onClick={addGoodsItem}
+              />
             </div>
 
             <div className={styles.blockContent}>
