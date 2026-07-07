@@ -107,7 +107,7 @@ function ArticlePickerCell({
           title={label}
           hasRightAccessory
           rightAccessory={
-            <span style={{ display: 'flex', width: 12, height: 12, color: 'var(--primitive-neutral-4)', flexShrink: 0, transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
+            <span className="ds-icon ds-icon--12" style={{ color: 'var(--primitive-neutral-4)', flexShrink: 0, transform: open ? 'rotate(180deg)' : 'none', transition: 'transform 0.15s' }}>
               <ChevronDownFilled />
             </span>
           }
