@@ -415,11 +415,7 @@ export default function CalculatorForm({
             placeholder="03732000..."
             onChange={(v) => update({ purchaseNumber: v })}
           />
-          <Input
-            label="Дата расчёта"
-            value={state.calcDate}
-            onChange={(v) => update({ calcDate: v })}
-          />
+          <div />
         </FormRow>
         <FormRow>
           <SelectDropdown
@@ -449,6 +445,17 @@ export default function CalculatorForm({
               update({ category: v as 'goods' | 'it' | 'construction' | 'medical' | 'other', overheadPercent: (n.min + n.max) / 2 })
             }}
           />
+        </FormRow>
+        <FormRow>
+          <Input
+            label="НМЦК заказчика"
+            value={n2s(state.nmcc)}
+            right={RUB}
+            placeholder="Введите НМЦК из ЕИС"
+            onChange={(v) => update({ nmcc: s2n(v) })}
+          />
+          <div />
+          <div />
         </FormRow>
       </FormBlock>
 
@@ -763,22 +770,6 @@ export default function CalculatorForm({
         </FormRow>
       </FormBlock>
 
-
-      {/* Block 7: Decision */}
-      <FormBlock title="Принятие решения">
-        <FormRow>
-          <Input
-            label="НМЦК заказчика"
-            value={n2s(state.nmcc)}
-            right={RUB}
-            placeholder="Введите НМЦК из ЕИС"
-            onChange={(v) => update({ nmcc: s2n(v) })}
-          />
-          <div />
-          <div />
-        </FormRow>
-
-      </FormBlock>
 
     </>
   )
