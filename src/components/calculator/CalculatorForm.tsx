@@ -131,12 +131,11 @@ function ArticlePickerCell({
               title={opt.label}
               titleClassName="ts-400-m"
               hasLeftAccessory={false}
-              hasRightAccessory={opt.value === value}
-              verticalPadding="3x"
+              hasRightAccessory
               rightAccessory={
                 opt.value === value
                   ? <span className="dropdown-popup__checkmark"><Checkmark /></span>
-                  : undefined
+                  : <span style={{ display: 'block', width: 24 }} />
               }
               onClick={() => { onChange(opt.value); setOpen(false) }}
             />
