@@ -7,7 +7,7 @@ interface Props {
 }
 
 const PRESETS = [
-  { label: 'Без алерта',   apply: (p: number) => ({ nmcc: 0 }) },
+  { label: 'Без алерта',   apply: (_p: number) => ({ nmcc: 0 }) },
   { label: 'Участвовать', apply: (p: number) => ({ nmcc: Math.round(p * 1.1) }) },
   { label: 'Осторожно',   apply: (p: number) => ({ nmcc: Math.round(p * 1.03) }) },
   { label: 'Отказаться',  apply: (p: number) => ({ nmcc: Math.round(p * 0.9) }) },

@@ -1,5 +1,5 @@
 import { Fragment, useRef, useEffect, useCallback, useState } from 'react'
-import { Widget, Input, Dropdown, Cell, CellRightAccessory, Alert, Table, TableCell, ActionFormCell } from '@pluginwoman/t-ds'
+import { Widget, Input, Dropdown, Cell, CellRightAccessory, Table, TableCell, ActionFormCell } from '@pluginwoman/t-ds'
 import { Plus, Trash } from '@pluginwoman/t-ds/icons'
 import type { CalculatorState, CalculatorResults, Specialist } from '../../hooks/useCalculator'
 import { fmtMoney, fmtPercent } from '../../utils/format'
@@ -171,18 +171,6 @@ export default function CalculatorForm({
     [state.specialists, updateSpecialist]
   )
 
-  const VERDICT_ALERT_TYPE: Record<string, 'success' | 'neutral' | 'error'> = {
-    success: 'success',
-    caution: 'neutral',
-    danger: 'error',
-  }
-
-  const VERDICT_LABELS: Record<string, string> = {
-    success: '✅ УЧАСТВОВАТЬ',
-    caution: '⚠️ ОСТОРОЖНО',
-    danger: '🛑 ОТКАЗАТЬСЯ',
-  }
-
   return (
     <>
       {/* Block 0: Identification */}
@@ -213,7 +201,7 @@ export default function CalculatorForm({
             options={PURCHASE_TYPE_OPTIONS}
             onChange={(v) => {
               update({
-                purchaseType: v,
+                purchaseType: v as 'goods' | 'service',
                 category: v === 'goods' ? 'goods' : 'other',
                 overheadPercent: v === 'goods' ? 12.5 : 20,
               })
@@ -223,7 +211,7 @@ export default function CalculatorForm({
             label="Система налогообложения"
             value={state.taxSystem}
             options={TAX_OPTIONS}
-            onChange={(v) => update({ taxSystem: v })}
+            onChange={(v) => update({ taxSystem: v as 'osno' | 'usn_income' | 'usn_expense' })}
           />
           <SelectDropdown
             label="Категория (для нормативов)"
@@ -231,7 +219,7 @@ export default function CalculatorForm({
             options={CATEGORY_OPTIONS}
             onChange={(v) => {
               const n = OVERHEAD_NORMS[v]
-              update({ category: v, overheadPercent: (n.min + n.max) / 2 })
+              update({ category: v as 'goods' | 'it' | 'construction' | 'medical' | 'other', overheadPercent: (n.min + n.max) / 2 })
             }}
           />
         </FormRow>
