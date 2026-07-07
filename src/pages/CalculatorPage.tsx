@@ -34,7 +34,7 @@ export default function CalculatorPage() {
           </aside>
         </div>
       </div>
-      {import.meta.env.DEV && <DebugPanel results={results} update={update} />}
+      <DebugPanel results={results} update={update} />
     </>
   )
 }
