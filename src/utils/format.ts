@@ -4,4 +4,4 @@ export const fmtMoney = new Intl.NumberFormat('ru-RU', {
   maximumFractionDigits: 0,
 })
 
-export const fmtPercent = (n: number) => n.toFixed(2) + '%'
+export const fmtPercent = (n: number) => n.toFixed(2).replace('.', ',') + '%'

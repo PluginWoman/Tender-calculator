@@ -2,33 +2,52 @@
   background: var(--container-default);
   border-radius: var(--card-rounding);
   box-shadow: var(--Card);
+}
+
+/* ── Header ─────────────────────────────────────────── */
+.header {
+  padding: var(--spacing-5x) var(--spacing-5x) var(--spacing-4x);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4x);
+  border-radius: var(--card-rounding) var(--card-rounding) 0 0;
   overflow: hidden;
 }
 
-.header {
-  background: var(--primitive-brand);
-  padding: var(--spacing-4x) var(--spacing-5x);
-  text-align: center;
-  color: white;
+.headerTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2x);
 }
 
-.price {
-  margin: var(--spacing-2x) 0 var(--spacing-1x);
-  color: white;
+.headerMetricBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1x);
 }
 
+.headerMetricRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2x);
+  flex-wrap: wrap;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--spacing-2x);
+  border-radius: var(--rounding-5x);
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* ── Body ────────────────────────────────────────────── */
 .body {
-  padding: var(--spacing-2x) var(--page-horizontal-padding) var(--spacing-4x);
-}
-
-.divider {
-  height: 1px;
-  background: var(--container-transparent-1);
-  margin: var(--spacing-2x) 0;
-}
-
-.verdict {
-  margin: var(--spacing-4x) var(--spacing-4x) 0;
+  padding: var(--spacing-6x) var(--spacing-5x) var(--spacing-5x);
+  display: flex;
+  flex-direction: column;
 }
 
 .stackedBar {
@@ -36,19 +55,65 @@
   height: 6px;
   border-radius: var(--rounding-2x);
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--container-transparent-1);
   gap: 2px;
-  margin-top: var(--spacing-3x);
+  margin-bottom: var(--spacing-5x);
 }
 
 .stackedSegment {
   min-width: 2px;
 }
 
+/* ── Rows ────────────────────────────────────────────── */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4x);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4x);
+}
+
+.rowDot {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+.rowLabel {
+  flex: 1;
+}
+
+.rowLabelWithIcon {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2x);
+  flex: 1;
+}
+
+/* ── Divider + totals ────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: var(--translucent-primitives-neutral-1);
+  margin: var(--spacing-6x) 0 var(--spacing-5x);
+}
+
+.totalBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2x);
+}
+
+/* ── Legend dot (stacked bar legend) ────────────────── */
 .dot {
   display: block;
-  width: 8px;
-  height: 8px;
+  width: var(--spacing-2-5x);
+  height: var(--spacing-2-5x);
   border-radius: 50%;
   flex-shrink: 0;
 }

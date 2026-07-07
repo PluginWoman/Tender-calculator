@@ -600,21 +600,6 @@ export default function CalculatorForm({
           />
         </FormRow>
 
-        {results.verdict && (
-          <Alert type={VERDICT_ALERT_TYPE[results.verdict]} textAlign="center">
-            <span className="ts-600-m">{VERDICT_LABELS[results.verdict]}</span>
-            {results.verdict !== 'danger' && (
-              <span className="ts-400-s" style={{ display: 'block', marginTop: 'var(--spacing-0-5x)' }}>
-                Запас: {fmtMoney.format(results.nmccDiff)} ({fmtPercent(results.nmccDiffPercent)})
-              </span>
-            )}
-            {results.verdict === 'danger' && (
-              <span className="ts-400-s" style={{ display: 'block', marginTop: 'var(--spacing-0-5x)' }}>
-                Дефицит: {fmtMoney.format(Math.abs(results.nmccDiff))}
-              </span>
-            )}
-          </Alert>
-        )}
       </FormBlock>
 
     </>

@@ -6,7 +6,7 @@
 
 .header {
   margin-bottom: var(--spacing-8x);
-  text-align: center;
+  text-align: left;
 }
 
 .layout {
