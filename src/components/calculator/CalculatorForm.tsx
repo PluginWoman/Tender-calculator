@@ -114,7 +114,7 @@ function ArticlePickerCell({
         />
       </div>
       {open && (
-        <div style={{
+        <div className="ds-scroll-area" style={{
           position: 'fixed',
           top: menuPos.top,
           left: menuPos.left,
