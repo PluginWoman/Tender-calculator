@@ -48,6 +48,9 @@ const ARTICLE_CONFIG: { key: ArticleKey; label: string; stateKey: ArticleStateKe
   { key: 'docs',      label: 'Оформление документации',    stateKey: 'contractDocs'      },
 ]
 
+const MENU_CELL_H = 40
+const MENU_MAX_H = 280
+
 function ArticlePickerCell({
   value,
   options,
@@ -62,28 +65,37 @@ function ArticlePickerCell({
   const triggerRef = useRef<HTMLDivElement>(null)
   const label = ARTICLE_CONFIG.find(a => a.key === value)!.label
 
-  useEffect(() => {
-    if (!open) return
-    const handle = (e: MouseEvent) => {
-      if (triggerRef.current && !triggerRef.current.contains(e.target as Node)) setOpen(false)
-    }
-    document.addEventListener('mousedown', handle)
-    return () => document.removeEventListener('mousedown', handle)
-  }, [open])
+  const updatePosition = useCallback(() => {
+    if (!triggerRef.current) return
+    const rect = triggerRef.current.getBoundingClientRect()
+    const menuH = Math.min(options.length * MENU_CELL_H, MENU_MAX_H)
+    const fitsBelow = rect.bottom + menuH <= window.innerHeight
+    setMenuPos({
+      top: fitsBelow ? rect.bottom : rect.top - menuH,
+      left: rect.left,
+      width: rect.width,
+    })
+  }, [options.length])
 
   const handleToggle = () => {
-    if (!open && triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect()
-      const estimatedMenuH = options.length * 52
-      const fitsBelow = rect.bottom + estimatedMenuH < window.innerHeight
-      setMenuPos({
-        top: fitsBelow ? rect.bottom : rect.top - estimatedMenuH,
-        left: rect.left,
-        width: rect.width,
-      })
-    }
+    if (!open) updatePosition()
     setOpen(o => !o)
   }
+
+  useEffect(() => {
+    if (!open) return
+    const handleOutside = (e: MouseEvent) => {
+      if (triggerRef.current && !triggerRef.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handleOutside)
+    window.addEventListener('scroll', updatePosition, true)
+    window.addEventListener('resize', updatePosition)
+    return () => {
+      document.removeEventListener('mousedown', handleOutside)
+      window.removeEventListener('scroll', updatePosition, true)
+      window.removeEventListener('resize', updatePosition)
+    }
+  }, [open, updatePosition])
 
   return (
     <div ref={triggerRef} className={styles.articlePickerCell}>
@@ -108,10 +120,10 @@ function ArticlePickerCell({
           background: 'var(--popup-primary)',
           borderRadius: 'var(--rounding-3x)',
           boxShadow: 'var(--Popout)',
-          overflow: 'hidden',
           padding: '0 var(--spacing-5x)',
           maxHeight: '280px',
           overflowY: 'auto',
+          overscrollBehavior: 'contain',
         }}>
           {options.map(opt => (
             <Cell
