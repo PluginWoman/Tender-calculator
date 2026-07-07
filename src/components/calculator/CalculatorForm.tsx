@@ -402,61 +402,84 @@ export default function CalculatorForm({
     <>
       {/* Block 0: Identification */}
       <FormBlock title="Идентификация закупки">
-        <FormRow>
-          <Input
-            label="Название закупки"
-            value={state.purchaseName}
-            placeholder="Например: Поставка компьютерного оборудования"
-            onChange={(v) => update({ purchaseName: v })}
-          />
-          <Input
-            label="Номер в ЕИС"
-            value={state.purchaseNumber}
-            placeholder="03732000..."
-            onChange={(v) => update({ purchaseNumber: v })}
-          />
-          <div />
-        </FormRow>
-        <FormRow>
-          <SelectDropdown
-            label="Тип предмета закупки"
-            value={state.purchaseType}
-            options={PURCHASE_TYPE_OPTIONS}
-            onChange={(v) => {
-              update({
-                purchaseType: v as 'goods' | 'service',
-                category: v === 'goods' ? 'goods' : 'other',
-                overheadPercent: v === 'goods' ? 12.5 : 20,
-              })
-            }}
-          />
-          <SelectDropdown
-            label="Система налогообложения"
-            value={state.taxSystem}
-            options={TAX_OPTIONS}
-            onChange={(v) => update({ taxSystem: v as 'osno' | 'usn_income' | 'usn_expense' })}
-          />
-          <SelectDropdown
-            label="Категория (для нормативов)"
-            value={state.category}
-            options={CATEGORY_OPTIONS}
-            onChange={(v) => {
-              const n = OVERHEAD_NORMS[v]
-              update({ category: v as 'goods' | 'it' | 'construction' | 'medical' | 'other', overheadPercent: (n.min + n.max) / 2 })
-            }}
-          />
-        </FormRow>
-        <FormRow>
-          <Input
-            label="НМЦК заказчика"
-            value={n2s(state.nmcc)}
-            right={RUB}
-            placeholder="Введите НМЦК из ЕИС"
-            onChange={(v) => update({ nmcc: s2n(v) })}
-          />
-          <div />
-          <div />
-        </FormRow>
+        <div className={styles.costGroupsContainer}>
+          <div className={styles.blockContent}>
+            <p className="ts-500-s">Закупка</p>
+            <FormRow>
+              <Input
+                label="Название закупки"
+                value={state.purchaseName}
+                placeholder="Например: Поставка компьютерного оборудования"
+                onChange={(v) => update({ purchaseName: v })}
+              />
+              <Input
+                label="Номер в ЕИС"
+                value={state.purchaseNumber}
+                placeholder="03732000..."
+                onChange={(v) => update({ purchaseNumber: v })}
+              />
+              <div />
+            </FormRow>
+            <FormRow>
+              <SelectDropdown
+                label="Тип предмета закупки"
+                value={state.purchaseType}
+                options={PURCHASE_TYPE_OPTIONS}
+                onChange={(v) => {
+                  update({
+                    purchaseType: v as 'goods' | 'service',
+                    category: v === 'goods' ? 'goods' : 'other',
+                    overheadPercent: v === 'goods' ? 12.5 : 20,
+                  })
+                }}
+              />
+              <SelectDropdown
+                label="Категория (для нормативов)"
+                value={state.category}
+                options={CATEGORY_OPTIONS}
+                onChange={(v) => {
+                  const n = OVERHEAD_NORMS[v]
+                  update({ category: v as 'goods' | 'it' | 'construction' | 'medical' | 'other', overheadPercent: (n.min + n.max) / 2 })
+                }}
+              />
+              <div />
+            </FormRow>
+          </div>
+          <div className={styles.blockContent}>
+            <p className="ts-500-s">Параметры расчёта</p>
+            <FormRow>
+              <Input
+                label="НМЦК заказчика"
+                value={n2s(state.nmcc)}
+                right={RUB}
+                placeholder="Введите НМЦК из ЕИС"
+                onChange={(v) => update({ nmcc: s2n(v) })}
+              />
+              <div>
+                <Input
+                  label="Целевая рентабельность (%)"
+                  value={n2s(state.profitPercent)}
+                  right={PCT}
+                  onChange={(v) => update({ profitPercent: s2n(v) })}
+                />
+                <p className="ts-400-xs" style={{ color: 'var(--primitive-secondary)', marginTop: 'var(--spacing-1x)' }}>
+                  Рекомендуется 10–20%
+                </p>
+              </div>
+              <div />
+            </FormRow>
+            <FormRow>
+              <SelectDropdown
+                label="Система налогообложения"
+                value={state.taxSystem}
+                options={TAX_OPTIONS}
+                onChange={(v) => update({ taxSystem: v as 'osno' | 'usn_income' | 'usn_expense' })}
+              />
+              <div />
+              <div />
+            </FormRow>
+          </div>
+        </div>
       </FormBlock>
 
       {/* Block 1A: Goods */}
@@ -751,24 +774,6 @@ export default function CalculatorForm({
         </FormRow>
       </FormBlock>
 
-      {/* Block 5: Profit */}
-      <FormBlock title="Целевая прибыль">
-        <FormRow>
-          <div>
-            <Input
-              label="Рентабельность (%)"
-              value={n2s(state.profitPercent)}
-              right={PCT}
-              onChange={(v) => update({ profitPercent: s2n(v) })}
-            />
-            <p className="ts-400-xs" style={{ color: 'var(--primitive-secondary)', marginTop: 'var(--spacing-1x)' }}>
-              Рекомендуется 10–20%
-            </p>
-          </div>
-          <div />
-          <div />
-        </FormRow>
-      </FormBlock>
 
 
     </>
