@@ -63,3 +63,29 @@
   background: #3b2f6b;
   border-color: #7c5cbf;
 }
+
+.divider {
+  height: 1px;
+  background: #333;
+  margin: 4px 0;
+}
+
+.resetBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 0;
+  color: #e57373;
+  font-size: 12px;
+  font-family: inherit;
+  text-align: left;
+  border-radius: 3px;
+  transition: color 0.1s;
+}
+
+.resetBtn:hover {
+  color: #ef9a9a;
+}

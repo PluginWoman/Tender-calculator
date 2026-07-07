@@ -258,6 +258,11 @@ export function useCalculator() {
     []
   )
 
+  const reset = useCallback(() => {
+    localStorage.removeItem(STORAGE_KEY)
+    setState(DEFAULT_STATE)
+  }, [])
+
   const addGoodsItem = useCallback(() => {
     setState((prev) => ({
       ...prev,
@@ -297,5 +302,6 @@ export function useCalculator() {
     addGoodsItem,
     removeGoodsItem,
     updateGoodsItem,
+    reset,
   }
 }

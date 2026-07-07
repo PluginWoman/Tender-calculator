@@ -4,6 +4,7 @@ import styles from './DebugPanel.module.css'
 interface Props {
   results: CalculatorResults
   update: (partial: Partial<CalculatorState>) => void
+  onReset: () => void
 }
 
 const PRESETS = [
@@ -13,7 +14,7 @@ const PRESETS = [
   { label: 'Отказаться',  apply: (p: number) => ({ nmcc: Math.round(p * 0.9) }) },
 ] as const
 
-export default function DebugPanel({ results, update }: Props) {
+export default function DebugPanel({ results, update, onReset }: Props) {
   const current = results.verdict ?? 'none'
 
   return (
@@ -33,6 +34,10 @@ export default function DebugPanel({ results, update }: Props) {
           </button>
         )
       })}
+      <div className={styles.divider} />
+      <button className={styles.resetBtn} onClick={onReset}>
+        ↺ Сбросить форму
+      </button>
     </div>
   )
 }

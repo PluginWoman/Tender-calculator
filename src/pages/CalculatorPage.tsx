@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useCalculator } from '../hooks/useCalculator'
 import CalculatorForm from '../components/calculator/CalculatorForm'
 import ResultsSidebar from '../components/calculator/ResultsSidebar'
@@ -6,8 +7,16 @@ import styles from './CalculatorPage.module.css'
 
 export default function CalculatorPage() {
   const { state, results, update, addSpecialist, removeSpecialist, updateSpecialist,
-    addGoodsItem, removeGoodsItem, updateGoodsItem } =
+    addGoodsItem, removeGoodsItem, updateGoodsItem, reset } =
     useCalculator()
+
+  const [formKey, setFormKey] = useState(0)
+
+  const handleReset = () => {
+    if (!window.confirm('Сбросить форму до стартового состояния? Все введённые данные будут удалены.')) return
+    reset()
+    setFormKey(k => k + 1)
+  }
 
   return (
     <>
@@ -22,6 +31,7 @@ export default function CalculatorPage() {
         <div className={styles.layout}>
           <div className={styles.formColumn}>
             <CalculatorForm
+              key={formKey}
               state={state}
               update={update}
               addSpecialist={addSpecialist}
@@ -37,7 +47,7 @@ export default function CalculatorPage() {
           </aside>
         </div>
       </div>
-      <DebugPanel results={results} update={update} />
+      <DebugPanel results={results} update={update} onReset={handleReset} />
     </>
   )
 }
