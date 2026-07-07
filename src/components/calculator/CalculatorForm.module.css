@@ -64,6 +64,11 @@
 }
 
 
+/* Allow tooltips inside DS Widget to overflow the block boundary */
+:global(.widget) {
+  overflow: visible;
+}
+
 /* Override DS icon color for success checkmark in CellRightAccessory */
 .successIcon :global(.ds-cell-right-accessory__icon) {
   color: var(--primitive-success);

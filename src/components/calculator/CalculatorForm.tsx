@@ -450,21 +450,21 @@ export default function CalculatorForm({
             <FormRow>
               <Input
                 label="НМЦК заказчика"
+                hasHelpIcon
                 value={n2s(state.nmcc)}
                 right={RUB}
                 placeholder="Введите НМЦК из ЕИС"
                 onChange={(v) => update({ nmcc: s2n(v) })}
+                helpText="Начальная (максимальная) цена контракта, указанная в документации закупки"
               />
               <div>
                 <Input
-                  label="Целевая рентабельность (%)"
+                  label="Целевая рентабельность"
                   value={n2s(state.profitPercent)}
+                  placeholder="Рекомендуем 10–20%"
                   right={PCT}
                   onChange={(v) => update({ profitPercent: s2n(v) })}
                 />
-                <p className="ts-400-xs" style={{ color: 'var(--primitive-secondary)', marginTop: 'var(--spacing-1x)' }}>
-                  Рекомендуется 10–20%
-                </p>
               </div>
               <div />
             </FormRow>
@@ -689,14 +689,23 @@ export default function CalculatorForm({
         <FormRow>
           <div>
             <Input
-              label="Коэффициент накладных расходов"
+              label="Коэффициент"
+              hasHelpIcon
+              helpText={
+                <>
+                  <p>Это административные и организационные расходы, не связанные напрямую с выполнением конкретного контракта: аренда, бухгалтерия, связь и т.д.</p>
+                  <p style={{ marginTop: '8px' }}>
+                    {state.purchaseType === 'goods'
+                      ? 'Коэффициент рассчитывается от суммы прямых затрат по контракту.'
+                      : 'Коэффициент рассчитывается от ФОТ специалистов.'}
+                  </p>
+                </>
+              }
               value={n2s(state.overheadPercent)}
               right={PCT}
               onChange={(v) => update({ overheadPercent: s2n(v) })}
+              description="Рекомендуемый диапазон: 15–25%"
             />
-            <p className="ts-400-xs" style={{ color: 'var(--primitive-secondary)', marginTop: 'var(--spacing-1x)' }}>
-              База: {norm?.base} · Норматив {norm?.min}–{norm?.max}%
-            </p>
           </div>
           <div />
         </FormRow>
@@ -706,13 +715,13 @@ export default function CalculatorForm({
       <FormBlock title="Специфические затраты и риски">
         <FormRow>
           <Input
-            label="Обеспечение заявки (сумма)"
+            label="Обеспечение заявки"
             value={n2s(state.bidSecurityAmount)}
             right={RUB}
             onChange={(v) => update({ bidSecurityAmount: s2n(v) })}
           />
           <Input
-            label="Срок заморозки (дней)"
+            label="Срок заморозки"
             value={n2s(state.bidSecurityDays)}
             onChange={(v) => update({ bidSecurityDays: s2n(v) })}
           />
@@ -723,13 +732,13 @@ export default function CalculatorForm({
 
         <FormRow>
           <Input
-            label="Обеспечение контракта (сумма)"
+            label="Обеспечение контракта"
             value={n2s(state.contractSecurityAmount)}
             right={RUB}
             onChange={(v) => update({ contractSecurityAmount: s2n(v) })}
           />
           <Input
-            label="Срок контракта (дней)"
+            label="Срок контракта"
             value={n2s(state.contractDurationDays)}
             onChange={(v) => update({ contractDurationDays: s2n(v) })}
           />
@@ -738,7 +747,7 @@ export default function CalculatorForm({
 
         <FormRow>
           <Input
-            label="Отсрочка платежа (дней)"
+            label="Отсрочка платежа"
             value={n2s(state.paymentDelayDays)}
             onChange={(v) => update({ paymentDelayDays: s2n(v) })}
           />
@@ -748,7 +757,7 @@ export default function CalculatorForm({
 
         <FormRow>
           <Input
-            label="Резерв на непредвиденное (%)"
+            label="Резерв на непредвиденное"
             value={n2s(state.riskReservePercent)}
             right={PCT}
             onChange={(v) => update({ riskReservePercent: s2n(v) })}
