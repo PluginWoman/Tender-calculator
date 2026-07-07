@@ -77,6 +77,7 @@ export interface CalculatorResults {
   contSecCost: number
   delayCost: number
   riskAmount: number
+  isReady: boolean
 }
 
 const DEFAULT_STATE: CalculatorState = {
@@ -201,6 +202,7 @@ function calculate(state: CalculatorState): CalculatorResults {
     contSecCost,
     delayCost,
     riskAmount,
+    isReady: state.nmcc > 0 && directCosts > 0,
   }
 }
 

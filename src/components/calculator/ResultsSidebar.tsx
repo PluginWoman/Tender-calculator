@@ -104,7 +104,7 @@ export default function ResultsSidebar({ results }: Props) {
   const { finalPrice, directCosts, overheadTotal, specificCosts,
     fullCost, profitAmount, taxAmount, verdict, nmccDiff, nmccDiffPercent } = results
 
-  const key: VerdictKey = verdict ?? 'none'
+  const key: VerdictKey = (results.isReady && verdict) ? verdict : 'none'
   const cfg = HEADER_CONFIG[key]
   const Icon = cfg.icon
 
