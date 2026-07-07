@@ -454,16 +454,16 @@ export default function CalculatorForm({
 
       {/* Block 1A: Goods */}
       {state.purchaseType === 'goods' && (
-        <FormBlock title="Прямые затраты: ТОВАРЫ">
+        <FormBlock title="Прямые затраты">
           <div className={styles.costGroupsContainer}>
-            <div className={styles.blockContent}>
+            <div className={styles.blockContent}> 
               <p className="ts-500-s">Товары</p>
               {state.goods.length > 0 && (
                 <div ref={goodsTableRef} onBlur={handleGoodsTableBlur}>
-                  <Table gridTemplateColumns="2fr 80px 140px 120px 120px 120px 48px">
+                  <Table gridTemplateColumns="2fr 80px 124px 124px 124px 124px 64px">
                     <TableCell title="Название" titleStyle="600" backgroundColor="var(--bg-neutral-1)" />
-                    <TableCell title="Кол-во" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
-                    <TableCell title="Цена (б/НДС)" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
+                    <TableCell title="Ед." titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
+                    <TableCell title="Цена" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
                     <TableCell title="Таможня" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
                     <TableCell title="Транспорт" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
                     <TableCell title="Упаковка" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
