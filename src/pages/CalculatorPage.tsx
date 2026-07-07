@@ -22,7 +22,6 @@ export default function CalculatorPage() {
           <div className={styles.formColumn}>
             <CalculatorForm
               state={state}
-              results={results}
               update={update}
               addSpecialist={addSpecialist}
               removeSpecialist={removeSpecialist}

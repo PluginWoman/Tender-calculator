@@ -1,13 +1,11 @@
 import { Fragment, useRef, useEffect, useCallback, useState } from 'react'
 import { Widget, Input, Dropdown, Cell, CellRightAccessory, Table, TableCell, ActionFormCell } from '@pluginwoman/t-ds'
 import { Plus, Trash } from '@pluginwoman/t-ds/icons'
-import type { CalculatorState, CalculatorResults, Specialist } from '../../hooks/useCalculator'
-import { fmtMoney, fmtPercent } from '../../utils/format'
+import type { CalculatorState, Specialist } from '../../hooks/useCalculator'
 import styles from './CalculatorForm.module.css'
 
 interface Props {
   state: CalculatorState
-  results: CalculatorResults
   update: (partial: Partial<CalculatorState>) => void
   addSpecialist: () => void
   removeSpecialist: (id: string) => void
@@ -115,7 +113,6 @@ function FormRow({ children }: { children: React.ReactNode }) {
 
 export default function CalculatorForm({
   state,
-  results,
   update,
   addSpecialist,
   removeSpecialist,
@@ -419,11 +416,6 @@ export default function CalculatorForm({
               База: {norm?.base} · Норматив {norm?.min}–{norm?.max}%
             </p>
           </div>
-          <Input
-            label="Итого накладные"
-            value={fmtMoney.format(results.overheadTotal)}
-            isDisabled
-          />
           <div />
         </FormRow>
       </FormBlock>
@@ -442,16 +434,7 @@ export default function CalculatorForm({
             value={n2s(state.bidSecurityDays)}
             onChange={(v) => update({ bidSecurityDays: s2n(v) })}
           />
-          <div>
-            <Input
-              label="Стоимость обеспечения"
-              value={fmtMoney.format(results.bidSecCost)}
-              isDisabled
-            />
-            <p className="ts-400-xs" style={{ color: 'var(--primitive-secondary)', marginTop: 'var(--spacing-1x)' }}>
-              Альт. доходность 15%
-            </p>
-          </div>
+          <div />
         </FormRow>
 
         <div className={styles.separator} />
@@ -468,16 +451,7 @@ export default function CalculatorForm({
             value={n2s(state.contractDurationDays)}
             onChange={(v) => update({ contractDurationDays: s2n(v) })}
           />
-          <div>
-            <Input
-              label="Стоимость обеспечения"
-              value={fmtMoney.format(results.contSecCost)}
-              isDisabled
-            />
-            <p className="ts-400-xs" style={{ color: 'var(--primitive-secondary)', marginTop: 'var(--spacing-1x)' }}>
-              Стоимость БГ 3% в год
-            </p>
-          </div>
+          <div />
         </FormRow>
 
         <FormRow>
@@ -486,11 +460,7 @@ export default function CalculatorForm({
             value={n2s(state.paymentDelayDays)}
             onChange={(v) => update({ paymentDelayDays: s2n(v) })}
           />
-          <Input
-            label="Стоимость отсрочки"
-            value={fmtMoney.format(results.delayCost)}
-            isDisabled
-          />
+          <div />
           <div />
         </FormRow>
 
@@ -501,11 +471,7 @@ export default function CalculatorForm({
             right={PCT}
             onChange={(v) => update({ riskReservePercent: s2n(v) })}
           />
-          <Input
-            label="Сумма резерва"
-            value={fmtMoney.format(results.riskAmount)}
-            isDisabled
-          />
+          <div />
           <div />
         </FormRow>
 
@@ -540,31 +506,11 @@ export default function CalculatorForm({
               Рекомендуется 10–20%
             </p>
           </div>
-          <Input
-            label="Сумма прибыли"
-            value={fmtMoney.format(results.profitAmount)}
-            isDisabled
-          />
+          <div />
           <div />
         </FormRow>
       </FormBlock>
 
-      {/* Block 6: Taxes */}
-      <FormBlock title="Налоги (авторасчёт)">
-        <FormRow>
-          <Input
-            label="Сумма налога"
-            value={fmtMoney.format(results.taxAmount)}
-            isDisabled
-          />
-          <p className="ts-400-xs" style={{ color: 'var(--primitive-secondary)', alignSelf: 'center' }}>
-            {state.taxSystem === 'osno' && 'НДС 20% на цену до налогов'}
-            {state.taxSystem === 'usn_income' && 'УСН 6% от выручки'}
-            {state.taxSystem === 'usn_expense' && 'УСН 15% от прибыли'}
-          </p>
-          <div />
-        </FormRow>
-      </FormBlock>
 
       {/* Block 7: Decision */}
       <FormBlock title="Принятие решения">
@@ -576,16 +522,8 @@ export default function CalculatorForm({
             placeholder="Введите НМЦК из ЕИС"
             onChange={(v) => update({ nmcc: s2n(v) })}
           />
-          <Input
-            label="Запас / Дефицит"
-            value={state.nmcc > 0 ? fmtMoney.format(results.nmccDiff) : '—'}
-            isDisabled
-          />
-          <Input
-            label="Запас в %"
-            value={state.nmcc > 0 ? fmtPercent(results.nmccDiffPercent) : '—'}
-            isDisabled
-          />
+          <div />
+          <div />
         </FormRow>
 
       </FormBlock>
