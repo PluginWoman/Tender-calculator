@@ -13,7 +13,7 @@
 .formRow {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-3x);
+  gap: var(--spacing-4x);
   align-items: start;
 }
 
@@ -67,6 +67,14 @@
 /* Allow tooltips inside DS Widget to overflow the block boundary */
 :global(.widget) {
   overflow: visible;
+}
+
+/* Block titles are not clickable — remove hover effect */
+:global(.widget-title__main.hoverOpacity) {
+  cursor: default;
+}
+:global(.widget-title__main.hoverOpacity:hover) {
+  opacity: 1;
 }
 
 /* Override DS icon color for success checkmark in CellRightAccessory */

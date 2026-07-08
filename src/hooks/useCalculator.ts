@@ -202,7 +202,7 @@ function calculate(state: CalculatorState): CalculatorResults {
     contSecCost,
     delayCost,
     riskAmount,
-    isReady: state.nmcc > 0 && directCosts > 0,
+    isReady: state.nmcc > 0 && directCosts > 0 && state.profitPercent > 0,
   }
 }
 

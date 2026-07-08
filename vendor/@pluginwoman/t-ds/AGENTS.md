@@ -10,7 +10,7 @@
    ```tsx
    import '@pluginwoman/t-ds/style'
    ```
-2. **Импортируй компоненты из корня пакета, иконки — из `/icons`:**
+2. **Импортируй компоненты из корня пакета, иконки — из subpath `/icons`:**
    ```tsx
    import { Button, Cell, Input } from '@pluginwoman/t-ds'
    import { Circle, ChevronRight } from '@pluginwoman/t-ds/icons'
@@ -101,7 +101,27 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 - Бордеры (через inset-тень): `--Top-Line`, `--Bottom-Line`, `--Left-Line`, `--Right-Line`.
 
 ### 2.6 Иконки (`src/assets/Icon/`)
-- 374 иконки 24px (`24/Stroked`) + отдельные наборы 12/16/20px. Баррель `/icons` отдаёт 24px-версию при конфликте имён.
+
+**Subpath-импорты** — единственный способ подключить иконки из пакета:
+
+| Subpath | Содержимое | Конфликты |
+|---|---|---|
+| `@pluginwoman/t-ds/icons` | Баррель всех размеров | 24px побеждает при совпадении имён |
+| `@pluginwoman/t-ds/icons/12/Filled` | 12px Filled | — |
+| `@pluginwoman/t-ds/icons/16/Stroked` | 16px Stroked | — |
+| `@pluginwoman/t-ds/icons/20/Filled` | 20px Filled | — |
+| `@pluginwoman/t-ds/icons/20/Stroked` | 20px Stroked | — |
+| `@pluginwoman/t-ds/icons/24/Stroked` | 24px Stroked | — |
+
+```tsx
+// Большинство случаев — баррель, 24px версия
+import { Circle, ChevronRight, Checkmark } from '@pluginwoman/t-ds/icons'
+
+// Когда нужен конкретный размер иконки с конфликтующим именем
+import { InformationCircle } from '@pluginwoman/t-ds/icons/20/Filled'
+import { Checkmark } from '@pluginwoman/t-ds/icons/16/Stroked'
+```
+
 - Оборачивай иконку в `.ds-icon` с размерным модификатором — она наследует `currentColor` и масштабируется:
   ```tsx
   <span className="ds-icon ds-icon--m" aria-hidden="true"><ChevronRight /></span>

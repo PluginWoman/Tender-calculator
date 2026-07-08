@@ -1,6 +1,7 @@
 import { Fragment, useRef, useEffect, useCallback, useState } from 'react'
-import { Widget, Input, Dropdown, Cell, CellRightAccessory, Table, TableCell, ActionFormCell } from '@pluginwoman/t-ds'
+import { Widget, Input, Dropdown, Cell, CellRightAccessory, Table, TableCell, ActionFormCell, ContextualNotification } from '@pluginwoman/t-ds'
 import { Plus, Trash, Checkmark } from '@pluginwoman/t-ds/icons'
+import { InformationCircle } from '@pluginwoman/t-ds/icons/20/Filled'
 import { ChevronDown as ChevronDownFilled } from '@pluginwoman/t-ds/icons/12/Filled'
 import type { CalculatorState, Specialist, GoodsItem } from '../../hooks/useCalculator'
 import styles from './CalculatorForm.module.css'
@@ -16,40 +17,8 @@ interface Props {
   updateGoodsItem: (id: string, partial: Partial<Omit<GoodsItem, 'id'>>) => void
 }
 
-const n2s = (n: number) => (n === 0 ? '' : String(n))
-const s2n = (s: string) => parseFloat(s) || 0
 
-function formatRateDisplay(n: number): string {
-  if (n === 0) return ''
-  const hasKopecks = Math.round((n % 1) * 100) !== 0
-  return n.toLocaleString('ru-RU', {
-    minimumFractionDigits: hasKopecks ? 2 : 0,
-    maximumFractionDigits: hasKopecks ? 2 : 0,
-  })
-}
-
-function parseRateInput(s: string): number {
-  const cleaned = s.replace(/[\s  ₽]/g, '').replace(',', '.')
-  return parseFloat(cleaned) || 0
-}
-
-const RUB = <span className="ts-400-s" style={{ color: 'var(--primitive-secondary)' }}>₽</span>
-const PCT = <span className="ts-400-s" style={{ color: 'var(--primitive-secondary)' }}>%</span>
-
-// --- Extra costs articles ---
-type ArticleKey = 'materials' | 'rent' | 'licenses' | 'delivery' | 'install' | 'travel' | 'cert' | 'insurance' | 'docs'
-type ArticleStateKey = 'serviceMaterials' | 'serviceRent' | 'serviceLicenses' | 'contractDelivery' | 'contractInstall' | 'contractTravel' | 'contractCert' | 'contractInsurance' | 'contractDocs'
-const ARTICLE_CONFIG: { key: ArticleKey; label: string; stateKey: ArticleStateKey }[] = [
-  { key: 'materials', label: 'Материалы',                  stateKey: 'serviceMaterials'  },
-  { key: 'rent',      label: 'Аренда оборудования',        stateKey: 'serviceRent'       },
-  { key: 'licenses',  label: 'Лицензии на ПО',             stateKey: 'serviceLicenses'   },
-  { key: 'delivery',  label: 'Доставка до заказчика',      stateKey: 'contractDelivery'  },
-  { key: 'install',   label: 'Монтаж / Пусконаладка',      stateKey: 'contractInstall'   },
-  { key: 'travel',    label: 'Командировочные расходы',     stateKey: 'contractTravel'    },
-  { key: 'cert',      label: 'Сертификация / Испытания',   stateKey: 'contractCert'      },
-  { key: 'insurance', label: 'Страхование',                 stateKey: 'contractInsurance' },
-  { key: 'docs',      label: 'Оформление документации',    stateKey: 'contractDocs'      },
-]
+import { ARTICLE_CONFIG, CATEGORY_OPTIONS, OVERHEAD_NORMS, PURCHASE_TYPE_OPTIONS, TAX_OPTIONS, type ArticleKey, type ArticleStateKey } from '../../constants/calculator'
 
 const MENU_CELL_H = 40
 const MENU_MAX_H = 280
@@ -149,33 +118,6 @@ function ArticlePickerCell({
   )
 }
 
-// --- Dropdown option sets ---
-const PURCHASE_TYPE_OPTIONS = [
-  { value: 'goods', label: 'Товар (Поставка)' },
-  { value: 'service', label: 'Работа / Услуга' },
-]
-
-const TAX_OPTIONS = [
-  { value: 'osno', label: 'ОСНО (НДС 20%)' },
-  { value: 'usn_income', label: 'УСН «Доходы» (6%)' },
-  { value: 'usn_expense', label: 'УСН «Доходы-Расходы» (15%)' },
-]
-
-const CATEGORY_OPTIONS = [
-  { value: 'it', label: 'IT-услуги' },
-  { value: 'construction', label: 'Строительство / Ремонт' },
-  { value: 'medical', label: 'Медицина / Оборудование' },
-  { value: 'other', label: 'Прочие услуги' },
-  { value: 'goods', label: 'Товары' },
-]
-
-const OVERHEAD_NORMS: Record<string, { min: number; max: number; base: string }> = {
-  goods: { min: 10, max: 15, base: 'Прямые затраты' },
-  construction: { min: 15, max: 25, base: 'Прямые затраты' },
-  it: { min: 70, max: 100, base: 'ФОТ (Трудозатраты)' },
-  medical: { min: 20, max: 30, base: 'Прямые затраты' },
-  other: { min: 15, max: 25, base: 'ФОТ (Трудозатраты)' },
-}
 
 function SelectDropdown<T extends string>({
   label,
@@ -246,7 +188,6 @@ export default function CalculatorForm({
   const norm = OVERHEAD_NORMS[state.category]
 
   const tableRef = useRef<HTMLDivElement>(null)
-  const extraTableRef = useRef<HTMLDivElement>(null)
   const goodsTableRef = useRef<HTMLDivElement>(null)
   const prevSpecCountRef = useRef(state.specialists.length)
   const prevGoodsCountRef = useRef(state.goods.length)
@@ -263,7 +204,6 @@ export default function CalculatorForm({
   useEffect(() => {
     if (state.goods.length > prevGoodsCountRef.current && goodsTableRef.current) {
       const inputs = goodsTableRef.current.querySelectorAll<HTMLInputElement>('input')
-      // 6 isEdit inputs per row: name, qty, price, customs, logistics, pack
       const idx = (state.goods.length - 1) * 6
       inputs[idx]?.focus()
     }
@@ -274,16 +214,12 @@ export default function CalculatorForm({
     addSpecialist()
   }, [addSpecialist])
 
+  const [showEisNotification, setShowEisNotification] = useState(true)
+
   const [activeArticles, setActiveArticles] = useState<ArticleKey[]>(() =>
     ARTICLE_CONFIG
       .filter(a => (state[a.stateKey] as number) > 0)
       .map(a => a.key)
-  )
-
-  const [articleAmounts, setArticleAmounts] = useState<Record<ArticleKey, string>>(
-    () => Object.fromEntries(
-      ARTICLE_CONFIG.map(a => [a.key, n2s(state[a.stateKey] as number)])
-    ) as Record<ArticleKey, string>
   )
 
   const handleAddArticle = useCallback(() => {
@@ -295,108 +231,14 @@ export default function CalculatorForm({
   const handleRemoveArticle = useCallback((key: ArticleKey) => {
     const cfg = ARTICLE_CONFIG.find(a => a.key === key)!
     update({ [cfg.stateKey]: 0 })
-    setArticleAmounts(prev => ({ ...prev, [key]: '' }))
     setActiveArticles(prev => prev.filter(k => k !== key))
   }, [update])
 
   const handleChangeArticle = useCallback((oldKey: ArticleKey, newKey: ArticleKey) => {
     const oldCfg = ARTICLE_CONFIG.find(a => a.key === oldKey)!
     update({ [oldCfg.stateKey]: 0 })
-    setArticleAmounts(prev => ({ ...prev, [oldKey]: '', [newKey]: '' }))
     setActiveArticles(prev => prev.map(k => k === oldKey ? newKey : k))
   }, [update])
-
-  const handleExtraTableBlur = useCallback((e: React.FocusEvent<HTMLDivElement>) => {
-    const target = e.target as HTMLInputElement
-    if (target.tagName !== 'INPUT' || !extraTableRef.current) return
-    const amountInputs = Array.from(
-      extraTableRef.current.querySelectorAll<HTMLInputElement>('input[placeholder="0"]')
-    )
-    const idx = amountInputs.indexOf(target)
-    if (idx < 0 || idx >= activeArticles.length) return
-    const key = activeArticles[idx]
-    const cfg = ARTICLE_CONFIG.find(a => a.key === key)!
-    const num = parseRateInput(target.value)
-    update({ [cfg.stateKey]: num })
-    setArticleAmounts(prev => ({ ...prev, [key]: formatRateDisplay(num) }))
-  }, [activeArticles, update])
-
-  const GOODS_MONEY_FIELDS = ['price', 'customs', 'logistics', 'pack'] as const
-
-  const [goodsDisplay, setGoodsDisplay] = useState<Record<string, string>>(() => {
-    const init: Record<string, string> = {}
-    for (const g of state.goods) {
-      for (const f of GOODS_MONEY_FIELDS) {
-        init[`${g.id}_${f}`] = formatRateDisplay(g[f])
-      }
-    }
-    return init
-  })
-
-  useEffect(() => {
-    setGoodsDisplay((prev) => {
-      const next: Record<string, string> = {}
-      for (const g of state.goods) {
-        for (const f of GOODS_MONEY_FIELDS) {
-          const k = `${g.id}_${f}`
-          next[k] = k in prev ? prev[k] : formatRateDisplay(g[f])
-        }
-      }
-      return next
-    })
-  }, [state.goods])
-
-  const handleGoodsTableBlur = useCallback(
-    (e: React.FocusEvent<HTMLDivElement>) => {
-      const target = e.target as HTMLInputElement
-      if (target.tagName !== 'INPUT' || !goodsTableRef.current) return
-      const moneyInputs = Array.from(
-        goodsTableRef.current.querySelectorAll<HTMLInputElement>('input[placeholder="0"]')
-      )
-      const idx = moneyInputs.indexOf(target)
-      if (idx < 0) return
-      const rowIdx = Math.floor(idx / 4)
-      const fieldIdx = idx % 4
-      const field = GOODS_MONEY_FIELDS[fieldIdx]
-      const item = state.goods[rowIdx]
-      if (!item) return
-      const num = parseRateInput(target.value)
-      updateGoodsItem(item.id, { [field]: num })
-      setGoodsDisplay((prev) => ({ ...prev, [`${item.id}_${field}`]: formatRateDisplay(num) }))
-    },
-    [state.goods, updateGoodsItem]
-  )
-
-  const [rateDisplay, setRateDisplay] = useState<Record<string, string>>(() =>
-    Object.fromEntries(state.specialists.map((s) => [s.id, formatRateDisplay(s.rate)]))
-  )
-
-  useEffect(() => {
-    setRateDisplay((prev) => {
-      const next: Record<string, string> = {}
-      for (const s of state.specialists) {
-        next[s.id] = s.id in prev ? prev[s.id] : formatRateDisplay(s.rate)
-      }
-      return next
-    })
-  }, [state.specialists])
-
-  const handleTableBlur = useCallback(
-    (e: React.FocusEvent<HTMLDivElement>) => {
-      const target = e.target as HTMLInputElement
-      if (target.tagName !== 'INPUT' || !tableRef.current) return
-      const rateInputs = Array.from(
-        tableRef.current.querySelectorAll<HTMLInputElement>('input[placeholder="0"]')
-      )
-      const idx = rateInputs.indexOf(target)
-      if (idx < 0 || idx >= state.specialists.length) return
-      const specialist = state.specialists[idx]
-      const num = parseRateInput(target.value)
-      updateSpecialist(specialist.id, { rate: num })
-      setRateDisplay((prev) => ({ ...prev, [specialist.id]: formatRateDisplay(num) }))
-    },
-    [state.specialists, updateSpecialist]
-  )
 
   return (
     <>
@@ -409,7 +251,7 @@ export default function CalculatorForm({
               <Input
                 label="Название закупки"
                 value={state.purchaseName}
-                placeholder="Например: Поставка компьютерного оборудования"
+                placeholder="Введите название закупки"
                 onChange={(v) => update({ purchaseName: v })}
               />
               <Input
@@ -418,8 +260,20 @@ export default function CalculatorForm({
                 placeholder="03732000..."
                 onChange={(v) => update({ purchaseNumber: v })}
               />
-              <div />
             </FormRow>
+            {showEisNotification && (
+              <ContextualNotification
+                title="Не знаете номер ЕИС?"
+                text="Найдите закупку бесплатно в Точка Закупки."
+                hasAction
+                icon={<span className="ds-icon ds-icon--m" style={{ color: 'var(--primitive-brand)' }}><InformationCircle /></span>}
+                actionLabel="Найти тендер"
+                onActionClick={() => window.open('https://zakupki.tochka.com/search/', '_blank')}
+                hasCloseIcon
+                onClose={() => setShowEisNotification(false)}
+                size='m'
+              />
+            )}
             <FormRow>
               <SelectDropdown
                 label="Тип предмета закупки"
@@ -451,33 +305,26 @@ export default function CalculatorForm({
               <Input
                 label="НМЦК заказчика"
                 hasHelpIcon
-                value={n2s(state.nmcc)}
-                right={RUB}
+                format="currency"
+                value={state.nmcc || null}
                 placeholder="Введите НМЦК из ЕИС"
-                onChange={(v) => update({ nmcc: s2n(v) })}
-                helpText="Начальная (максимальная) цена контракта, указанная в документации закупки"
+                onValueChange={(v) => update({ nmcc: v ?? 0 })}
+                helpText="Начальная (максимальная) цена контракта, указанная в документации закупки"
               />
-              <div>
-                <Input
+              <Input
                   label="Целевая рентабельность"
-                  value={n2s(state.profitPercent)}
+                  format="percent"
+                  value={state.profitPercent || null}
                   placeholder="Рекомендуем 10–20%"
-                  right={PCT}
-                  onChange={(v) => update({ profitPercent: s2n(v) })}
+                  onValueChange={(v) => update({ profitPercent: v ?? 0 })}
                 />
-              </div>
-              <div />
             </FormRow>
-            <FormRow>
               <SelectDropdown
                 label="Система налогообложения"
                 value={state.taxSystem}
                 options={TAX_OPTIONS}
                 onChange={(v) => update({ taxSystem: v as 'osno' | 'usn_income' | 'usn_expense' })}
               />
-              <div />
-              <div />
-            </FormRow>
           </div>
         </div>
       </FormBlock>
@@ -489,7 +336,7 @@ export default function CalculatorForm({
             <div className={styles.blockContent}> 
               <p className="ts-500-s">Товары</p>
               {state.goods.length > 0 && (
-                <div ref={goodsTableRef} onBlur={handleGoodsTableBlur}>
+                <div ref={goodsTableRef}>
                   <Table gridTemplateColumns="2fr 80px 124px 124px 124px 124px 64px">
                     <TableCell title="Название" titleStyle="600" backgroundColor="var(--bg-neutral-1)" />
                     <TableCell title="Ед." titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
@@ -501,26 +348,22 @@ export default function CalculatorForm({
                     {state.goods.map((g) => (
                       <Fragment key={g.id}>
                         <TableCell isEdit title={g.name} placeholder="Название товара" onTitleChange={(v) => updateGoodsItem(g.id, { name: v })} />
-                        <TableCell isEdit title={n2s(g.qty)} className={styles.rateCell} placeholder="1" onTitleChange={(v) => updateGoodsItem(g.id, { qty: s2n(v) })} />
+                        <TableCell isEdit editFormat="number" title={String(g.qty || '')} className={styles.rateCell} placeholder="1" onEditValueChange={(v) => updateGoodsItem(g.id, { qty: v ?? 1 })} />
                         <TableCell
-                          isEdit title={goodsDisplay[`${g.id}_price`] ?? ''} placeholder="0" className={styles.rateCell} hasRightAccessory
-                          rightAccessory={<span className="ts-400-m" style={{ color: goodsDisplay[`${g.id}_price`] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
-                          onTitleChange={(v) => setGoodsDisplay((prev) => ({ ...prev, [`${g.id}_price`]: v }))}
+                          isEdit editFormat="currency" title={String(g.price || '')} placeholder="0" className={styles.rateCell}
+                          onEditValueChange={(v) => updateGoodsItem(g.id, { price: v ?? 0 })}
                         />
                         <TableCell
-                          isEdit title={goodsDisplay[`${g.id}_customs`] ?? ''} placeholder="0" className={styles.rateCell} hasRightAccessory
-                          rightAccessory={<span className="ts-400-m" style={{ color: goodsDisplay[`${g.id}_customs`] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
-                          onTitleChange={(v) => setGoodsDisplay((prev) => ({ ...prev, [`${g.id}_customs`]: v }))}
+                          isEdit editFormat="currency" title={String(g.customs || '')} placeholder="0" className={styles.rateCell}
+                          onEditValueChange={(v) => updateGoodsItem(g.id, { customs: v ?? 0 })}
                         />
                         <TableCell
-                          isEdit title={goodsDisplay[`${g.id}_logistics`] ?? ''} placeholder="0" className={styles.rateCell} hasRightAccessory
-                          rightAccessory={<span className="ts-400-m" style={{ color: goodsDisplay[`${g.id}_logistics`] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
-                          onTitleChange={(v) => setGoodsDisplay((prev) => ({ ...prev, [`${g.id}_logistics`]: v }))}
+                          isEdit editFormat="currency" title={String(g.logistics || '')} placeholder="0" className={styles.rateCell}
+                          onEditValueChange={(v) => updateGoodsItem(g.id, { logistics: v ?? 0 })}
                         />
                         <TableCell
-                          isEdit title={goodsDisplay[`${g.id}_pack`] ?? ''} placeholder="0" className={styles.rateCell} hasRightAccessory
-                          rightAccessory={<span className="ts-400-m" style={{ color: goodsDisplay[`${g.id}_pack`] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
-                          onTitleChange={(v) => setGoodsDisplay((prev) => ({ ...prev, [`${g.id}_pack`]: v }))}
+                          isEdit editFormat="currency" title={String(g.pack || '')} placeholder="0" className={styles.rateCell}
+                          onEditValueChange={(v) => updateGoodsItem(g.id, { pack: v ?? 0 })}
                         />
                         <TableCell hasTitle={false} hasRightAccessory className={styles.deleteCell}
                           rightAccessory={
@@ -544,12 +387,13 @@ export default function CalculatorForm({
             <div className={styles.blockContent}>
               <p className="ts-500-s">Прочие затраты</p>
               {activeArticles.length > 0 && (
-                <div ref={extraTableRef} onBlur={handleExtraTableBlur}>
+                <div>
                   <Table gridTemplateColumns="1fr 160px 64px">
                     <TableCell title="Статья" titleStyle="600" backgroundColor="var(--bg-neutral-1)" />
                     <TableCell title="Сумма" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
                     <TableCell title="" backgroundColor="var(--bg-neutral-1)" />
                     {activeArticles.map((key) => {
+                      const cfg = ARTICLE_CONFIG.find(a => a.key === key)!
                       const opts = ARTICLE_CONFIG
                         .filter(a => a.key === key || !activeArticles.includes(a.key))
                         .map(a => ({ value: a.key, label: a.label }))
@@ -558,12 +402,11 @@ export default function CalculatorForm({
                           <ArticlePickerCell value={key} options={opts} onChange={(v) => handleChangeArticle(key, v)} />
                           <TableCell
                             isEdit
-                            title={articleAmounts[key]}
+                            editFormat="currency"
+                            title={String((state[cfg.stateKey] as number) || '')}
                             placeholder="0"
                             className={styles.rateCell}
-                            hasRightAccessory
-                            rightAccessory={<span className="ts-400-m" style={{ color: articleAmounts[key] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
-                            onTitleChange={(v) => setArticleAmounts(prev => ({ ...prev, [key]: v }))}
+                            onEditValueChange={(v) => update({ [cfg.stateKey]: v ?? 0 })}
                           />
                           <TableCell hasTitle={false} hasRightAccessory className={styles.deleteCell}
                             rightAccessory={
@@ -598,7 +441,7 @@ export default function CalculatorForm({
             <div className={styles.blockContent}>
               <p className="ts-500-s">Трудозатраты (ФОТ)</p>
               {state.specialists.length > 0 && (
-                <div ref={tableRef} onBlur={handleTableBlur}>
+                <div ref={tableRef}>
                   <Table gridTemplateColumns="1fr 96px 96px 160px 64px">
                     <TableCell title="Профессия / Роль" titleStyle="600" backgroundColor="var(--bg-neutral-1)" />
                     <TableCell title="Чел." titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
@@ -608,12 +451,11 @@ export default function CalculatorForm({
                     {state.specialists.map((s) => (
                       <Fragment key={s.id}>
                         <TableCell isEdit title={s.role} placeholder="Должность" onTitleChange={(v) => updateSpecialist(s.id, { role: v })} />
-                        <TableCell isEdit title={n2s(s.qty)} className={styles.rateCell} placeholder="1" onTitleChange={(v) => updateSpecialist(s.id, { qty: s2n(v) })} />
-                        <TableCell isEdit title={n2s(s.hours)} className={styles.rateCell} placeholder="1" onTitleChange={(v) => updateSpecialist(s.id, { hours: s2n(v) })} />
+                        <TableCell isEdit editFormat="number" title={String(s.qty || '')} className={styles.rateCell} placeholder="1" onEditValueChange={(v) => updateSpecialist(s.id, { qty: v ?? 1 })} />
+                        <TableCell isEdit editFormat="number" title={String(s.hours || '')} className={styles.rateCell} placeholder="1" onEditValueChange={(v) => updateSpecialist(s.id, { hours: v ?? 1 })} />
                         <TableCell
-                          isEdit title={rateDisplay[s.id] ?? ''} placeholder="0" className={styles.rateCell} hasRightAccessory
-                          rightAccessory={<span className="ts-400-m" style={{ color: rateDisplay[s.id] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
-                          onTitleChange={(v) => setRateDisplay((prev) => ({ ...prev, [s.id]: v }))}
+                          isEdit editFormat="currency" title={String(s.rate || '')} placeholder="0" className={styles.rateCell}
+                          onEditValueChange={(v) => updateSpecialist(s.id, { rate: v ?? 0 })}
                         />
                         <TableCell hasTitle={false} hasRightAccessory className={styles.deleteCell}
                           rightAccessory={
@@ -637,12 +479,13 @@ export default function CalculatorForm({
             <div className={styles.blockContent}>
               <p className="ts-500-s">Прочие затраты</p>
               {activeArticles.length > 0 && (
-                <div ref={extraTableRef} onBlur={handleExtraTableBlur}>
+                <div>
                   <Table gridTemplateColumns="1fr 160px 64px">
                     <TableCell title="Статья" titleStyle="600" backgroundColor="var(--bg-neutral-1)" />
                     <TableCell title="Сумма" titleStyle="600" backgroundColor="var(--bg-neutral-1)" className={styles.rateCell} />
                     <TableCell title="" backgroundColor="var(--bg-neutral-1)" />
                     {activeArticles.map((key) => {
+                      const cfg = ARTICLE_CONFIG.find(a => a.key === key)!
                       const opts = ARTICLE_CONFIG
                         .filter(a => a.key === key || !activeArticles.includes(a.key))
                         .map(a => ({ value: a.key, label: a.label }))
@@ -651,12 +494,11 @@ export default function CalculatorForm({
                           <ArticlePickerCell value={key} options={opts} onChange={(v) => handleChangeArticle(key, v)} />
                           <TableCell
                             isEdit
-                            title={articleAmounts[key]}
+                            editFormat="currency"
+                            title={String((state[cfg.stateKey] as number) || '')}
                             placeholder="0"
                             className={styles.rateCell}
-                            hasRightAccessory
-                            rightAccessory={<span className="ts-400-m" style={{ color: articleAmounts[key] ? 'var(--primitive-secondary)' : 'var(--primitive-neutral-4)', userSelect: 'none', marginLeft: '4px' }}>₽</span>}
-                            onTitleChange={(v) => setArticleAmounts(prev => ({ ...prev, [key]: v }))}
+                            onEditValueChange={(v) => update({ [cfg.stateKey]: v ?? 0 })}
                           />
                           <TableCell hasTitle={false} hasRightAccessory className={styles.deleteCell}
                             rightAccessory={
@@ -686,29 +528,24 @@ export default function CalculatorForm({
 
       {/* Block 3: Overhead */}
       <FormBlock title="Накладные расходы">
-        <FormRow>
-          <div>
-            <Input
-              label="Коэффициент"
-              hasHelpIcon
-              helpText={
-                <>
-                  <p>Это административные и организационные расходы, не связанные напрямую с выполнением конкретного контракта: аренда, бухгалтерия, связь и т.д.</p>
-                  <p style={{ marginTop: '8px' }}>
-                    {state.purchaseType === 'goods'
-                      ? 'Коэффициент рассчитывается от суммы прямых затрат по контракту.'
-                      : 'Коэффициент рассчитывается от ФОТ специалистов.'}
-                  </p>
-                </>
-              }
-              value={n2s(state.overheadPercent)}
-              right={PCT}
-              onChange={(v) => update({ overheadPercent: s2n(v) })}
-              description="Рекомендуемый диапазон: 15–25%"
-            />
-          </div>
-          <div />
-        </FormRow>
+        <Input
+          label="Коэффициент"
+          hasHelpIcon
+          helpText={
+            <>
+              <p>Это административные и организационные расходы, не связанные напрямую с выполнением конкретного контракта: аренда, бухгалтерия, связь и т.д.</p>
+              <p style={{ marginTop: '8px' }}>
+                {state.purchaseType === 'goods'
+                  ? 'Коэффициент рассчитывается от суммы прямых затрат по контракту.'
+                  : 'Коэффициент рассчитывается от ФОТ специалистов.'}
+              </p>
+            </>
+          }
+          format="percent"
+          value={state.overheadPercent || null}
+          onValueChange={(v) => update({ overheadPercent: v ?? 0 })}
+          description={`Для категории ${CATEGORY_OPTIONS.find(o => o.value === state.category)?.label} рекомендуем: ${OVERHEAD_NORMS[state.category].min}–${OVERHEAD_NORMS[state.category].max}%`}
+        />
       </FormBlock>
 
       {/* Block 4: Specifics */}
@@ -716,71 +553,67 @@ export default function CalculatorForm({
         <FormRow>
           <Input
             label="Обеспечение заявки"
-            value={n2s(state.bidSecurityAmount)}
-            right={RUB}
-            onChange={(v) => update({ bidSecurityAmount: s2n(v) })}
+            placeholder="0 ₽"
+            format="currency"
+            value={state.bidSecurityAmount || null}
+            onValueChange={(v) => update({ bidSecurityAmount: v ?? 0 })}
           />
           <Input
             label="Срок заморозки"
-            value={n2s(state.bidSecurityDays)}
-            onChange={(v) => update({ bidSecurityDays: s2n(v) })}
+            format="number"
+            suffix=" дней"
+            value={state.bidSecurityDays || null}
+            onValueChange={(v) => update({ bidSecurityDays: v ?? 0 })}
           />
-          <div />
         </FormRow>
-
-        <div className={styles.separator} />
-
         <FormRow>
           <Input
             label="Обеспечение контракта"
-            value={n2s(state.contractSecurityAmount)}
-            right={RUB}
-            onChange={(v) => update({ contractSecurityAmount: s2n(v) })}
+            placeholder="0 ₽"
+            format="currency"
+            value={state.contractSecurityAmount || null}
+            onValueChange={(v) => update({ contractSecurityAmount: v ?? 0 })}
           />
           <Input
             label="Срок контракта"
-            value={n2s(state.contractDurationDays)}
-            onChange={(v) => update({ contractDurationDays: s2n(v) })}
+            format="number"
+            suffix=" дней"
+            value={state.contractDurationDays || null}
+            onValueChange={(v) => update({ contractDurationDays: v ?? 0 })}
           />
-          <div />
         </FormRow>
-
-        <FormRow>
           <Input
             label="Отсрочка платежа"
-            value={n2s(state.paymentDelayDays)}
-            onChange={(v) => update({ paymentDelayDays: s2n(v) })}
+            placeholder="Введите количество дней"
+            format="number"
+            suffix=" дней"
+            value={state.paymentDelayDays || null}
+            onValueChange={(v) => update({ paymentDelayDays: v ?? 0 })}
           />
-          <div />
-          <div />
-        </FormRow>
 
         <FormRow>
           <Input
             label="Резерв на непредвиденное"
-            value={n2s(state.riskReservePercent)}
-            right={PCT}
-            onChange={(v) => update({ riskReservePercent: s2n(v) })}
-          />
-          <div />
-          <div />
-        </FormRow>
-
-        <FormRow>
-          <Input
-            label="Тендерный менеджмент"
-            value={n2s(state.tenderMgmt)}
-            right={RUB}
-            onChange={(v) => update({ tenderMgmt: s2n(v) })}
+            placeholder="0 %"
+            format="percent"
+            value={state.riskReservePercent || null}
+            onValueChange={(v) => update({ riskReservePercent: v ?? 0 })}
           />
           <Input
             label="Гарантийный резерв"
-            value={n2s(state.warrantyReserve)}
-            right={RUB}
-            onChange={(v) => update({ warrantyReserve: s2n(v) })}
+            placeholder="0 ₽"
+            format="currency"
+            value={state.warrantyReserve || null}
+            onValueChange={(v) => update({ warrantyReserve: v ?? 0 })}
           />
-          <div />
         </FormRow>
+          <Input
+            label="Тендерный менеджмент"
+            placeholder="0 ₽"
+            format="currency"
+            value={state.tenderMgmt || null}
+            onValueChange={(v) => update({ tenderMgmt: v ?? 0 })}
+          />
       </FormBlock>
 
 

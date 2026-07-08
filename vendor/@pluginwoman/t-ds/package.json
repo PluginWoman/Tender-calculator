@@ -1,6 +1,6 @@
 {
   "name": "@pluginwoman/t-ds",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "description": "T Design System - React components library",
   "type": "module",
   "main": "./dist/t-ds.cjs",
@@ -26,6 +26,11 @@
       "import": "./dist/icons/16/Stroked.es.js",
       "require": "./dist/icons/16/Stroked.cjs",
       "types": "./dist/icons/16/Stroked.d.ts"
+    },
+    "./icons/20/Filled": {
+      "import": "./dist/icons/20/Filled.es.js",
+      "require": "./dist/icons/20/Filled.cjs",
+      "types": "./dist/icons/20/Filled.d.ts"
     },
     "./icons/20/Stroked": {
       "import": "./dist/icons/20/Stroked.es.js",
@@ -82,5 +87,8 @@
     "react-dom": "^19.2.5",
     "typescript": "^5.2.2",
     "vite": "^5.3.4"
+  },
+  "dependencies": {
+    "react-number-format": "^5.4.5"
   }
 }

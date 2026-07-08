@@ -1,0 +1,143 @@
+<style>
+  .question { margin-bottom: 24px; }
+  .cards { display: flex; gap: 20px; flex-wrap: wrap; }
+  .card { flex: 1; min-width: 280px; cursor: pointer; border: 2px solid #e8e8e8; border-radius: 12px; overflow: hidden; transition: border-color 0.15s; }
+  .card:hover { border-color: #a78bfa; }
+  .card.selected { border-color: #7c3aed; background: #faf5ff; }
+  .card-image { padding: 24px 24px 0; background: #f8f8f8; }
+  .card-body { padding: 16px; }
+  .card-body h3 { margin: 0 0 6px; font-size: 15px; font-weight: 600; }
+  .card-body p { margin: 0; font-size: 13px; color: #666; }
+
+  /* Chart mockup shared styles */
+  .pdf-page { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); font-family: sans-serif; }
+  .pdf-title { font-size: 13px; font-weight: 700; color: #111; margin: 0 0 12px; }
+
+  /* Option A: Donut */
+  .donut-wrap { display: flex; gap: 16px; align-items: center; }
+  .donut-svg { flex-shrink: 0; }
+  .donut-legend { display: flex; flex-direction: column; gap: 6px; }
+  .legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #333; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .legend-val { margin-left: auto; font-weight: 600; color: #111; padding-left: 8px; }
+
+  /* Option B: Bar */
+  .bar-table { width: 100%; }
+  .bar-row { margin-bottom: 8px; }
+  .bar-label { display: flex; justify-content: space-between; font-size: 11px; color: #555; margin-bottom: 3px; }
+  .bar-track { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 4px; }
+
+  /* Option C: Table only */
+  .data-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+  .data-table th { text-align: left; color: #888; font-weight: 500; padding: 4px 0; border-bottom: 1px solid #eee; }
+  .data-table td { padding: 5px 0; border-bottom: 1px solid #f0f0f0; color: #111; }
+  .data-table td:last-child { text-align: right; color: #666; }
+  .data-table td:nth-child(2) { text-align: right; font-weight: 600; }
+</style>
+
+<h2>Как показывать структуру цены на странице 1?</h2>
+<p class="subtitle">Выбери вариант диаграммы — потом покажу макет страницы целиком</p>
+
+<div class="cards">
+
+  <!-- A: Donut -->
+  <div class="card" data-choice="donut" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="pdf-page">
+        <div class="pdf-title">Структура цены</div>
+        <div class="donut-wrap">
+          <svg class="donut-svg" width="100" height="100" viewBox="0 0 100 100">
+            <!-- Donut segments -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#e5e7eb" stroke-width="18"/>
+            <!-- Прямые 60% -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#7c3aed" stroke-width="18"
+              stroke-dasharray="143.3 95.5" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+            <!-- Накладные 12% -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#a78bfa" stroke-width="18"
+              stroke-dasharray="28.7 210.1" stroke-dashoffset="-143.3" transform="rotate(-90 50 50)"/>
+            <!-- Специфические 5% -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#c4b5fd" stroke-width="18"
+              stroke-dasharray="11.9 226.9" stroke-dashoffset="-172" transform="rotate(-90 50 50)"/>
+            <!-- Прибыль 13% -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#34d399" stroke-width="18"
+              stroke-dasharray="31 207.8" stroke-dashoffset="-183.9" transform="rotate(-90 50 50)"/>
+            <!-- Налоги 10% -->
+            <circle cx="50" cy="50" r="38" fill="none" stroke="#6ee7b7" stroke-width="18"
+              stroke-dasharray="23.9 214.9" stroke-dashoffset="-214.9" transform="rotate(-90 50 50)"/>
+            <text x="50" y="54" text-anchor="middle" font-size="11" font-weight="700" fill="#111">100%</text>
+          </svg>
+          <div class="donut-legend">
+            <div class="legend-row"><span class="legend-dot" style="background:#7c3aed"></span>Прямые затраты<span class="legend-val">60%</span></div>
+            <div class="legend-row"><span class="legend-dot" style="background:#a78bfa"></span>Накладные<span class="legend-val">12%</span></div>
+            <div class="legend-row"><span class="legend-dot" style="background:#c4b5fd"></span>Специфические<span class="legend-val">5%</span></div>
+            <div class="legend-row"><span class="legend-dot" style="background:#34d399"></span>Прибыль<span class="legend-val">13%</span></div>
+            <div class="legend-row"><span class="legend-dot" style="background:#6ee7b7"></span>Налоги<span class="legend-val">10%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Кольцевая диаграмма</h3>
+      <p>Наглядно, компактно, классика для структуры</p>
+    </div>
+  </div>
+
+  <!-- B: Horizontal bars -->
+  <div class="card" data-choice="bars" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="pdf-page">
+        <div class="pdf-title">Структура цены</div>
+        <div class="bar-table">
+          <div class="bar-row">
+            <div class="bar-label"><span>Прямые затраты</span><span style="font-weight:600">60%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:60%;background:#7c3aed"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label"><span>Прибыль</span><span style="font-weight:600">13%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:13%;background:#34d399"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label"><span>Накладные</span><span style="font-weight:600">12%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:12%;background:#a78bfa"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label"><span>Налоги</span><span style="font-weight:600">10%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:10%;background:#6ee7b7"></div></div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-label"><span>Специфические</span><span style="font-weight:600">5%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:5%;background:#c4b5fd"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Горизонтальные бары</h3>
+      <p>Легко считывается, удобно сравнивать доли</p>
+    </div>
+  </div>
+
+  <!-- C: Table only -->
+  <div class="card" data-choice="table" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div class="pdf-page">
+        <div class="pdf-title">Структура цены</div>
+        <table class="data-table">
+          <tr><th>Статья</th><th style="text-align:right">Сумма</th><th style="text-align:right">Доля</th></tr>
+          <tr><td>Прямые затраты</td><td>325 440 ₽</td><td>60%</td></tr>
+          <tr><td>Накладные</td><td>65 088 ₽</td><td>12%</td></tr>
+          <tr><td>Специфические</td><td>27 120 ₽</td><td>5%</td></tr>
+          <tr><td>Прибыль</td><td>70 512 ₽</td><td>13%</td></tr>
+          <tr><td>Налоги</td><td>54 240 ₽</td><td>10%</td></tr>
+          <tr style="font-weight:700"><td>Итого</td><td>542 400 ₽</td><td>100%</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Только таблица</h3>
+      <p>Минимализм, никаких зависимостей для рендера</p>
+    </div>
+  </div>
+
+</div>

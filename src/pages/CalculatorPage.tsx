@@ -43,7 +43,7 @@ export default function CalculatorPage() {
             />
           </div>
           <aside className={styles.sidebarColumn}>
-            <ResultsSidebar results={results} />
+            <ResultsSidebar state={state} results={results} />
           </aside>
         </div>
       </div>

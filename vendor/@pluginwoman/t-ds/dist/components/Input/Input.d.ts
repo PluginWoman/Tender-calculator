@@ -1,6 +1,6 @@
 import React from 'react';
 import './input.css';
-interface InputProps {
+export interface InputProps {
     /** Подпись над полем */
     label?: string;
     /** Вспомогательный текст под полем */
@@ -10,8 +10,8 @@ interface InputProps {
     /** Текст-заглушка при пустом поле */
     placeholder?: string;
     /** Управляемое значение. Если передан — компонент переходит в controlled mode */
-    value?: string;
-    /** Колбэк при изменении значения */
+    value?: string | number | null;
+    /** Колбэк при изменении строкового значения (без format) */
     onChange?: (value: string) => void;
     /** Блокирует поле
      * @default false */
@@ -28,9 +28,19 @@ interface InputProps {
     hasHelpIcon?: boolean;
     /** Текст тултипа при наведении на иконку-подсказку */
     helpText?: React.ReactNode;
+    /** Включает числовой режим с форматированием */
+    format?: 'number' | 'currency' | 'percent';
+    /** Суффикс (переопределяет дефолт формата) */
+    suffix?: string;
+    /** Количество знаков после запятой (переопределяет дефолт формата) */
+    decimalScale?: number;
+    /** Разрешить отрицательные числа
+     * @default false */
+    allowNegative?: boolean;
+    /** Колбэк с числовым значением без суффикса (только при format) */
+    onValueChange?: (value: number | null) => void;
 }
 /**
  * Текстовое поле ввода с поддержкой подписи, подсказки, сообщения об ошибке и боковых аксессуаров.
  */
 export declare const Input: React.FC<InputProps>;
-export {};

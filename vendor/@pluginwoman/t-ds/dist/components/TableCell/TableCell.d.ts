@@ -29,6 +29,14 @@ export interface TableCellProps {
     placeholder?: string;
     /** Колбэк при изменении значения input (только при isEdit=true) */
     onTitleChange?: (value: string) => void;
+    /** Включает числовой режим в isEdit */
+    editFormat?: 'number' | 'currency' | 'percent';
+    /** Суффикс для числового режима (переопределяет дефолт формата) */
+    editSuffix?: string;
+    /** Количество знаков после запятой (переопределяет дефолт формата) */
+    editDecimalScale?: number;
+    /** Колбэк с числовым значением без суффикса */
+    onEditValueChange?: (value: number | null) => void;
     /** Задизейбленное состояние @default false */
     isDisabled?: boolean;
     /** Ошибка — правый слот заменяется иконкой Info Circle 20px @default false */
