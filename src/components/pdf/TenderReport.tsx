@@ -154,6 +154,7 @@ function DonutChart({ results }: { results: CalculatorResults }) {
               stroke={c.color}
               fill="none"
               strokeDasharray={`${c.dashLen} ${circ}`}
+              // @ts-expect-error strokeDashoffset missing from react-pdf CircleProps
               strokeDashoffset={`${c.offset}`}
               transform={`rotate(-90, ${CX}, ${CY})`}
             />

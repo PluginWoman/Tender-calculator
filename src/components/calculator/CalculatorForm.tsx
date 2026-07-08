@@ -18,7 +18,7 @@ interface Props {
 }
 
 
-import { ARTICLE_CONFIG, CATEGORY_OPTIONS, OVERHEAD_NORMS, PURCHASE_TYPE_OPTIONS, TAX_OPTIONS, type ArticleKey, type ArticleStateKey } from '../../constants/calculator'
+import { ARTICLE_CONFIG, CATEGORY_OPTIONS, OVERHEAD_NORMS, PURCHASE_TYPE_OPTIONS, TAX_OPTIONS, type ArticleKey } from '../../constants/calculator'
 
 const MENU_CELL_H = 40
 const MENU_MAX_H = 280
@@ -185,8 +185,6 @@ export default function CalculatorForm({
   removeGoodsItem,
   updateGoodsItem,
 }: Props) {
-  const norm = OVERHEAD_NORMS[state.category]
-
   const tableRef = useRef<HTMLDivElement>(null)
   const goodsTableRef = useRef<HTMLDivElement>(null)
   const prevSpecCountRef = useRef(state.specialists.length)

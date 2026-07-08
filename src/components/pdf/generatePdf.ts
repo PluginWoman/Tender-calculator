@@ -13,7 +13,8 @@ function makeSlug(state: CalculatorState): string {
 
 export async function generatePdf(state: CalculatorState, results: CalculatorResults): Promise<void> {
   const doc = createElement(TenderReport, { state, results })
-  const blob = await pdf(doc).toBlob()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const blob = await pdf(doc as any).toBlob()
   const slug = makeSlug(state)
   const filename = `Расчёт_тендера_${slug}_${state.calcDate}.pdf`
   const url = URL.createObjectURL(blob)
