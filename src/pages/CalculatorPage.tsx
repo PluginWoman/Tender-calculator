@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useCalculator } from '../hooks/useCalculator'
 import CalculatorForm from '../components/calculator/CalculatorForm'
 import ResultsSidebar from '../components/calculator/ResultsSidebar'
+import StickyResultsBar from '../components/calculator/StickyResultsBar'
 import DebugPanel from '../components/debug/DebugPanel'
 import styles from './CalculatorPage.module.css'
 
@@ -11,6 +12,7 @@ export default function CalculatorPage() {
     useCalculator()
 
   const [formKey, setFormKey] = useState(0)
+  const resultsRef = useRef<HTMLDivElement>(null)
 
   const handleReset = () => {
     if (!window.confirm('Сбросить форму до стартового состояния? Все введённые данные будут удалены.')) return
@@ -43,10 +45,11 @@ export default function CalculatorPage() {
             />
           </div>
           <aside className={styles.sidebarColumn}>
-            <ResultsSidebar state={state} results={results} />
+            <ResultsSidebar ref={resultsRef} state={state} results={results} />
           </aside>
         </div>
       </div>
+      <StickyResultsBar results={results} resultsRef={resultsRef} />
       <DebugPanel results={results} update={update} onReset={handleReset} />
     </>
   )

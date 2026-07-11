@@ -27,13 +27,17 @@
   top: var(--spacing-5x);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1023px) {
   .layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .formColumn {
+    min-width: 0;
   }
 
   .sidebarColumn {
     position: static;
-    order: -1;
+    min-width: 0;
   }
 }

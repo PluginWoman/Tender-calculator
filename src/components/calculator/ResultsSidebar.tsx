@@ -1,4 +1,4 @@
-import type { FC, CSSProperties } from 'react'
+import { forwardRef, type FC, type CSSProperties } from 'react'
 import { Tooltip } from '@pluginwoman/t-ds'
 import { QuestionCircle } from '@pluginwoman/t-ds/icons'
 
@@ -104,7 +104,7 @@ function BodyRow({ color, label, value }: { color: string; label: string; value:
   )
 }
 
-export default function ResultsSidebar({ state, results }: Props) {
+const ResultsSidebar = forwardRef<HTMLDivElement, Props>(function ResultsSidebar({ state, results }, ref) {
   const { finalPrice, directCosts, overheadTotal, specificCosts,
     fullCost, profitAmount, taxAmount, verdict, nmccDiff, nmccDiffPercent } = results
 
@@ -131,7 +131,7 @@ export default function ResultsSidebar({ state, results }: Props) {
 
   return (
     <>
-    <div className={styles.panel}>
+    <div ref={ref} className={styles.panel}>
       <div className={styles.header} style={{ background: cfg.bg, transition: 'background 0.4s ease' }}>
         <div className={styles.headerTitle}>
           {Icon && (
@@ -212,4 +212,6 @@ export default function ResultsSidebar({ state, results }: Props) {
     )}
     </>
   )
-}
+})
+
+export default ResultsSidebar
