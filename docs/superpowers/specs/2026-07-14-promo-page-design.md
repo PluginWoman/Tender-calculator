@@ -68,6 +68,7 @@ export const EXTERNAL_LINKS = {
 ```tsx
 import { useNavigate } from 'react-router-dom'
 import { PromoPageBanner } from '@pluginwoman/t-ds'
+import heroIllustration from '../../assets/hero-illustration.svg'
 
 export default function HeroSection() {
   const navigate = useNavigate()
@@ -78,14 +79,14 @@ export default function HeroSection() {
       description="Рассчитайте прибыль и финансовую нагрузку до подачи заявки."
       adaptiveDescription="Рассчитайте прибыль и финансовую нагрузку до подачи заявки."
       buttonLabel="Рассчитать тендер"
-      hasImage={false}
+      imageSrc={heroIllustration}
       onButtonClick={() => navigate('/calculator')}
     />
   )
 }
 ```
 
-Картинка не используется (`hasImage={false}`) — по решению пользователя. Собственных стилей не требуется, всё покрыто DS.
+Картинка — предоставленная пользователем SVG-иллюстрация, сохранена в `src/assets/hero-illustration.svg`. `hasImage` по умолчанию `true`, отдельно указывать не нужно. Собственных стилей не требуется, всё покрыто DS.
 
 ---
 
