@@ -38,6 +38,14 @@ export const CATEGORY_OPTIONS = [
   { value: 'goods',        label: 'Товары'                  },
 ]
 
+export const RESERVE_HINTS: Record<string, { risk: string; warranty: string }> = {
+  construction: { risk: 'Рекомендуемый диапазон: 3–10%', warranty: 'Рекомендуемый диапазон: 2–5%' },
+  it:           { risk: 'Рекомендуемый диапазон: 3–5%',  warranty: 'Обычно не требуется' },
+  other:        { risk: 'Рекомендуемый диапазон: 2–5%',  warranty: 'Рекомендуемый диапазон: 1–3%' },
+  goods:        { risk: 'Рекомендуемый диапазон: 1–3%',  warranty: 'Рекомендуемый диапазон: 0–1%' },
+  medical:      { risk: 'Рекомендуемый диапазон: 2–5%',  warranty: 'Рекомендуемый диапазон: 1–3%' },
+}
+
 export const OVERHEAD_NORMS: Record<string, { min: number; max: number; base: string }> = {
   goods:        { min: 10, max: 15,  base: 'Прямые затраты'      },
   construction: { min: 15, max: 25,  base: 'Прямые затраты'      },

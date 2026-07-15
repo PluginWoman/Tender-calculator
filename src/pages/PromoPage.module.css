@@ -1,0 +1,8 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16x);
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: var(--page-top-padding) 0 var(--page-bottom-padding-with-chat);
+}

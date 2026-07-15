@@ -1,0 +1,37 @@
+import { Tag } from '@pluginwoman/t-ds'
+import styles from './HowItWorks.module.css'
+
+const STEPS = [
+  {
+    title: 'Найдите тендер',
+    description: 'Если ещё не выбрали закупку, воспользуйтесь сервисом Точка Закупки. Здесь можно бесплатно найти подходящие тендеры и подобрать закупки под ваш бизнес.',
+  },
+  {
+    title: 'Введите расходы',
+    description: 'Заполните расходы вашей компании. Калькулятор автоматически учтёт прямые, накладные и специфические расходы, налоги и финансовую нагрузку.',
+  },
+  {
+    title: 'Получите рекомендацию',
+    description: 'Сервис рассчитает итоговую цену, покажет прибыль и подскажет, стоит ли участвовать в закупке.',
+  },
+]
+
+export default function HowItWorks() {
+  return (
+    <section className={styles.section}>
+      <h2 className="ts-600-5xl">Как это работает</h2>
+      <div className={styles.steps}>
+        {STEPS.map((step, i) => (
+          <div key={step.title} className={styles.step}>
+            <div className={styles.stepText}>
+              <Tag variant="filled" shape="square" size="l" className={styles.stepTag}>Шаг {i + 1}</Tag>
+              <h3 className="ts-600-5xl" style={{ margin: 0, color: 'var(--primitive-primary)' }}>{step.title}</h3>
+              <p className="ts-400-l" style={{ margin: 0, color: 'var(--primitive-secondary)' }}>{step.description}</p>
+            </div>
+            <div className={styles.imagePlaceholder} />
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}

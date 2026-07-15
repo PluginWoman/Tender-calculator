@@ -1,0 +1,15 @@
+.banner {
+  max-width: none !important;
+}
+
+@media (min-width: 1024px) {
+  .banner {
+    min-height: 300px;
+  }
+
+  .banner :global(.promo-page-banner__image-img),
+  .banner :global(.promo-page-banner__default-image) {
+    width: 400px;
+    height: 400px;
+  }
+}

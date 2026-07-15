@@ -209,7 +209,8 @@ const ResultsSidebar = forwardRef<HTMLDivElement, Props>(function ResultsSidebar
         leftAccessory={<ArrowDownIncomingCircle />}
         onClick={() => generatePdf(state, results)}
       />
-    )}
+      )}
+      
     </>
   )
 })

@@ -1,5 +1,5 @@
 import { Fragment, useRef, useEffect, useCallback, useState } from 'react'
-import { Widget, Input, Dropdown, Cell, CellRightAccessory, Table, TableCell, ActionFormCell, ContextualNotification } from '@pluginwoman/t-ds'
+import { Widget, Input, Dropdown, Cell, CellLeftAccessory, CellRightAccessory, Table, TableCell, ActionFormCell, ContextualNotification } from '@pluginwoman/t-ds'
 import { Plus, Trash, Checkmark } from '@pluginwoman/t-ds/icons'
 import { InformationCircle } from '@pluginwoman/t-ds/icons/20/Filled'
 import { ChevronDown as ChevronDownFilled } from '@pluginwoman/t-ds/icons/12/Filled'
@@ -18,7 +18,7 @@ interface Props {
 }
 
 
-import { ARTICLE_CONFIG, CATEGORY_OPTIONS, OVERHEAD_NORMS, PURCHASE_TYPE_OPTIONS, TAX_OPTIONS, type ArticleKey } from '../../constants/calculator'
+import { ARTICLE_CONFIG, CATEGORY_OPTIONS, OVERHEAD_NORMS, PURCHASE_TYPE_OPTIONS, RESERVE_HINTS, TAX_OPTIONS, type ArticleKey } from '../../constants/calculator'
 
 const MENU_CELL_H = 40
 const MENU_MAX_H = 280
@@ -591,16 +591,20 @@ export default function CalculatorForm({
 
         <FormRow>
           <Input
-            label="Резерв на непредвиденное"
-            placeholder="0 %"
+            label="Резерв на непредвиденные расходы"
+            placeholder="0%"
             format="percent"
+            description={RESERVE_HINTS[state.category]?.risk}
             value={state.riskReservePercent || null}
             onValueChange={(v) => update({ riskReservePercent: v ?? 0 })}
           />
           <Input
-            label="Гарантийный резерв"
+            label="Резерв на гарантийные обязательства"
+            hasHelpIcon
+            helpText="Деньги на устранение дефектов в течение гарантийного периода"
             placeholder="0 ₽"
             format="currency"
+            description={RESERVE_HINTS[state.category]?.warranty}
             value={state.warrantyReserve || null}
             onValueChange={(v) => update({ warrantyReserve: v ?? 0 })}
           />
@@ -613,6 +617,13 @@ export default function CalculatorForm({
             onValueChange={(v) => update({ tenderMgmt: v ?? 0 })}
           />
       </FormBlock>
+      <Cell
+        title="Загрузить файлы"
+        description="PDF, XLSX, PNG — до 10 МБ"
+        hasLeftAccessory
+        leftAccessory={<CellLeftAccessory variant="add-button" icon={<Plus />} />}
+        hasRightAccessory={false}
+      />
 
 
 

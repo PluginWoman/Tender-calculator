@@ -1,0 +1,45 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6x);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-4x);
+}
+
+@media (max-width: 1023px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-5x);
+  padding: var(--spacing-10x);
+  border-radius: var(--rounding-4x);
+  background: var(--bg-neutral-1);
+  box-sizing: border-box;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4x);
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2x);
+  margin-top: auto;
+}
+
+.buttons :global(.button) {
+  width: 100%;
+  min-width: 0;
+}
