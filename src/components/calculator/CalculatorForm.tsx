@@ -1,5 +1,5 @@
 import { Fragment, useRef, useEffect, useCallback, useState } from 'react'
-import { Widget, Input, Dropdown, Cell, CellLeftAccessory, CellRightAccessory, Table, TableCell, ActionFormCell, ContextualNotification } from '@pluginwoman/t-ds'
+import { Widget, Input, Dropdown, Cell, CellRightAccessory, Table, TableCell, ActionFormCell, ContextualNotification } from '@pluginwoman/t-ds'
 import { Plus, Trash, Checkmark } from '@pluginwoman/t-ds/icons'
 import { InformationCircle } from '@pluginwoman/t-ds/icons/20/Filled'
 import { ChevronDown as ChevronDownFilled } from '@pluginwoman/t-ds/icons/12/Filled'

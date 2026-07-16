@@ -20,7 +20,6 @@ const IconCrossCircle: FC<{ style?: CSSProperties }> = ({ style }) => (
   </svg>
 )
 import { Button } from '@pluginwoman/t-ds'
-import { ArrowDownIncomingCircle } from '@pluginwoman/t-ds/icons'
 import type { CalculatorState, CalculatorResults } from '../../hooks/useCalculator'
 import { fmtMoney, fmtPercent } from '../../utils/format'
 import { generatePdf } from '../pdf/generatePdf'
