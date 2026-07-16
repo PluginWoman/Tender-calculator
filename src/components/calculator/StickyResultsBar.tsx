@@ -8,9 +8,9 @@ type VerdictKey = 'none' | 'success' | 'caution' | 'danger'
 
 const BAR_CONFIG: Record<VerdictKey, { bg: string; titleColor: string; title: string }> = {
   none:    { bg: 'var(--bg-neutral-2)',  titleColor: 'var(--primitive-primary)',   title: 'Недостаточно данных' },
-  success: { bg: 'var(--bg-success-1)', titleColor: 'var(--primitive-success)',    title: 'Участвовать' },
-  caution: { bg: 'var(--bg-warning-1)', titleColor: 'var(--primitive-warning-2)', title: 'Осторожно' },
-  danger:  { bg: 'var(--bg-error-1)',   titleColor: 'var(--primitive-error)',      title: 'Отказаться' },
+  success: { bg: 'var(--bg-success-1)', titleColor: 'var(--primitive-success)',    title: 'Перспективно' },
+  caution: { bg: 'var(--bg-warning-1)', titleColor: 'var(--primitive-warning-2)', title: 'Рисковано' },
+  danger:  { bg: 'var(--bg-error-1)',   titleColor: 'var(--primitive-error)',      title: 'Убыточно' },
 }
 
 interface Props {

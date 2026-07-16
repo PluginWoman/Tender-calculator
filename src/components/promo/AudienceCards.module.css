@@ -6,7 +6,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-4x);
 }
 
@@ -30,6 +30,22 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4x);
+}
+
+.benefits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2-5x);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2x);
+  color: var(--primitive-primary);
 }
 
 .buttons {

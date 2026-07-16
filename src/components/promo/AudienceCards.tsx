@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@pluginwoman/t-ds'
+import { Checkmark } from '@pluginwoman/t-ds/icons'
 import { EXTERNAL_LINKS } from '../../constants/promo'
 import styles from './AudienceCards.module.css'
 
@@ -11,6 +12,7 @@ interface CardAction {
 interface CardConfig {
   title: string
   description: string
+  benefits: string[]
   actions: CardAction[]
 }
 
@@ -19,32 +21,35 @@ export default function AudienceCards() {
 
   const cards: CardConfig[] = [
     {
-      title: 'Только начинаете',
-      description: 'Найдите первую закупку бесплатно и получите курс по работе с тендерами.',
+      title: 'Ещё не нашли тендер?',
+      description: 'Подберите подходящие закупки и начните работу с тендерами вместе с Точка Закупки.',
+      benefits: [
+        'Бесплатный поиск тендеров',
+        'Бесплатный курс по работе с тендерами',
+        'Сохраните шаблон расходов и вернитесь к расчёту после выбора тендера',
+      ],
       actions: [
         { label: 'Найти тендер', onClick: () => window.open(EXTERNAL_LINKS.zakupki, '_blank') },
         { label: 'Получить курс', onClick: () => window.open(EXTERNAL_LINKS.course, '_blank') },
       ],
     },
     {
-      title: 'Уже знаете что ищете',
-      description: 'Сохраните шаблон расходов и продолжите расчёт после выбора тендера.',
-      actions: [
-        { label: 'Создать шаблон', onClick: () => navigate('/calculator') },
+      title: 'Уже нашли тендер?',
+      description: 'Оцените рентабельность закупки до подачи заявки.',
+      benefits: [
+        'Рассчитаем себестоимость и итоговую цену',
+        'Учтём налоги, накладные и финансовую нагрузку',
+        'Покажем прибыль и дадим рекомендацию по участию',
       ],
-    },
-    {
-      title: 'Уже нашли тендер',
-      description: 'Введите параметры закупки и получите расчёт за несколько минут.',
       actions: [
-        { label: 'Открыть калькулятор', onClick: () => navigate('/calculator') },
+        { label: 'Перейти к расчёту', onClick: () => navigate('/calculator') },
       ],
     },
   ]
 
   return (
     <section className={styles.section}>
-      <h2 className="ts-600-5xl">Для всех и каждого</h2>
+      <h2 className="ts-600-5xl">Выберите, с чего начать</h2>
       <div className={styles.grid}>
         {cards.map((card) => (
           <div key={card.title} className={styles.card}>
@@ -52,6 +57,14 @@ export default function AudienceCards() {
               <h3 className="ts-600-2xl" style={{ color: 'var(--primitive-primary)', margin: 0 }}>{card.title}</h3>
               <p className="ts-500-m" style={{ color: 'var(--primitive-secondary)', margin: 0 }}>{card.description}</p>
             </div>
+            <ul className={styles.benefits}>
+              {card.benefits.map((benefit) => (
+                <li key={benefit} className={styles.benefit}>
+                  <Checkmark style={{ color: 'var(--primitive-brand)', width: 24, height: 24, flexShrink: 0 }} />
+                  <span className="ts-400-m">{benefit}</span>
+                </li>
+              ))}
+            </ul>
             <div className={styles.buttons}>
               {card.actions.map((action) => (
                 <Button key={action.label} variant="secondary" size="m" onClick={action.onClick}>

@@ -8,10 +8,10 @@ interface Props {
 }
 
 const PRESETS = [
-  { label: 'Без алерта',   apply: (_p: number) => ({ nmcc: 0 }) },
-  { label: 'Участвовать', apply: (p: number) => ({ nmcc: Math.round(p * 1.1) }) },
-  { label: 'Осторожно',   apply: (p: number) => ({ nmcc: Math.round(p * 1.03) }) },
-  { label: 'Отказаться',  apply: (p: number) => ({ nmcc: Math.round(p * 0.9) }) },
+  { label: 'Без алерта',    apply: (_p: number) => ({ nmcc: 0 }) },
+  { label: 'Перспективно', apply: (p: number) => ({ nmcc: Math.round(p * 1.1) }) },
+  { label: 'Рисковано',    apply: (p: number) => ({ nmcc: Math.round(p * 1.03) }) },
+  { label: 'Убыточно',     apply: (p: number) => ({ nmcc: Math.round(p * 0.9) }) },
 ] as const
 
 export default function DebugPanel({ results, update, onReset }: Props) {
@@ -21,7 +21,7 @@ export default function DebugPanel({ results, update, onReset }: Props) {
     <div className={styles.root}>
       <span className={styles.label}>DEBUG</span>
       {PRESETS.map((preset) => {
-        const key = preset.label === 'Без алерта' ? 'none' : preset.label === 'Участвовать' ? 'success' : preset.label === 'Осторожно' ? 'caution' : 'danger'
+        const key = preset.label === 'Без алерта' ? 'none' : preset.label === 'Перспективно' ? 'success' : preset.label === 'Рисковано' ? 'caution' : 'danger'
         const active = current === key
         return (
           <button

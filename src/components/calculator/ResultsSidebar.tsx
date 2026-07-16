@@ -65,7 +65,7 @@ const HEADER_CONFIG: Record<VerdictKey, {
   success: {
     bg: 'var(--bg-success-1)',
     titleColor: 'var(--primitive-success)',
-    title: 'Участвовать',
+    title: 'Перспективно',
     subtitle: null,
     metricLabel: 'Запас',
     tagBg: 'var(--bg-success-3)',
@@ -75,7 +75,7 @@ const HEADER_CONFIG: Record<VerdictKey, {
   caution: {
     bg: 'var(--bg-warning-1)',
     titleColor: 'var(--primitive-warning-2)',
-    title: 'Осторожно',
+    title: 'Рисковано',
     subtitle: 'Есть риск низкой прибыли',
     metricLabel: 'Запас',
     tagBg: 'var(--bg-warning-3)',
@@ -85,7 +85,7 @@ const HEADER_CONFIG: Record<VerdictKey, {
   danger: {
     bg: 'var(--bg-error-1)',
     titleColor: 'var(--primitive-error)',
-    title: 'Отказаться',
+    title: 'Убыточно',
     subtitle: null,
     metricLabel: 'Убыток',
     tagBg: 'var(--bg-error-3)',
