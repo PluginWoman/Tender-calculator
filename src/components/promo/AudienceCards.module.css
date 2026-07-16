@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-6x);
+  padding: 0 var(--page-horizontal-padding);
+  box-sizing: border-box;
 }
 
 .grid {
@@ -24,6 +26,12 @@
   border-radius: var(--rounding-4x);
   background: var(--bg-neutral-1);
   box-sizing: border-box;
+}
+
+@media (max-width: 1023px) {
+  .card {
+    padding: var(--spacing-8x);
+  }
 }
 
 .text {

@@ -7,6 +7,7 @@ import styles from './AudienceCards.module.css'
 interface CardAction {
   label: string
   onClick: () => void
+  variant?: 'primary' | 'secondary' | 'transparent' | 'white'
 }
 
 interface CardConfig {
@@ -30,7 +31,7 @@ export default function AudienceCards() {
       ],
       actions: [
         { label: 'Найти тендер', onClick: () => window.open(EXTERNAL_LINKS.zakupki, '_blank') },
-        { label: 'Получить курс', onClick: () => window.open(EXTERNAL_LINKS.course, '_blank') },
+        { label: 'Получить курс', onClick: () => window.open(EXTERNAL_LINKS.course, '_blank'), variant: 'white' },
       ],
     },
     {
@@ -49,7 +50,7 @@ export default function AudienceCards() {
 
   return (
     <section className={styles.section}>
-      <h2 className="ts-600-5xl">Выберите, с чего начать</h2>
+      <h2 className="ts-600-3xl">Выберите, с чего начать</h2>
       <div className={styles.grid}>
         {cards.map((card) => (
           <div key={card.title} className={styles.card}>
@@ -67,7 +68,7 @@ export default function AudienceCards() {
             </ul>
             <div className={styles.buttons}>
               {card.actions.map((action) => (
-                <Button key={action.label} variant="secondary" size="m" onClick={action.onClick}>
+                <Button key={action.label} variant={action.variant ?? 'primary'} size="m" onClick={action.onClick}>
                   {action.label}
                 </Button>
               ))}

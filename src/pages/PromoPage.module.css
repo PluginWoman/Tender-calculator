@@ -6,3 +6,9 @@
   margin: 0 auto;
   padding: var(--page-top-padding) 0 var(--page-bottom-padding-with-chat);
 }
+
+@media (max-width: 1023px) {
+  .page {
+    padding-top: 0;
+  }
+}
