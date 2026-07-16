@@ -1,7 +1,6 @@
 import HeroSection from '../components/promo/HeroSection'
 import AudienceCards from '../components/promo/AudienceCards'
 import HowItWorks from '../components/promo/HowItWorks'
-import FinalCta from '../components/promo/FinalCta'
 import styles from './PromoPage.module.css'
 
 export default function PromoPage() {
@@ -10,7 +9,6 @@ export default function PromoPage() {
       <HeroSection />
       <AudienceCards />
       <HowItWorks />
-      <FinalCta />
     </div>
   )
 }

@@ -617,16 +617,10 @@ export default function CalculatorForm({
             onValueChange={(v) => update({ tenderMgmt: v ?? 0 })}
           />
       </FormBlock>
-      <Cell
-        title="Загрузить файлы"
-        description="PDF, XLSX, PNG — до 10 МБ"
-        hasLeftAccessory
-        leftAccessory={<CellLeftAccessory variant="add-button" icon={<Plus />} />}
-        hasRightAccessory={false}
-      />
 
-
-
+      <p className="ts-400-s" style={{ color: 'var(--primitive-secondary)', margin: 0 }}>
+        Расчёт носит информационный характер, является приблизительным и не может рассматриваться как финансовая рекомендация. Итоговые условия могут отличаться. Для получения точной информации обратитесь к специалисту.
+      </p>
     </>
   )
 }

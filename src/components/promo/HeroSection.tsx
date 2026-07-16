@@ -8,10 +8,10 @@ export default function HeroSection() {
 
   return (
     <PromoPageBanner
-      title="Ищите выгоду, а не просто контракт"
-      adaptiveTitle="Ищите выгоду, а не просто контракт"
-      description="Рассчитайте прибыль и финансовую нагрузку до подачи заявки."
-      adaptiveDescription="Рассчитайте прибыль и финансовую нагрузку до подачи заявки."
+      title="Ищите выгоду, а не просто контракт"
+      adaptiveTitle="Ищите выгоду, а не просто контракт"
+      description="Рассчитайте прибыль и финансовую нагрузку до подачи заявки"
+      adaptiveDescription="Рассчитайте прибыль и финансовую нагрузку до подачи заявки"
       buttonLabel="Рассчитать тендер"
       imageSrc={heroIllustration}
       onButtonClick={() => navigate('/calculator')}

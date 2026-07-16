@@ -188,9 +188,9 @@ function VerdictBlock({ results }: { results: CalculatorResults }) {
   if (!verdict) return null
 
   const cfgs = {
-    success: { ...C.success, title: 'Перспективно', metricLabel: 'Запас',  sub: 'Себестоимость ниже НМЦК, участие ожидаемо рентабельно.' },
-    caution: { ...C.caution, title: 'Рисковано',     metricLabel: 'Запас',  sub: 'Есть риск низкой прибыли — запас менее 5% от НМЦК.' },
-    danger:  { ...C.danger,  title: 'Убыточно',      metricLabel: 'Убыток', sub: 'Себестоимость выше НМЦК, участие нерентабельно.' },
+    success: { ...C.success, title: 'Перспективно', metricLabel: 'Запас',  sub: 'Себестоимость ниже НМЦК, участие ожидаемо рентабельно' },
+    caution: { ...C.caution, title: 'Рисковано',     metricLabel: 'Запас',  sub: 'Есть риск низкой прибыли — запас менее 5% от НМЦК' },
+    danger:  { ...C.danger,  title: 'Убыточно',      metricLabel: 'Убыток', sub: 'Себестоимость выше НМЦК, участие нерентабельно' },
   }
   const cfg = cfgs[verdict]
   const absAmt = Math.abs(nmccDiff)

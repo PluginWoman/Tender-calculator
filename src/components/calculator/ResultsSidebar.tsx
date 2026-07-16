@@ -19,7 +19,7 @@ const IconCrossCircle: FC<{ style?: CSSProperties }> = ({ style }) => (
     <path d="M12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2ZM15.5352 8.46484C15.1446 8.07438 14.5116 8.07434 14.1211 8.46484L12 10.5859L9.87891 8.46484C9.48838 8.07432 8.85537 8.07432 8.46484 8.46484C8.07432 8.85537 8.07432 9.48838 8.46484 9.87891L10.5859 12L8.46484 14.1211C8.07434 14.5116 8.07438 15.1446 8.46484 15.5352C8.85537 15.9257 9.48838 15.9257 9.87891 15.5352L12 13.4141L14.1211 15.5352C14.5116 15.9257 15.1446 15.9257 15.5352 15.5352C15.9257 15.1446 15.9257 14.5116 15.5352 14.1211L13.4141 12L15.5352 9.87891C15.9257 9.48838 15.9257 8.85537 15.5352 8.46484Z" fill="currentColor"/>
   </svg>
 )
-import { PageAction } from '@pluginwoman/t-ds'
+import { Button } from '@pluginwoman/t-ds'
 import { ArrowDownIncomingCircle } from '@pluginwoman/t-ds/icons'
 import type { CalculatorState, CalculatorResults } from '../../hooks/useCalculator'
 import { fmtMoney, fmtPercent } from '../../utils/format'
@@ -56,7 +56,7 @@ const HEADER_CONFIG: Record<VerdictKey, {
     bg: 'var(--bg-neutral-2)',
     titleColor: 'var(--primitive-primary)',
     title: 'Ожидаем данные',
-    subtitle: 'Заполните НМЦК, целевую рентабельность и прямые затраты, чтобы получить рекомендацию по участию в тендере',
+    subtitle: 'Укажите НМЦК, рентабельность и прямые затраты для оценки участия в тендере',
     metricLabel: null,
     tagBg: null,
     tagTextColor: null,
@@ -66,7 +66,7 @@ const HEADER_CONFIG: Record<VerdictKey, {
     bg: 'var(--bg-success-1)',
     titleColor: 'var(--primitive-success)',
     title: 'Перспективно',
-    subtitle: null,
+    subtitle: 'Хороший запас прочности для участия',
     metricLabel: 'Запас',
     tagBg: 'var(--bg-success-3)',
     tagTextColor: 'var(--primitive-success)',
@@ -76,7 +76,7 @@ const HEADER_CONFIG: Record<VerdictKey, {
     bg: 'var(--bg-warning-1)',
     titleColor: 'var(--primitive-warning-2)',
     title: 'Рисковано',
-    subtitle: 'Есть риск низкой прибыли',
+    subtitle: 'Маржа минимальна — любое колебание цен съест прибыль',
     metricLabel: 'Запас',
     tagBg: 'var(--bg-warning-3)',
     tagTextColor: 'var(--primitive-warning-2)',
@@ -86,8 +86,8 @@ const HEADER_CONFIG: Record<VerdictKey, {
     bg: 'var(--bg-error-1)',
     titleColor: 'var(--primitive-error)',
     title: 'Убыточно',
-    subtitle: null,
-    metricLabel: 'Убыток',
+    subtitle: 'Себестоимость выше НМЦК, участие нерентабельно',
+    metricLabel: 'Запас',
     tagBg: 'var(--bg-error-3)',
     tagTextColor: 'var(--primitive-error)',
     icon: IconCrossCircle,
@@ -130,7 +130,6 @@ const ResultsSidebar = forwardRef<HTMLDivElement, Props>(function ResultsSidebar
   const items = [...rawItems].sort((a, b) => b.value - a.value)
 
   return (
-    <>
     <div ref={ref} className={styles.panel}>
       <div className={styles.header} style={{ background: cfg.bg, transition: 'background 0.4s ease' }}>
         <div className={styles.headerTitle}>
@@ -193,25 +192,24 @@ const ResultsSidebar = forwardRef<HTMLDivElement, Props>(function ResultsSidebar
                   </span>
                 }
               >
-                <span className="ts-400-s">Стоимость без учёта налогов и прибыли</span>
+                <span className="ts-400-s">Стоимость без учёта налогов и прибыли</span>
               </Tooltip>
             </div>
             <span className="ts-500-m">{fmtMoney.format(fullCost)}</span>
           </div>
+
+          {results.isReady && (
+            <Button
+              variant="secondary"
+              size="s"
+              onClick={() => generatePdf(state, results)}
+            >
+              Скачать отчёт PDF
+            </Button>
+          )}
         </div>
       </div>
-
     </div>
-
-    {results.isReady && (
-      <PageAction
-        title="Скачать отчёт PDF"
-        leftAccessory={<ArrowDownIncomingCircle />}
-        onClick={() => generatePdf(state, results)}
-      />
-      )}
-      
-    </>
   )
 })
 
